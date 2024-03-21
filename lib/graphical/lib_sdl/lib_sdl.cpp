@@ -20,7 +20,7 @@ void lib_sdl::init()
     y = BASE_Y;
     square_size = 30;
     TTF_Init();
-    _font = TTF_OpenFont("font/ARCADE_N.TTF", 28);
+    _font = TTF_OpenFont("lib/graphical/font/ARCADE_N.TTF", 28);
 }
 
 void lib_sdl::stop()

@@ -18,7 +18,7 @@ void lib_sfml::init()
     y = BASE_Y;
     square_size = 30;
     key_pressed = false;
-    _font.loadFromFile("font/ARCADE_N.TTF");
+    _font.loadFromFile("lib/graphical/font/ARCADE_N.TTF");
 }
 
 void lib_sfml::stop() {
