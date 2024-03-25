@@ -28,7 +28,7 @@ void arcade::LibPacman::init()
         "######o##o#### M  ###o##o######",
         "#ooooooooo####M  M###ooooooooo#",
         "#o####o##o###########o##o####o#",
-        "#Ooo##oooooooooPooooooooo##ooO#",
+        "#Ooo##oooPooooooooooooooo##ooO#",
         "###o##o##o###########o##o##o###",
         "#oooooo##oooooo##ooooo##oooooo#",
         "#o############o##o###########o#",
@@ -39,6 +39,8 @@ void arcade::LibPacman::init()
     mapSize = 1;
     playerX = 0;
     playerY = 0;
+    gameStatus = arcade::PLAYING;
+    keyPressed = arcade::OTHER;
 }
 
 std::array<std::string, 21> arcade::LibPacman::getMap()
@@ -46,7 +48,7 @@ std::array<std::string, 21> arcade::LibPacman::getMap()
     return map;
 }
 
-std::size_t arcade::LibPacman::getSize()
+std::size_t arcade::LibPacman::getMapCellSize()
 {
     return mapSize;
 }
@@ -70,35 +72,72 @@ int arcade::LibPacman::findPlayer()
 
 bool arcade::LibPacman::isAvailable(char c)
 {
-    switch (c) {
-        case '#':
-            return false;
-        case '=':
-            return false;
-        case '<':
-            return false;
-        default:
-            break;
+    if (c == '#') {
+        return false;
+    }
+    if (c == 'M') {
+        gameStatus = arcade::LOOSE;
+    }
+    return true;
+}
+
+void arcade::LibPacman::updateKeyPressed(arcade::KeyPressed key)
+{
+    if (key != arcade::OTHER) {
+        keyPressed = key;
+    }
+}
+
+void arcade::LibPacman::moovePlayer(arcade::KeyPressed key)
+{
+    int defaultX = playerX;
+    int defaultY = playerY;
+    if (key == arcade::UP) {
+        playerY -= 1;
+    }
+    if (key == arcade::DOWN) {
+        playerY += 1;
+    }
+    if (key == arcade::LEFT) {
+        playerX -= 1;
+    }
+    if (key == arcade::RIGHT) {
+        playerX += 1;
+    }
+
+    if (isAvailable(map.at(playerY).at(playerX)) == true) {
+        map[defaultY][defaultX] = ' ';
+        map[playerY][playerX] = 'P';
     }
 }
 
 arcade::GameStatus arcade::LibPacman::updateMap(arcade::KeyPressed key)
 {
     findPlayer();
+    int defaultX = playerX;
+    int defaultY = playerY;
     if (key == arcade::UP) {
-        playerY - 1;
+        playerY -= 1;
     }
     if (key == arcade::DOWN) {
-        playerY + 1;
+        playerY += 1;
     }
     if (key == arcade::LEFT) {
-        playerX - 1;
+        playerX -= 1;
     }
     if (key == arcade::RIGHT) {
-        playerX + 1;
+        playerX += 1;
     }
-
-    return arcade::PLAYING;
+    if (isAvailable(map.at(playerY).at(playerX)) == true) {
+        map[defaultY][defaultX] = ' ';
+        map[playerY][playerX] = 'P';
+        updateKeyPressed(key);
+    } else {
+        playerX = defaultX;
+        playerY = defaultY;
+        moovePlayer(keyPressed);
+    }
+    playerX = 0;
+    playerY = 0;
+    return gameStatus;
 }
-
-//map.at(playerY).at(playerX)

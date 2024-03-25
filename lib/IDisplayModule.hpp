@@ -25,7 +25,7 @@ namespace arcade
             virtual void stop() = 0;
             virtual bool game() = 0;
             virtual void displayText(std::vector<std::string> textToDisplay) = 0;
-            virtual void displayMap(std::array<std::string, 21> map, size_t size) = 0;
+            virtual void displayMap(std::array<std::string, 21> map, std::size_t size) = 0;
             virtual arcade::KeyPressed getKey() = 0;
             virtual void setKey(arcade::KeyPressed newValue) = 0;
     };

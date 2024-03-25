@@ -30,7 +30,7 @@ namespace arcade
             virtual std::vector<std::string> getText() = 0;
             virtual GameStatus updateMap(arcade::KeyPressed key) = 0;
             virtual KeyPressed nextPlayerMove() = 0;
-            virtual std::size_t getSize() = 0;
+            virtual std::size_t getMapCellSize() = 0;
             virtual bool isAvailable(char c) = 0;
     };
 }

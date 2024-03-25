@@ -24,12 +24,12 @@ core: $(OBJ)
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)
 
 graphicals:
-	cd ./lib/graphical/libSfml/ && make re
-	cd ./lib/graphical/libSdl/ && make re
-	cd ./lib/graphical/libNcurses/ && make re
+	cd ./lib/graphical/libSfml/ && make re -j5
+	cd ./lib/graphical/libSdl/ && make re -j5
+	cd ./lib/graphical/libNcurses/ && make re -j5
 
 games:
-	cd ./lib/games/pacman/ && make re
+	cd ./lib/games/pacman/ && make re -j5
 
 all: $(OBJ)	graphicals games
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)

@@ -53,7 +53,7 @@ void libSdl::displayText(std::vector<std::string> textToDisplay)
     SDL_Color White = {255, 255, 255, 255};
     int x = 50;
     int y = 10;
-    for (int i = 0; i < textToDisplay.size(); i++) {
+    for (size_t i = 0; i < textToDisplay.size(); i++) {
         SDL_Surface* surfaceMessage = TTF_RenderText_Solid(_font, textToDisplay.at(i).c_str(), White); 
         SDL_Texture* Message = SDL_CreateTextureFromSurface(render, surfaceMessage);
         SDL_Rect Message_rect;
@@ -116,7 +116,7 @@ void libSdl::checkTwoChar(std::size_t j, std::string str)
 }
 
 
-void libSdl::displayMap(std::array<std::string, 21> map, size_t size)
+void libSdl::displayMap(std::array<std::string, 21> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
@@ -134,7 +134,7 @@ void libSdl::displayMap(std::array<std::string, 21> map, size_t size)
 arcade::KeyPressed libSdl::getKey()
 {
     switch(event.type) {
-        case SDL_KEYUP:
+        case SDL_KEYDOWN:
             switch(event.key.keysym.sym) {
                 case SDLK_LEFT:
                     return arcade::KeyPressed::LEFT;

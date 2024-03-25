@@ -20,6 +20,8 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <deque>
+#include <unistd.h>
+#include <chrono>
 
 bool isALib (std::string path) {
     if (path.size() < 5) {
@@ -162,13 +164,23 @@ int main(int argc, char **argv)
     int libIndex = getUsedLib(argv[1]);
     arcade::IDisplayModule *lib_graphical = lib.first;
     arcade::IGameModule *libGame = gameLib.first;
-    
+    auto time1 = std::chrono::steady_clock::now();
     arcade::KeyPressed key = arcade::OTHER;
+    arcade::KeyPressed tmpKey = arcade::OTHER;
     while (!lib_graphical->game()) {
         lib_graphical->displayText({"Arcade", " game."});
-        lib_graphical->displayMap(libGame->getMap(), libGame->getSize());
-        key = lib_graphical->getKey();
-        libGame->updateMap(key);
+        auto time2 = std::chrono::steady_clock::now();
+        auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
+        tmpKey = lib_graphical->getKey();
+        if (tmpKey != arcade::OTHER) {
+            key = tmpKey;
+        }
+        if (elapsed.count() >= 150) {
+            libGame->updateMap(key);
+            time1 = std::chrono::steady_clock::now();
+        }
+        lib_graphical->displayMap(libGame->getMap(), libGame->getMapCellSize());
+
     }
 
     return 0;

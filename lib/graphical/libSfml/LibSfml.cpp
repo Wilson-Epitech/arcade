@@ -114,7 +114,7 @@ void libSfml::checkTwoChar(std::size_t j, std::string str)
     window.draw(cerc);
 }
 
-void libSfml::displayMap(std::array<std::string, 21> map, size_t size)
+void libSfml::displayMap(std::array<std::string, 21> map, std::size_t size)
 {
     sf::RectangleShape rect;
     for (std::size_t i = 0; i < map.size(); i++) {
@@ -136,7 +136,7 @@ void libSfml::displayText(std::vector<std::string> textToDisplay)
     int x = 50;
     int y = 10;
 
-    for (int i = 0; i < textToDisplay.size(); i++) {
+    for (size_t i = 0; i < textToDisplay.size(); i++) {
         txt.setFont(_font);
         txt.setCharacterSize(50);
         txt.setFillColor(sf::Color::White);

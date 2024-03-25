@@ -27,7 +27,7 @@ class libNcurses : virtual public arcade::IDisplayModule{
         void stop() override;
         bool game() override;
         void displayText(std::vector<std::string> textToDisplay) override;
-        void displayMap(std::array<std::string, 21> map, size_t size) override;
+        void displayMap(std::array<std::string, 21> map, std::size_t size) override;
         arcade::KeyPressed getKey() override;
         void setKey(arcade::KeyPressed newValue) override {};
     private:
@@ -46,6 +46,7 @@ class libNcurses : virtual public arcade::IDisplayModule{
         int x;
         int y;
         bool keyPressed;
+        int quit;
 
         void color_remove(void);
         void checkTwoChar(std::size_t j, std::string str);

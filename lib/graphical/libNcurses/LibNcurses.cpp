@@ -46,7 +46,7 @@ bool libNcurses::game()
 {
     wclear(win);
     refresh();
-    timeout(50);
+    timeout(100);
     int c = getch();
     if (c == 'q') {
         delwin(win);
@@ -70,7 +70,7 @@ void libNcurses::color_remove(void) {
 arcade::KeyPressed libNcurses::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
-    timeout(50);
+    timeout(100);
     int c = getch();
     if (c == KEY_UP) {
         key = arcade::KeyPressed::UP;
@@ -127,11 +127,11 @@ void libNcurses::checkTwoChar(std::size_t j, std::string str)
     }
 }
 
-void libNcurses::displayMap(std::array<std::string, 21> map, size_t size)
+void libNcurses::displayMap(std::array<std::string, 21> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
-            for (int k = 0; k < size; k++) {
+            for (size_t k = 0; k < size; k++) {
                 checkTwoChar(j, map.at(i));
                 x += 1;
             }
@@ -150,7 +150,7 @@ void libNcurses::displayText(std::vector<std::string> textToDisplay)
     wattron(win,COLOR_PAIR(RIEN));
     int x = 50;
     int y = 10;
-    for (int i = 0; i < textToDisplay.size(); i++) {
+    for (size_t i = 0; i < textToDisplay.size(); i++) {
         mvwprintw(win, (y * 0.1), (x * 0.04), "%s", textToDisplay.at(i).c_str());
         x += 50;
     }

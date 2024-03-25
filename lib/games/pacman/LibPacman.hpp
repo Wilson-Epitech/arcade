@@ -26,16 +26,20 @@ namespace arcade {
             std::vector<std::string> getText() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
             KeyPressed nextPlayerMove() override {};
-            std::size_t getSize() override;
+            std::size_t getMapCellSize() override;
             bool isAvailable(char c) override;
         private:
             void init();
             int findPlayer();
+            void updateKeyPressed(arcade::KeyPressed key);
+            void moovePlayer(arcade::KeyPressed);
 
             std::array<std::string, 21> map;
-            size_t mapSize;
-            int playerX;
-            int playerY;
+            std::size_t mapSize;
+            std::size_t playerX;
+            std::size_t playerY;
+            GameStatus gameStatus;
+            KeyPressed keyPressed;
     };
 }
 
