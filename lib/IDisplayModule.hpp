@@ -10,6 +10,7 @@
 
 #include <string>
 #include <array>
+#include <vector>
 #include "KeyPressed.hpp"
 
 namespace arcade
@@ -23,7 +24,7 @@ namespace arcade
             virtual void init() = 0;
             virtual void stop() = 0;
             virtual bool game() = 0;
-            virtual void textDisplay(const std::string displayText, int xPos, int yPos) = 0;
+            virtual void displayText(std::vector<std::string> textToDisplay) = 0;
             virtual void displayMap(std::array<std::string, 19> map) = 0;
             virtual arcade::KeyPressed getKey() = 0;
             virtual void setKey(arcade::KeyPressed newValue) = 0;

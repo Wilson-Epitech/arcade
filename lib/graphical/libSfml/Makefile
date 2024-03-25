@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-SRC =	./lib_sfml.cpp
+SRC =	./LibSfml.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

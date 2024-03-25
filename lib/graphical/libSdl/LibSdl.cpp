@@ -2,33 +2,34 @@
 ** ARCADE PROJECT, 2024
 ** test_lib
 ** File description:
-** lib_sdl
+** LibSdl
 */
 
-#include "lib_sdl.hpp"
+#include "LibSdl.hpp"
 
-lib_sdl::lib_sdl()
+libSdl::libSdl()
 {
     init();
 }
 
-void lib_sdl::init()
+void libSdl::init()
 {
-    window = SDL_CreateWindow("GAME", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
+    window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     x = BASE_X;
     y = BASE_Y;
-    square_size = 30;
+    squareSize = 30;
     TTF_Init();
-    _font = TTF_OpenFont("lib/graphical/font/ARCADE_N.TTF", 28);
+    _font = TTF_OpenFont(FONT_PATH.c_str(), 28);
 }
 
-void lib_sdl::stop()
+void libSdl::stop()
 {
-    std::cout << "3 pass\n";
+    SDL_DestroyRenderer(render);
+    SDL_DestroyWindow(window);
 }
 
-bool lib_sdl::game()
+bool libSdl::game()
 {
     SDL_RenderPresent(render);
     SDL_PollEvent(&event);
@@ -42,27 +43,33 @@ bool lib_sdl::game()
     return false;
 }
 
-void lib_sdl::textDisplay(const std::string displayText, int xPos, int yPos)
+void libSdl::displayText(std::vector<std::string> textToDisplay)
 {
     if (_font == NULL) {
         fprintf(stderr, "error: font not found\n");
-        exit(EXIT_FAILURE);
+        exit(84);
     }
     int text_size = 50;
     SDL_Color White = {255, 255, 255, 255};
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(_font, displayText.c_str(), White); 
-    SDL_Texture* Message = SDL_CreateTextureFromSurface(render, surfaceMessage);
-    SDL_Rect Message_rect;
+    int x = 50;
+    int y = 10;
+    for (int i = 0; i < textToDisplay.size(); i++) {
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(_font, textToDisplay.at(i).c_str(), White); 
+        SDL_Texture* Message = SDL_CreateTextureFromSurface(render, surfaceMessage);
+        SDL_Rect Message_rect;
 
-    Message_rect.x = xPos;
-    Message_rect.y = yPos;
-    Message_rect.w = (displayText.size() * text_size);
-    Message_rect.h = text_size;
-    SDL_RenderCopy(render, Message, NULL, &Message_rect);
-    SDL_DestroyTexture(Message);
+        Message_rect.x = x;
+        Message_rect.y = y;
+        Message_rect.w = (textToDisplay.at(i).size() * text_size);
+        Message_rect.h = text_size;
+        SDL_RenderCopy(render, Message, NULL, &Message_rect);
+        SDL_DestroyTexture(Message);
+        SDL_FreeSurface(surfaceMessage);
+        x += 50;
+    }
 }
 
-void lib_sdl::check_two_char(std::size_t j, std::string str, SDL_Rect rect)
+void libSdl::checkTwoChar(std::size_t j, std::string str, SDL_Rect rect)
 {
     int pass = 0;
     if (str.at(j) == str.at(j + 1) && str.at(j) == '#') {
@@ -92,30 +99,30 @@ void lib_sdl::check_two_char(std::size_t j, std::string str, SDL_Rect rect)
     SDL_RenderDrawRect(render, &rect);
 }
 
-void lib_sdl::displayMap(std::array<std::string, 19> map)
+void libSdl::displayMap(std::array<std::string, 19> map)
 {
     SDL_Rect rect;
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.size() * 2); j += 2) {
-            rect.w = square_size;
-            rect.h = square_size;
+            rect.w = squareSize;
+            rect.h = squareSize;
             rect.x = x;
             rect.y = y;
-            check_two_char(j, map.at(i), rect);
-            x += square_size;
+            checkTwoChar(j, map.at(i), rect);
+            x += squareSize;
         }
         x = BASE_X;
-        y += square_size;
+        y += squareSize;
     }
     x = BASE_X;
     y = BASE_Y;
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
 }
 
-arcade::KeyPressed lib_sdl::getKey()
+arcade::KeyPressed libSdl::getKey()
 {
     switch(event.type) {
-        case SDL_KEYDOWN:
+        case SDL_KEYUP:
             switch(event.key.keysym.sym) {
                 case SDLK_LEFT:
                     return arcade::KeyPressed::LEFT;

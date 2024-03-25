@@ -1,0 +1,59 @@
+/*
+** ARCADE PROJECT, 2024
+** test_lib
+** File description:
+** LibNcurses
+*/
+
+#ifndef SFML_HPP_
+    #define SFML_HPP_
+
+    #include <string>
+    #include <iostream>
+    #include <ncurses.h>
+    #include "../../IDisplayModule.hpp"
+
+static const int BASE_X = 2;
+static const int BASE_Y = 3;
+
+static const std::string FONT_PATH = "lib/graphical/font/ARCADE_N.TTF";
+static const std::string WINDOW_TITLE = "Arcade Ncurses";
+
+class libNcurses : virtual public arcade::IDisplayModule{
+    public:
+        libNcurses();
+        ~libNcurses() {};
+        void init() override;
+        void stop() override;
+        bool game() override;
+        void displayText(std::vector<std::string> textToDisplay) override;
+        void displayMap(std::array<std::string, 19> map) override;
+        arcade::KeyPressed getKey() override;
+        void setKey(arcade::KeyPressed newValue) override {};
+    private:
+        WINDOW *win;
+        enum {
+            RIEN,
+            GREEN,
+            BLUE,
+            RED,
+            CYAN,
+            BLACK,
+            WHITE,
+            GRAY
+        };
+        int x;
+        int y;
+        bool keyPressed;
+
+        void color_remove(void);
+        void checkTwoChar(std::size_t j, std::string str);
+};
+
+extern "C" {
+    arcade::IDisplayModule *entryPoint() {
+        return (new libNcurses);
+    }
+}
+
+#endif /* !SFML_HPP_ */

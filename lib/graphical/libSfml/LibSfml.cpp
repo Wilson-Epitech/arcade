@@ -2,30 +2,31 @@
 ** ARCADE PROJECT, 2024
 ** test_lib
 ** File description:
-** lib_sfml
+** LibSfml
 */
 
-#include "lib_sfml.hpp"
+#include "LibSfml.hpp"
 
-lib_sfml::lib_sfml() : window(sf::VideoMode(1920, 1080), "SFML Window")
+libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str())
 {
     init();
 }
 
-void lib_sfml::init()
+void libSfml::init()
 {
     x = BASE_X;
     y = BASE_Y;
-    square_size = 30;
-    key_pressed = false;
-    _font.loadFromFile("lib/graphical/font/ARCADE_N.TTF");
+    squareSize = 30;
+    keyPressed = false;
+    _font.loadFromFile(FONT_PATH.c_str());
+    
 }
 
-void lib_sfml::stop() {
-    std::cout << "3 pass\n";
+void libSfml::stop() {
+    window.close();
 }
 
-arcade::KeyPressed lib_sfml::getKey()
+arcade::KeyPressed libSfml::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     bool pressed = false;
@@ -46,17 +47,17 @@ arcade::KeyPressed lib_sfml::getKey()
         pressed = true;
     }
     if (!pressed) {
-        key_pressed = false;
+        keyPressed = false;
         return arcade::KeyPressed::OTHER;
-    } else if (key_pressed == false) {
-        key_pressed = true;
+    } else if (keyPressed == false) {
+        keyPressed = true;
         return key;
     } else {
         return arcade::KeyPressed::OTHER;
     }
 }
 
-bool lib_sfml::game()
+bool libSfml::game()
 {
     window.pollEvent(event);
     window.clear();
@@ -67,7 +68,7 @@ bool lib_sfml::game()
     return false;
 }
 
-sf::Color lib_sfml::check_two_char(std::size_t j, std::string str)
+sf::Color libSfml::checkTwoChar(std::size_t j, std::string str)
 {
     if (str.at(j) == str.at(j + 1) && str.at(j) == '#') {
         return RGB(50,50,50);
@@ -87,38 +88,43 @@ sf::Color lib_sfml::check_two_char(std::size_t j, std::string str)
     return RGB(255,0,0);
 }
 
-void lib_sfml::displayMap(std::array<std::string, 19> map)
+void libSfml::displayMap(std::array<std::string, 19> map)
 {
     sf::RectangleShape rect;
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.size() * 2); j += 2) {
-            rect.setSize(get_position(square_size, square_size));
-            rect.setFillColor( check_two_char(j, map.at(i)));
-            rect.setPosition(get_position(x, y));
+            rect.setSize(getPosition(squareSize, squareSize));
+            rect.setFillColor( checkTwoChar(j, map.at(i)));
+            rect.setPosition(getPosition(x, y));
             window.draw(rect);
-            x += square_size;
+            x += squareSize;
         }
         x = BASE_X;
-        y += square_size;
+        y += squareSize;
     }
     x = BASE_X;
     y = BASE_Y;
     window.display();
 }
 
-void lib_sfml::textDisplay(const std::string displayText, int xPos, int yPos)
+void libSfml::displayText(std::vector<std::string> textToDisplay)
 {
     sf::Text txt;
+    int x = 50;
+    int y = 10;
 
-    txt.setFont(_font);
-    txt.setCharacterSize(50);
-    txt.setFillColor(sf::Color::White);
-    txt.setPosition(get_position(xPos, yPos));
-    txt.setString(displayText.c_str());
-    window.draw(txt);
+    for (int i = 0; i < textToDisplay.size(); i++) {
+        txt.setFont(_font);
+        txt.setCharacterSize(50);
+        txt.setFillColor(sf::Color::White);
+        txt.setPosition(getPosition(x, y));
+        txt.setString(textToDisplay.at(i).c_str());
+        window.draw(txt);
+        x += 50;
+    }
 }
 
-sf::Color lib_sfml::RGB(int r, int g, int b)
+sf::Color libSfml::RGB(int r, int g, int b)
 {
     sf::Color color;
     color.r = r;
@@ -127,7 +133,7 @@ sf::Color lib_sfml::RGB(int r, int g, int b)
     return color;
 }
 
-sf::Vector2f lib_sfml::get_position(float x, float y)
+sf::Vector2f libSfml::getPosition(float x, float y)
 {
     sf::Vector2f vector;
 

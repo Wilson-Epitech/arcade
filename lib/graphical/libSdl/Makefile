@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-SRC =	./lib_sdl.cpp
+SRC =	./LibSdl.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
