@@ -1,6 +1,6 @@
 arcade
-lib/arcade_sdl.so
-lib/arcade_sfml.so
+lib/*.so
 src/*.o
 lib/graphical/lib*/*.o
 lib/game/*/*.o
+src/main.cpp
