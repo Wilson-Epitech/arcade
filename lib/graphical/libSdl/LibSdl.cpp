@@ -69,46 +69,58 @@ void libSdl::displayText(std::vector<std::string> textToDisplay)
     }
 }
 
-void libSdl::checkTwoChar(std::size_t j, std::string str, SDL_Rect rect)
+void libSdl::checkTwoChar(std::size_t j, std::string str)
 {
-    int pass = 0;
-    if (str.at(j) == str.at(j + 1) && str.at(j) == '#') {
+    SDL_Rect rect;
+    rect.w = squareSize;
+    rect.h = squareSize;
+    rect.x = x;
+    rect.y = y;
+    if (str.at(j) == '#') {
         SDL_SetRenderDrawColor(render, 50, 50, 50, 255);
-        pass = 1;
     }
-    if (str.at(j) == '8' && str.at(j + 1) == '~' && pass == 0) {
-        SDL_SetRenderDrawColor(render, 25, 250, 50, 255);
-        pass = 1;
+    if (str.at(j) == '8') {
+        SDL_SetRenderDrawColor(render, 25,250,50, 255);
     }
-    if (str.at(j) == '=' && str.at(j + 1) == '=' && pass == 0) {
-        SDL_SetRenderDrawColor(render, 25, 25, 255, 255);
-        pass = 1;
+    if (str.at(j) == '=' || str.at(j) == '<') {
+        SDL_SetRenderDrawColor(render, 25,25,255, 255);
     }
-    if (str.at(j) == '<' && str.at(j + 1) == '=' && pass == 0) {
-        SDL_SetRenderDrawColor(render, 25, 25, 255, 255);
-        pass = 1;
+    if (str.at(j) == ' ') {
+        SDL_SetRenderDrawColor(render, 0,0,0, 255);
     }
-    if (str.at(j) == ' ' && str.at(j + 1) == ' ' && pass == 0) {
-        SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
-        pass = 1;
+    if (str.at(j) == '[') {
+        SDL_SetRenderDrawColor(render, 255,0,0, 255);
     }
-    if (pass == 0) {
-        SDL_SetRenderDrawColor(render, 255, 0, 0, 255);
+    if (str.at(j) == 'o') {
+        rect.w = squareSize / 8;
+        rect.h = squareSize / 8;
+        rect.x = x + (squareSize / 2.5);
+        rect.y = y + (squareSize / 2.5);
+        SDL_SetRenderDrawColor(render, 255,255,255, 255);
+    }
+    if (str.at(j) == 'O') {
+        rect.w = squareSize / 4;
+        rect.h = squareSize / 4;
+        rect.x = x + (squareSize / 3);
+        rect.y = y + (squareSize / 3);
+        SDL_SetRenderDrawColor(render, 74,86,237, 255);
+    }
+    if (str.at(j) == 'P') {
+        SDL_SetRenderDrawColor(render, 255,240,0, 255);
+    }
+    if (str.at(j) == 'M') {
+        SDL_SetRenderDrawColor(render, 255,0,124, 255);
     }
     SDL_RenderFillRect(render, &rect);
     SDL_RenderDrawRect(render, &rect);
 }
 
-void libSdl::displayMap(std::array<std::string, 19> map)
+
+void libSdl::displayMap(std::array<std::string, 21> map, size_t size)
 {
-    SDL_Rect rect;
     for (std::size_t i = 0; i < map.size(); i++) {
-        for (std::size_t j = 0; j < (map.size() * 2); j += 2) {
-            rect.w = squareSize;
-            rect.h = squareSize;
-            rect.x = x;
-            rect.y = y;
-            checkTwoChar(j, map.at(i), rect);
+        for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
+            checkTwoChar(j, map.at(i));
             x += squareSize;
         }
         x = BASE_X;

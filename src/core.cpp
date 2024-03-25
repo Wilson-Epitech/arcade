@@ -104,6 +104,28 @@ std::pair <arcade::IDisplayModule *,void *> entryPoint(std::string libPath)
     return {(*do_somthing)(), handle};
 }
 
+std::pair <arcade::IGameModule *,void *> entryPointGame(void)
+{
+    void *handle;
+    arcade::IGameModule * (*do_somthing)(void);
+    char *err;
+
+    handle = dlopen("./lib/arcade_pacman.so", RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "%s\n", dlerror());
+        exit(84);
+    }
+    dlerror();
+    do_somthing = (arcade::IGameModule * (*)(void)) dlsym(handle, "entryPoint");
+    err = dlerror();
+    if (err != NULL) {
+        fprintf(stderr, "%s\n", err);
+        exit(84);
+    }
+    return {(*do_somthing)(), handle};
+}
+
+
 int getUsedLib(const char *path)
 {
     int index = 0;
@@ -132,48 +154,21 @@ int changeLibIndex(int index, int change)
 
 int main(int argc, char **argv)
 {
-    entryPoint2(allLibAvailable());
-
+    //entryPoint2(allLibAvailable());
+    //std::cout << "pass\n";
 
     std::pair <arcade::IDisplayModule *,void *> lib = entryPoint(argv[1]);
+    std::pair <arcade::IGameModule *,void *> gameLib = entryPointGame();
     int libIndex = getUsedLib(argv[1]);
     arcade::IDisplayModule *lib_graphical = lib.first;
-    std::array<std::string, 19UL> map = {
-        "######################################",
-        "##    []      []      []      []    ##",
-        "##  ######  ##  ######  ##  ######  ##",
-        "##[]##  ##[]##          ##[]##  ##[]##",
-        "##  ######  ##  ##  ##  ##  ######  ##",
-        "##          ##[]##  ##[]##          ##",
-        "##  ##########  ##  ##  ##########  ##",
-        "##[]##  []                  []  ##[]##",
-        "##  ##  ########      ########  ##  ##",
-        "##      []                  []      ##",
-        "##  ##########  ######  ##########  ##",
-        "##    []        ##  ##        []    ##",
-        "##  ######  ##  ######  ##  ######  ##",
-        "##  ##  ##  ##          ##  ##  ##  ##",
-        "##[]######[]##[]######[]##[]######[]##",
-        "##          ##  ##  ##  ##          ##",
-        "##[]##########  ######  ##########[]##",
-        "##          <=========8~      ##    ##",
-        "######################################"
-    };
+    arcade::IGameModule *libGame = gameLib.first;
+    
     arcade::KeyPressed key = arcade::OTHER;
     while (!lib_graphical->game()) {
         lib_graphical->displayText({"Arcade", " game."});
-        lib_graphical->displayMap(map);
+        lib_graphical->displayMap(libGame->getMap(), libGame->getSize());
         key = lib_graphical->getKey();
-        if (key == arcade::DOWN) {
-            lib_graphical->stop();
-            libIndex = changeLibIndex(libIndex, -1);
-            lib_graphical = entryPoint(allLibraryPath[libIndex]).first;
-        }
-        if (key == arcade::UP) {
-            lib_graphical->stop();
-            libIndex = changeLibIndex(libIndex, 1);
-            lib_graphical = entryPoint(allLibraryPath[libIndex]).first;
-        }
+        libGame->updateMap(key);
     }
 
     return 0;

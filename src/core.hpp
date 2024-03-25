@@ -16,4 +16,5 @@ static std::string allLibraryPath[NB_LIB] = {
     "./lib/arcade_ncurses.so"
 };
 
+
 #endif /* !CORE_HPP_ */

@@ -28,7 +28,10 @@ graphicals:
 	cd ./lib/graphical/libSdl/ && make re
 	cd ./lib/graphical/libNcurses/ && make re
 
-all: $(OBJ)	graphicals
+games:
+	cd ./lib/games/pacman/ && make re
+
+all: $(OBJ)	graphicals games
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)
 
 clean:

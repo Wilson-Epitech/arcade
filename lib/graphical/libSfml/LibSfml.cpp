@@ -68,35 +68,58 @@ bool libSfml::game()
     return false;
 }
 
-sf::Color libSfml::checkTwoChar(std::size_t j, std::string str)
+void libSfml::checkTwoChar(std::size_t j, std::string str)
 {
-    if (str.at(j) == str.at(j + 1) && str.at(j) == '#') {
-        return RGB(50,50,50);
+    sf::RectangleShape rect;
+    rect.setSize(getPosition(squareSize, squareSize));
+    rect.setPosition(getPosition(x, y));
+    rect.setFillColor(RGB(0,0,0));
+    sf::CircleShape cerc;
+    if (str.at(j) == '#') {
+        rect.setFillColor(RGB(50,50,50));
     }
-    if (str.at(j) == '8' && str.at(j + 1) == '~') {
-        return RGB(25,250,50);
+    if (str.at(j) == '8') {
+        rect.setFillColor(RGB(25,250,50));
     }
-    if (str.at(j) == '=' && str.at(j + 1) == '=') {
-        return RGB(25,25,255);
+    if (str.at(j) == '=' || str.at(j) == '<') {
+        rect.setFillColor(RGB(25,25,255));
     }
-    if (str.at(j) == '<' && str.at(j + 1) == '=') {
-        return RGB(25,25,255);
+    if (str.at(j) == ' ') {
+        rect.setFillColor(RGB(0,0,0));
     }
-    if (str.at(j) == ' ' && str.at(j + 1) == ' ') {
-        return RGB(0,0,0);
+    if (str.at(j) == '[') {
+        rect.setFillColor(RGB(255,0,0));
     }
-    return RGB(255,0,0);
+    if (str.at(j) == 'o') {
+        cerc.setRadius(squareSize / 8);
+        cerc.setFillColor(RGB(255,255,255));
+        cerc.setPosition(getPosition(x + (squareSize / 2.5), y + (squareSize / 2.5)));
+    }
+    if (str.at(j) == 'O') {
+        cerc.setRadius(squareSize / 4);
+        cerc.setFillColor(RGB(74,86,237));
+        cerc.setPosition(getPosition(x + (squareSize / 4), y + (squareSize / 4)));
+    }
+    if (str.at(j) == 'P') {
+        cerc.setRadius(squareSize / 2);
+        cerc.setFillColor(RGB(255,240,0));
+        cerc.setPosition(getPosition(x, y));
+    }
+    if (str.at(j) == 'M') {
+        cerc.setRadius(squareSize / 2);
+        cerc.setFillColor(RGB(255,0,124));
+        cerc.setPosition(getPosition(x, y));
+    }
+    window.draw(rect);
+    window.draw(cerc);
 }
 
-void libSfml::displayMap(std::array<std::string, 19> map)
+void libSfml::displayMap(std::array<std::string, 21> map, size_t size)
 {
     sf::RectangleShape rect;
     for (std::size_t i = 0; i < map.size(); i++) {
-        for (std::size_t j = 0; j < (map.size() * 2); j += 2) {
-            rect.setSize(getPosition(squareSize, squareSize));
-            rect.setFillColor( checkTwoChar(j, map.at(i)));
-            rect.setPosition(getPosition(x, y));
-            window.draw(rect);
+        for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
+            checkTwoChar(j, map.at(i));
             x += squareSize;
         }
         x = BASE_X;
