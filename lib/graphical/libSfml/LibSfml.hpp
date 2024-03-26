@@ -27,7 +27,7 @@ class libSfml : virtual public arcade::IDisplayModule{
         void stop() override;
         bool game() override;
         void displayText(std::vector<std::string> textToDisplay) override;
-        void displayMap(std::array<std::string, 21> map, std::size_t size) override;
+        void displayMap(std::array<std::string, 23> map, std::size_t size) override;
         arcade::KeyPressed getKey() override;
         void setKey(arcade::KeyPressed newValue) override {};
     private:

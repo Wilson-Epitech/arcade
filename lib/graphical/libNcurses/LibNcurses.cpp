@@ -16,10 +16,11 @@ void libNcurses::init()
 {
     initscr();
     noecho();
+    nodelay(stdscr, TRUE);
     start_color();
     keypad(stdscr, TRUE);
     curs_set(FALSE);
-    init_pair(RIEN, COLOR_WHITE, COLOR_BLACK);
+    init_pair(DEFAULT, COLOR_WHITE, COLOR_BLACK);
     init_pair(RED, COLOR_RED, COLOR_RED);
     init_pair(GREEN, COLOR_GREEN, COLOR_GREEN);
     init_pair(BLUE, COLOR_BLUE, COLOR_BLUE);
@@ -35,22 +36,19 @@ void libNcurses::init()
 }
 
 void libNcurses::stop() {
-    clear();
+    
     wclear(win);
     delwin(win);
-    clear();
     endwin();
 }
 
 bool libNcurses::game()
 {
     wclear(win);
-    refresh();
-    timeout(100);
     int c = getch();
     if (c == 'q') {
         delwin(win);
-        clear();
+        
         endwin();
         return true;
     }
@@ -64,13 +62,12 @@ void libNcurses::color_remove(void) {
     wattroff(win,COLOR_PAIR(BLACK));
     wattroff(win,COLOR_PAIR(WHITE));
     wattroff(win,COLOR_PAIR(GRAY));
-    wattron(win,COLOR_PAIR(RIEN));
+    wattron(win,COLOR_PAIR(DEFAULT));
 }
 
 arcade::KeyPressed libNcurses::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
-    timeout(100);
     int c = getch();
     if (c == KEY_UP) {
         key = arcade::KeyPressed::UP;
@@ -110,7 +107,7 @@ void libNcurses::checkTwoChar(std::size_t j, std::string str)
         mvwprintw(win, y, x, " ");
     }
     if (str.at(j) == 'o') {
-        wattron(win,COLOR_PAIR(RIEN));
+        wattron(win,COLOR_PAIR(DEFAULT));
         mvwprintw(win, y, x, "*");
     }
     if (str.at(j) == 'O') {
@@ -125,9 +122,13 @@ void libNcurses::checkTwoChar(std::size_t j, std::string str)
         wattron(win,COLOR_PAIR(RED));
         mvwprintw(win, y, x, " ");
     }
+    if (str.at(j) == 'F') {
+        wattron(win,COLOR_PAIR(BLUE));
+        mvwprintw(win, y, x, " ");
+    }
 }
 
-void libNcurses::displayMap(std::array<std::string, 21> map, std::size_t size)
+void libNcurses::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
@@ -147,7 +148,7 @@ void libNcurses::displayMap(std::array<std::string, 21> map, std::size_t size)
 
 void libNcurses::displayText(std::vector<std::string> textToDisplay)
 {
-    wattron(win,COLOR_PAIR(RIEN));
+    wattron(win,COLOR_PAIR(DEFAULT));
     int x = 50;
     int y = 10;
     for (size_t i = 0; i < textToDisplay.size(); i++) {

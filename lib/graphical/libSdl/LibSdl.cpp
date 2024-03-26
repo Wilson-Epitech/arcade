@@ -111,12 +111,15 @@ void libSdl::checkTwoChar(std::size_t j, std::string str)
     if (str.at(j) == 'M') {
         SDL_SetRenderDrawColor(render, 255,0,124, 255);
     }
+    if (str.at(j) == 'F') {
+        SDL_SetRenderDrawColor(render, 0,0,124, 255);
+    }
     SDL_RenderFillRect(render, &rect);
     SDL_RenderDrawRect(render, &rect);
 }
 
 
-void libSdl::displayMap(std::array<std::string, 21> map, std::size_t size)
+void libSdl::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {

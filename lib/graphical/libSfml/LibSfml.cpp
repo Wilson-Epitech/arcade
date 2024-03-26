@@ -110,11 +110,16 @@ void libSfml::checkTwoChar(std::size_t j, std::string str)
         cerc.setFillColor(RGB(255,0,124));
         cerc.setPosition(getPosition(x, y));
     }
+    if (str.at(j) == 'F') {
+        cerc.setRadius(squareSize / 2);
+        cerc.setFillColor(RGB(0,0,124));
+        cerc.setPosition(getPosition(x, y));
+    }
     window.draw(rect);
     window.draw(cerc);
 }
 
-void libSfml::displayMap(std::array<std::string, 21> map, std::size_t size)
+void libSfml::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     sf::RectangleShape rect;
     for (std::size_t i = 0; i < map.size(); i++) {

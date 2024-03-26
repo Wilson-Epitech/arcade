@@ -167,20 +167,20 @@ int main(int argc, char **argv)
     auto time1 = std::chrono::steady_clock::now();
     arcade::KeyPressed key = arcade::OTHER;
     arcade::KeyPressed tmpKey = arcade::OTHER;
-    while (!lib_graphical->game()) {
+    arcade::GameStatus status = arcade::PLAYING;
+    while (!lib_graphical->game() && status == arcade::PLAYING) {
         lib_graphical->displayText({"Arcade", " game."});
         auto time2 = std::chrono::steady_clock::now();
         auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
-        tmpKey = lib_graphical->getKey();
-        if (tmpKey != arcade::OTHER) {
-            key = tmpKey;
-        }
         if (elapsed.count() >= 150) {
-            libGame->updateMap(key);
+            tmpKey = lib_graphical->getKey();
+            if (tmpKey != arcade::OTHER) {
+                key = tmpKey;
+            }
+            status = libGame->updateMap(key);
             time1 = std::chrono::steady_clock::now();
         }
         lib_graphical->displayMap(libGame->getMap(), libGame->getMapCellSize());
-
     }
 
     return 0;

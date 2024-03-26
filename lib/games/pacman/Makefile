@@ -5,7 +5,8 @@
 ## Makefile
 ##
 
-SRC =	./LibPacman.cpp
+SRC =	./LibPacman.cpp	\
+		./MoveGhost.cpp
 
 
 OBJ = $(SRC:.cpp=.o)
