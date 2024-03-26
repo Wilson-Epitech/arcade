@@ -38,6 +38,7 @@ void arcade::LibPacman::init()
         "#ooooooooooooooooooooooooooooo#",
         "###############################"
     };
+    tt = 0;
     mapSize = 1;
     playerX = 0;
     playerY = 0;
@@ -133,6 +134,9 @@ void arcade::LibPacman::isGameWin(void)
 
 arcade::GameStatus arcade::LibPacman::updateMap(arcade::KeyPressed key)
 {
+    if (key == arcade::QUITE) {
+        return arcade::QUIT;
+    }
     findPlayer();
     for (int i = 0; i < map.size(); i++) {
         for (int j = 0; j < map.at(i).size(); j++) {
@@ -246,4 +250,15 @@ extern "C" {
     arcade::IGameModule *entryPoint() {
         return (new arcade::LibPacman);
     }
+}
+
+std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibPacman::getText()
+{
+    std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
+    textToDisplay.push_back({"Pacman", {10, 10}});
+    std::string scoreTxt;
+    scoreTxt = "Score : ";
+    scoreTxt.append(std::to_string(score));
+    textToDisplay.push_back({scoreTxt, {200, 10}});
+    return textToDisplay;
 }

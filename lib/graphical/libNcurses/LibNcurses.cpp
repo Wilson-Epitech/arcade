@@ -7,12 +7,7 @@
 
 #include "LibNcurses.hpp"
 
-libNcurses::libNcurses()
-{
-    init();
-}
-
-void libNcurses::init()
+arcade::libNcurses::libNcurses()
 {
     initscr();
     noecho();
@@ -27,35 +22,32 @@ void libNcurses::init()
     init_pair(CYAN, COLOR_CYAN, COLOR_BLACK);
     init_pair(BLACK, COLOR_BLACK, COLOR_BLACK);
     init_pair(WHITE, COLOR_WHITE, COLOR_WHITE);
-    init_color(COLOR_MAGENTA, 150, 150, 150);
+    init_color(100, 150, 150, 150);
     init_pair(YELLOW, COLOR_YELLOW, COLOR_YELLOW);
-    init_pair(GRAY, COLOR_MAGENTA, COLOR_MAGENTA);
+    init_pair(GRAY, 100, 100);
     win = newwin(500 , 500, 0, 0);
     wclear(win);
     keyPressed = false;
 }
 
-void libNcurses::stop() {
+void arcade::libNcurses::init(std::map<std::string, Color> pattern)
+{
+    return;
+}
+
+void arcade::libNcurses::stop() {
     
     wclear(win);
     delwin(win);
     endwin();
 }
 
-bool libNcurses::game()
+void arcade::libNcurses::game()
 {
-    wclear(win);
-    int c = getch();
-    if (c == 'q') {
-        delwin(win);
-        
-        endwin();
-        return true;
-    }
-    return false;
+    werase(win);
 }
 
-void libNcurses::color_remove(void) {
+void arcade::libNcurses::color_remove(void) {
     wattroff(win,COLOR_PAIR(RED));
     wattroff(win,COLOR_PAIR(GREEN));
     wattroff(win,COLOR_PAIR(CYAN));
@@ -65,7 +57,7 @@ void libNcurses::color_remove(void) {
     wattron(win,COLOR_PAIR(DEFAULT));
 }
 
-arcade::KeyPressed libNcurses::getKey()
+arcade::KeyPressed arcade::libNcurses::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     int c = getch();
@@ -81,10 +73,15 @@ arcade::KeyPressed libNcurses::getKey()
     if (c == KEY_RIGHT) {
         key = arcade::KeyPressed::RIGHT;
     }
+    if (c == 'q') {
+        delwin(win);
+        endwin();
+        return arcade::QUITE;
+    }
     return key;
 }
 
-void libNcurses::checkTwoChar(std::size_t j, std::string str)
+void arcade::libNcurses::checkTwoChar(std::size_t j, std::string str)
 {
     if (str.at(j) == '#') {
         wattron(win,COLOR_PAIR(GRAY));
@@ -128,7 +125,7 @@ void libNcurses::checkTwoChar(std::size_t j, std::string str)
     }
 }
 
-void libNcurses::displayMap(std::array<std::string, 23> map, std::size_t size)
+void arcade::libNcurses::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
@@ -146,13 +143,10 @@ void libNcurses::displayMap(std::array<std::string, 23> map, std::size_t size)
     wrefresh(win);
 }
 
-void libNcurses::displayText(std::vector<std::string> textToDisplay)
+void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     wattron(win,COLOR_PAIR(DEFAULT));
-    int x = 50;
-    int y = 10;
     for (size_t i = 0; i < textToDisplay.size(); i++) {
-        mvwprintw(win, (y * 0.1), (x * 0.04), "%s", textToDisplay.at(i).c_str());
-        x += 50;
+        mvwprintw(win, (textToDisplay.at(i).second.second * 0.1), (textToDisplay.at(i).second.first * 0.04), "%s", textToDisplay.at(i).first.c_str());
     }
 }

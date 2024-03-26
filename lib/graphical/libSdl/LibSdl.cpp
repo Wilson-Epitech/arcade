@@ -7,12 +7,7 @@
 
 #include "LibSdl.hpp"
 
-libSdl::libSdl()
-{
-    init();
-}
-
-void libSdl::init()
+arcade::libSdl::libSdl()
 {
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -23,53 +18,49 @@ void libSdl::init()
     _font = TTF_OpenFont(FONT_PATH.c_str(), 28);
 }
 
-void libSdl::stop()
+void arcade::libSdl::init(std::map<std::string, Color> pattern)
+{
+    return;
+}
+
+void arcade::libSdl::stop()
 {
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
 }
 
-bool libSdl::game()
+void arcade::libSdl::game()
 {
     SDL_RenderPresent(render);
     SDL_PollEvent(&event);
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
-    switch (event.type) {
-        case SDL_QUIT:
-            return true;
-            break;
-    }
-    return false;
 }
 
-void libSdl::displayText(std::vector<std::string> textToDisplay)
+void arcade::libSdl::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     if (_font == NULL) {
         fprintf(stderr, "error: font not found\n");
         exit(84);
     }
-    int text_size = 50;
+    int text_size = 25;
     SDL_Color White = {255, 255, 255, 255};
-    int x = 50;
-    int y = 10;
     for (size_t i = 0; i < textToDisplay.size(); i++) {
-        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(_font, textToDisplay.at(i).c_str(), White); 
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(_font, textToDisplay.at(i).first.c_str(), White); 
         SDL_Texture* Message = SDL_CreateTextureFromSurface(render, surfaceMessage);
         SDL_Rect Message_rect;
 
-        Message_rect.x = x;
-        Message_rect.y = y;
-        Message_rect.w = (textToDisplay.at(i).size() * text_size);
+        Message_rect.x = textToDisplay.at(i).second.first;
+        Message_rect.y = textToDisplay.at(i).second.second;
+        Message_rect.w = (textToDisplay.at(i).first.size() * text_size);
         Message_rect.h = text_size;
         SDL_RenderCopy(render, Message, NULL, &Message_rect);
         SDL_DestroyTexture(Message);
         SDL_FreeSurface(surfaceMessage);
-        x += 50;
     }
 }
 
-void libSdl::checkTwoChar(std::size_t j, std::string str)
+void arcade::libSdl::checkTwoChar(std::size_t j, std::string str)
 {
     SDL_Rect rect;
     rect.w = squareSize;
@@ -119,7 +110,7 @@ void libSdl::checkTwoChar(std::size_t j, std::string str)
 }
 
 
-void libSdl::displayMap(std::array<std::string, 23> map, std::size_t size)
+void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     for (std::size_t i = 0; i < map.size(); i++) {
         for (std::size_t j = 0; j < (map.at(i).size()); j += size) {
@@ -134,27 +125,31 @@ void libSdl::displayMap(std::array<std::string, 23> map, std::size_t size)
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
 }
 
-arcade::KeyPressed libSdl::getKey()
+arcade::KeyPressed arcade::libSdl::getKey()
 {
+    switch (event.type) {
+        case SDL_QUIT:
+            return QUITE;
+    }
     switch(event.type) {
         case SDL_KEYDOWN:
             switch(event.key.keysym.sym) {
                 case SDLK_LEFT:
-                    return arcade::KeyPressed::LEFT;
+                    return arcade::LEFT;
                     break;
                 case SDLK_RIGHT:
-                    return arcade::KeyPressed::RIGHT;
+                    return arcade::RIGHT;
                     break;
                 case SDLK_UP:
-                    return arcade::KeyPressed::UP;
+                    return arcade::UP;
                     break;
                 case SDLK_DOWN:
-                    return arcade::KeyPressed::DOWN;
+                    return arcade::DOWN;
                     break;
                 default:
-                    return arcade::KeyPressed::OTHER;
+                    return arcade::OTHER;
                     break;
             }
     }
-    return arcade::KeyPressed::OTHER;
+    return arcade::OTHER;
 }

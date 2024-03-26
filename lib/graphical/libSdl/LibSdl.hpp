@@ -21,32 +21,36 @@ static const std::string FONT_PATH = "lib/graphical/font/ARCADE_N.TTF";
 
 static const std::string WINDOW_TITLE = "Arcade SDL2";
 
-class libSdl : virtual public arcade::IDisplayModule{
-    public:
-        libSdl();
-        ~libSdl() {};
-        void init() override;
-        void stop() override;
-        bool game() override;
-        void displayText(std::vector<std::string> textToDisplay) override;
-        void displayMap(std::array<std::string, 23> map, std::size_t size) override;
-        arcade::KeyPressed getKey() override;
-        void setKey(arcade::KeyPressed newValue) override {};
-    private:
-        SDL_Window* window;
-        SDL_Event event;
-        SDL_Renderer* render;
-        float x;
-        float y;
-        float squareSize;
-        TTF_Font* _font;
+namespace arcade
+{
+    class libSdl : virtual public arcade::IDisplayModule{
+        public:
+            libSdl();
+            ~libSdl() {};
+            void init(std::map<std::string, Color> pattern) override;
+            void stop() override;
+            void game() override;
+            void displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay) override;
+            void displayMap(std::array<std::string, 23> map, std::size_t size) override;
+            arcade::KeyPressed getKey() override;
+            void setKey(arcade::KeyPressed newValue) override {};
+            void pickColor(std::map<std::string, Color> patternMap) override {};
+        private:
+            SDL_Window* window;
+            SDL_Event event;
+            SDL_Renderer* render;
+            float x;
+            float y;
+            float squareSize;
+            TTF_Font* _font;
 
-        void checkTwoChar(std::size_t j, std::string str);
+            void checkTwoChar(std::size_t j, std::string str);
+    };
 };
 
 extern "C" {
     arcade::IDisplayModule *entryPoint() {
-        return (new libSdl);
+        return (new arcade::libSdl);
     }
 }
 

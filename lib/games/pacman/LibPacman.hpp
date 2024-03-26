@@ -24,7 +24,7 @@ namespace arcade {
             void resetGame() override {};
             std::array<std::string, 23> getMap() override;
             std::map<std::string, Color> getPattern() override {};
-            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override {};
+            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
         private:
@@ -47,7 +47,6 @@ namespace arcade {
             bool isAvailableDirect(int x, int y);
             arcade::KeyPressed randKey(arcade::KeyPressed key1, arcade::KeyPressed key2, arcade::KeyPressed key3);
             arcade::KeyPressed changeGhostKey(arcade::KeyPressed key);
-            void mooveGhostBis(arcade::KeyPressed key);
             arcade::KeyPressed mooveGhost(arcade::KeyPressed key);
             bool isAvailableGhost(char c);
             void wallBoxGhost(void);

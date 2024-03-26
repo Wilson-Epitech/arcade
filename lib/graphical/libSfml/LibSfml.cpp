@@ -7,12 +7,7 @@
 
 #include "LibSfml.hpp"
 
-libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str())
-{
-    init();
-}
-
-void libSfml::init()
+arcade::libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str())
 {
     x = BASE_X;
     y = BASE_Y;
@@ -22,14 +17,23 @@ void libSfml::init()
     
 }
 
-void libSfml::stop() {
+void arcade::libSfml::init(std::map<std::string, Color> pattern)
+{
+    return;
+}
+
+void arcade::libSfml::stop() {
     window.close();
 }
 
-arcade::KeyPressed libSfml::getKey()
+arcade::KeyPressed arcade::libSfml::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     bool pressed = false;
+    if (event.type == sf::Event::Closed) {
+        window.close();
+        return arcade::QUITE;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == true) {
         key = arcade::KeyPressed::UP;
         pressed = true;
@@ -57,18 +61,13 @@ arcade::KeyPressed libSfml::getKey()
     }
 }
 
-bool libSfml::game()
+void arcade::libSfml::game()
 {
     window.pollEvent(event);
     window.clear();
-    if (event.type == sf::Event::Closed) {
-        window.close();
-        return true;
-    }
-    return false;
 }
 
-void libSfml::checkTwoChar(std::size_t j, std::string str)
+void arcade::libSfml::checkTwoChar(std::size_t j, std::string str)
 {
     sf::RectangleShape rect;
     rect.setSize(getPosition(squareSize, squareSize));
@@ -119,7 +118,7 @@ void libSfml::checkTwoChar(std::size_t j, std::string str)
     window.draw(cerc);
 }
 
-void libSfml::displayMap(std::array<std::string, 23> map, std::size_t size)
+void arcade::libSfml::displayMap(std::array<std::string, 23> map, std::size_t size)
 {
     sf::RectangleShape rect;
     for (std::size_t i = 0; i < map.size(); i++) {
@@ -135,24 +134,20 @@ void libSfml::displayMap(std::array<std::string, 23> map, std::size_t size)
     window.display();
 }
 
-void libSfml::displayText(std::vector<std::string> textToDisplay)
+void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     sf::Text txt;
-    int x = 50;
-    int y = 10;
-
     for (size_t i = 0; i < textToDisplay.size(); i++) {
         txt.setFont(_font);
-        txt.setCharacterSize(50);
+        txt.setCharacterSize(25);
         txt.setFillColor(sf::Color::White);
-        txt.setPosition(getPosition(x, y));
-        txt.setString(textToDisplay.at(i).c_str());
+        txt.setPosition(getPosition(textToDisplay.at(i).second.first, textToDisplay.at(i).second.second));
+        txt.setString(textToDisplay.at(i).first.c_str());
         window.draw(txt);
-        x += 50;
     }
 }
 
-sf::Color libSfml::RGB(int r, int g, int b)
+sf::Color arcade::libSfml::RGB(int r, int g, int b)
 {
     sf::Color color;
     color.r = r;
@@ -161,7 +156,7 @@ sf::Color libSfml::RGB(int r, int g, int b)
     return color;
 }
 
-sf::Vector2f libSfml::getPosition(float x, float y)
+sf::Vector2f arcade::libSfml::getPosition(float x, float y)
 {
     sf::Vector2f vector;
 

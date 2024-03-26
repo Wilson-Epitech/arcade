@@ -76,10 +76,6 @@ std::deque <std::pair <arcade::IDisplayModule *,void *>> entryPoint2(std::deque<
             continue;
         }
         allLib.push_back({(*do_somthing)(), handle});
-        if (allLib.at(allLib.size() - 1).first->game() != 0) {
-            allLib.pop_back();
-            continue;
-        }
         allLib.at(allLib.size() - 1).first->stop();
     }
     return allLib;
@@ -168,15 +164,23 @@ int main(int argc, char **argv)
     arcade::KeyPressed key = arcade::OTHER;
     arcade::KeyPressed tmpKey = arcade::OTHER;
     arcade::GameStatus status = arcade::PLAYING;
-    while (!lib_graphical->game() && status == arcade::PLAYING) {
-        lib_graphical->displayText({"Arcade", " game."});
+    std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
+    textToDisplay.push_back({"Arcade", {10, 10}});
+    textToDisplay.push_back({"game", {1000, 10}});
+
+    while (status == arcade::PLAYING) {
+        lib_graphical->game();
+        lib_graphical->displayText(libGame->getText());
         auto time2 = std::chrono::steady_clock::now();
         auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
+        tmpKey = lib_graphical->getKey();
+        if (tmpKey != arcade::OTHER) {
+            key = tmpKey;
+        }
+        if (key == arcade::QUITE) {
+            return 0;
+        }
         if (elapsed.count() >= 150) {
-            tmpKey = lib_graphical->getKey();
-            if (tmpKey != arcade::OTHER) {
-                key = tmpKey;
-            }
             status = libGame->updateMap(key);
             time1 = std::chrono::steady_clock::now();
         }

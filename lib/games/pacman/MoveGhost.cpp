@@ -133,21 +133,6 @@ arcade::KeyPressed arcade::LibPacman::mooveGhost(arcade::KeyPressed key)
     return key;
 }
 
-void arcade::LibPacman::mooveGhostBis(arcade::KeyPressed key)
-{
-    int defaultX = ghostX;
-    int defaultY = ghostY;
-    changeGhostPos(key);
-    if (tpGhostSide(key, defaultX, defaultY) == true) {
-        return;
-    }
-    if (isAvailableGhost(map.at(ghostY).at(ghostX)) == true) {
-        map[defaultY][defaultX] = ghostPos.at(tt).second;
-        ghostPos.at(tt).second = map[ghostY][ghostX];
-        map[ghostY][ghostX] = 'M';
-    }
-}
-
 bool arcade::LibPacman::tpGhostSide(arcade::KeyPressed key, int defaultX, int defaultY)
 {
     if (ghostX >= map.at(ghostY).size() && key == arcade::RIGHT) {
@@ -211,8 +196,6 @@ bool arcade::LibPacman::isAvailableDirect(int x, int y)
 
 arcade::KeyPressed arcade::LibPacman::changeGhostKey(arcade::KeyPressed key)
 {
-    int defaultX = ghostX;
-    int defaultY = ghostY;
     arcade::KeyPressed oldKey = key;
     key = randKey(randKey(arcade::DOWN, arcade::LEFT, arcade::DOWN), randKey(arcade::RIGHT, arcade::LEFT, arcade::RIGHT), randKey(arcade::UP, arcade::LEFT, arcade::UP));
     if (oldKey == arcade::UP && key == arcade::DOWN)
