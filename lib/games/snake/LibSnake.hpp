@@ -19,15 +19,22 @@ namespace arcade {
             LibSnake();
             ~LibSnake() {};
             void resetGame() override {};
-            std::array<std::string, 19> getMap() override {};
+            std::array<std::string, 23> getMap() override;
             std::map<std::string, Color> getPattern() override {};
-            std::vector<std::string> getText() override {};
-            GameStatus updateMap(arcade::KeyPressed key) override {};
-            KeyPressed nextPlayerMove() override {};
-            std::size_t getSize() override {};
-        protected:    
+            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override {};
+            GameStatus updateMap(arcade::KeyPressed key) override;
+            std::size_t getMapCellSize() override;
+        protected:
         private:
+            bool isAvailable(char c);
+            void getSnakeLenght();
             void init();
+            std::size_t playerX;
+            std::size_t playerY;
+            std::size_t mapSize;
+            GameStatus gameStatus;
+            std::size_t SnakeLenght;
+            std::array<std::string, 23> map;
     };
 }
 
