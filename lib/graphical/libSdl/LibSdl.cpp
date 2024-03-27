@@ -9,6 +9,11 @@
 
 arcade::libSdl::libSdl()
 {
+    return;
+}
+
+void arcade::libSdl::init(std::map<std::string, Color> pattern)
+{
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     x = BASE_X;
@@ -17,11 +22,46 @@ arcade::libSdl::libSdl()
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH.c_str(), 28);
     oldKeyPressed = arcade::OTHER;
+    pickColor(pattern);
 }
 
-void arcade::libSdl::init(std::map<std::string, Color> pattern)
+SDL_Texture* arcade::libSdl::madeRectangle(int r, int g, int b)
 {
-    return;
+    SDL_Surface* surface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
+    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, r, g, b));
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
+    SDL_FreeSurface(surface);
+    return texture;
+}
+
+void arcade::libSdl::pickColor(std::map<std::string, arcade::Color> patternMap)
+{
+    for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
+        if (tt->second == arcade::BLACK) {
+            charMap.insert({tt->first, madeRectangle(0,0,0)});
+        }
+        if (tt->second == arcade::WHITE) {
+            charMap.insert({tt->first, madeRectangle(255,255,255)});
+        }
+        if (tt->second == arcade::RED) {
+            charMap.insert({tt->first, madeRectangle(255,0,0)});
+        }
+        if (tt->second == arcade::BLUE) {
+            charMap.insert({tt->first, madeRectangle(0,0,124)});
+        }
+        if (tt->second == arcade::GREEN) {
+            charMap.insert({tt->first, madeRectangle(0,255,0)});
+        }
+        if (tt->second == arcade::YELLOW) {
+            charMap.insert({tt->first, madeRectangle(255,240,0)});
+        }
+        if (tt->second == arcade::GRAY) {
+            charMap.insert({tt->first, madeRectangle(50,50,50)});
+        }
+        if (tt->second == arcade::CYAN) {
+            charMap.insert({tt->first, madeRectangle(74,86,237)});
+        }
+    }
 }
 
 void arcade::libSdl::stop()
@@ -68,48 +108,24 @@ void arcade::libSdl::checkTwoChar(std::size_t j, std::string str)
     rect.h = squareSize;
     rect.x = x;
     rect.y = y;
-    if (str.at(j) == '#') {
-        SDL_SetRenderDrawColor(render, 50, 50, 50, 255);
+    for (auto tt = charMap.begin(); tt != charMap.end(); tt++) {
+        if (tt->first.at(0) == str.at(j)) {
+            if (str.at(j) == 'o') {
+                rect.w = squareSize / 8;
+                rect.h = squareSize / 8;
+                rect.x = x + (squareSize / 2.5);
+                rect.y = y + (squareSize / 2.5);
+            } else if (str.at(j) == 'O') {
+                rect.w = squareSize / 4;
+                rect.h = squareSize / 4;
+                rect.x = x + (squareSize / 3);
+                rect.y = y + (squareSize / 3);
+            }
+            SDL_RenderCopy(render, tt->second, NULL, &rect);
+            break;
+        }
     }
-    if (str.at(j) == '8') {
-        SDL_SetRenderDrawColor(render, 25,250,50, 255);
-    }
-    if (str.at(j) == '=' || str.at(j) == '<') {
-        SDL_SetRenderDrawColor(render, 25,25,255, 255);
-    }
-    if (str.at(j) == ' ') {
-        SDL_SetRenderDrawColor(render, 0,0,0, 255);
-    }
-    if (str.at(j) == '[') {
-        SDL_SetRenderDrawColor(render, 255,0,0, 255);
-    }
-    if (str.at(j) == 'o') {
-        rect.w = squareSize / 8;
-        rect.h = squareSize / 8;
-        rect.x = x + (squareSize / 2.5);
-        rect.y = y + (squareSize / 2.5);
-        SDL_SetRenderDrawColor(render, 255,255,255, 255);
-    }
-    if (str.at(j) == 'O') {
-        rect.w = squareSize / 4;
-        rect.h = squareSize / 4;
-        rect.x = x + (squareSize / 3);
-        rect.y = y + (squareSize / 3);
-        SDL_SetRenderDrawColor(render, 74,86,237, 255);
-    }
-    if (str.at(j) == 'P') {
-        SDL_SetRenderDrawColor(render, 255,240,0, 255);
-    }
-    if (str.at(j) == 'M') {
-        SDL_SetRenderDrawColor(render, 255,0,124, 255);
-    }
-    if (str.at(j) == 'F') {
-        SDL_SetRenderDrawColor(render, 0,0,124, 255);
-    }
-    SDL_RenderFillRect(render, &rect);
-    SDL_RenderDrawRect(render, &rect);
 }
-
 
 void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t size)
 {

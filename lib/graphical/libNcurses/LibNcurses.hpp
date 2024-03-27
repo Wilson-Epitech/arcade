@@ -32,25 +32,15 @@ namespace arcade
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void pickColor(std::map<std::string, Color> patternMap) override {};
         private:
             WINDOW *win;
-            enum {
-                DEFAULT,
-                GREEN,
-                BLUE,
-                RED,
-                CYAN,
-                BLACK,
-                WHITE,
-                GRAY,
-                YELLOW
-            };
             int x;
             int y;
             bool keyPressed;
             int quit;
+            std::map<std::string, arcade::Color> charMap;
     
+            void pickColor(std::map<std::string, Color> patternMap);
             void color_remove(void);
             void checkTwoChar(std::size_t j, std::string str);
     };

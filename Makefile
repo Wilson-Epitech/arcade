@@ -30,6 +30,7 @@ graphicals:
 
 games:
 	cd ./lib/games/pacman/ && make re -j5
+	cd ./lib/games/snake/ && make re -j5
 
 all: $(OBJ)	graphicals games
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)

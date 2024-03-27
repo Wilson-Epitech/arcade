@@ -271,7 +271,7 @@ std::map<std::string, arcade::Color> arcade::LibPacman::getPattern()
 {
     std::map<std::string, arcade::Color> pattern;
     pattern.insert({" ", arcade::BLACK});
-    pattern.insert({"#", arcade::GREY});
+    pattern.insert({"#", arcade::GRAY});
     pattern.insert({"o", arcade::WHITE});
     pattern.insert({"O", arcade::CYAN});
     pattern.insert({"|", arcade::BLACK});

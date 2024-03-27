@@ -34,7 +34,6 @@ namespace arcade
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void pickColor(std::map<std::string, Color> patternMap) override {};
         private:
             SDL_Window* window;
             SDL_Event event;
@@ -44,8 +43,11 @@ namespace arcade
             float squareSize;
             TTF_Font* _font;
             KeyPressed oldKeyPressed;
+            std::map<std::string, SDL_Texture*> charMap;
 
+            void pickColor(std::map<std::string, Color> patternMap);
             void checkTwoChar(std::size_t j, std::string str);
+            SDL_Texture* madeRectangle(int r, int g, int b);
     };
 };
 

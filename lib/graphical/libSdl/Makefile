@@ -17,7 +17,7 @@ LDFLAGS = -shared
 
 FLAGS_DEBUG = -g3
 
-BIN_NAME = arcade_sdl.so
+BIN_NAME = arcade_sdl2.so
 
 all: $(OBJ)
 	$(CXX) -c $(CXXFLAGS) $(SRC)

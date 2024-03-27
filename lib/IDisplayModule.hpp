@@ -35,7 +35,6 @@ namespace arcade
             virtual void displayMap(std::array<std::string, 23> map, std::size_t size) = 0;
             virtual arcade::KeyPressed getKey() = 0;
             virtual void setKey(arcade::KeyPressed newValue) = 0;
-            virtual void pickColor(std::map<std::string, Color> patternMap) = 0;
     };
 }
 

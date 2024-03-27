@@ -9,15 +9,17 @@
 
 arcade::libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str())
 {
+    return;
+}
+
+void arcade::libSfml::init(std::map<std::string, Color> pattern)
+{
     x = BASE_X;
     y = BASE_Y;
     squareSize = 30;
     keyPressed = false;
     _font.loadFromFile(FONT_PATH.c_str());
-}
-
-void arcade::libSfml::init(std::map<std::string, Color> pattern)
-{
+    pickColor(pattern);
     return;
 }
 
@@ -42,7 +44,7 @@ void arcade::libSfml::pickColor(std::map<std::string, arcade::Color> patternMap)
             charMap.insert({tt->first, madeRectangle(RGB(255,0,0), squareSize)});
         }
         if (tt->second == arcade::BLUE) {
-            charMap.insert({tt->first, madeRectangle(RGB(0,0,255), squareSize)});
+            charMap.insert({tt->first, madeRectangle(RGB(0,0,124), squareSize)});
         }
         if (tt->second == arcade::GREEN) {
             charMap.insert({tt->first, madeRectangle(RGB(0,255,0), squareSize)});
@@ -50,11 +52,11 @@ void arcade::libSfml::pickColor(std::map<std::string, arcade::Color> patternMap)
         if (tt->second == arcade::YELLOW) {
             charMap.insert({tt->first, madeRectangle(RGB(255,240,0), squareSize)});
         }
-        if (tt->second == arcade::GREY) {
+        if (tt->second == arcade::GRAY) {
             charMap.insert({tt->first, madeRectangle(RGB(50,50,50), squareSize)});
         }
         if (tt->second == arcade::CYAN) {
-            charMap.insert({tt->first, madeRectangle(RGB(74,86,237), squareSize)});
+            charMap.insert({tt->first, madeRectangle(RGB(74,86,237), squareSize / 4)});
         }
     }
 }
@@ -66,7 +68,6 @@ void arcade::libSfml::stop() {
 arcade::KeyPressed arcade::libSfml::getKey()
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
-    bool pressed = false;
     if (event.type == sf::Event::Closed) {
         window.close();
         return arcade::QUITE;
@@ -92,55 +93,53 @@ void arcade::libSfml::game()
     window.clear();
 }
 
+bool arcade::libSfml::displayRoundShape(sf::RectangleShape rect, char c)
+{
+    sf::CircleShape cerc;
+    cerc.setRadius(rect.getSize().x);
+    cerc.setFillColor(rect.getFillColor());
+    cerc.setPosition(rect.getPosition());
+    if (c == 'o') {
+        cerc.setPosition(getPosition(x + (squareSize / 2.5), y + (squareSize / 2.5)));
+        window.draw(cerc);
+        return true;
+    }
+    if (c == 'O') {
+        cerc.setPosition(getPosition(x + (squareSize / 3), y + (squareSize / 3)));
+        window.draw(cerc);
+        return true;
+    }
+    if (c == 'P') {
+        cerc.setRadius(rect.getSize().x / 2);
+        window.draw(cerc);
+        return true;
+    }
+    if (c == 'F') {
+        cerc.setRadius(rect.getSize().x / 2);
+        window.draw(cerc);
+        return true;
+    }
+    if (c == 'M') {
+        cerc.setRadius(rect.getSize().x / 2);
+        window.draw(cerc);
+        return true;
+    }
+    return false;
+}
+
 void arcade::libSfml::checkTwoChar(std::size_t j, std::string str)
 {
-    sf::RectangleShape rect;
-    rect.setSize(getPosition(squareSize, squareSize));
-    rect.setPosition(getPosition(x, y));
-    rect.setFillColor(RGB(0,0,0));
-    sf::CircleShape cerc;
-    if (str.at(j) == '#') {
-        rect.setFillColor(RGB(50,50,50));
+
+    for (auto tt = charMap.begin(); tt != charMap.end(); tt++) {
+        if (tt->first.at(0) == str.at(j)) {
+            sf::RectangleShape rect = tt->second;
+            rect.setPosition(getPosition(x, y));
+            if (displayRoundShape(rect, str.at(j)) == true) {
+                break;
+            }
+            window.draw(rect);
+        }
     }
-    if (str.at(j) == '8') {
-        rect.setFillColor(RGB(25,250,50));
-    }
-    if (str.at(j) == '=' || str.at(j) == '<') {
-        rect.setFillColor(RGB(25,25,255));
-    }
-    if (str.at(j) == ' ') {
-        rect.setFillColor(RGB(0,0,0));
-    }
-    if (str.at(j) == '[') {
-        rect.setFillColor(RGB(255,0,0));
-    }
-    if (str.at(j) == 'o') {
-        cerc.setRadius(squareSize / 8);
-        cerc.setFillColor(RGB(255,255,255));
-        cerc.setPosition(getPosition(x + (squareSize / 2.5), y + (squareSize / 2.5)));
-    }
-    if (str.at(j) == 'O') {
-        cerc.setRadius(squareSize / 4);
-        cerc.setFillColor(RGB(74,86,237));
-        cerc.setPosition(getPosition(x + (squareSize / 4), y + (squareSize / 4)));
-    }
-    if (str.at(j) == 'P') {
-        cerc.setRadius(squareSize / 2);
-        cerc.setFillColor(RGB(255,240,0));
-        cerc.setPosition(getPosition(x, y));
-    }
-    if (str.at(j) == 'M') {
-        cerc.setRadius(squareSize / 2);
-        cerc.setFillColor(RGB(255,0,124));
-        cerc.setPosition(getPosition(x, y));
-    }
-    if (str.at(j) == 'F') {
-        cerc.setRadius(squareSize / 2);
-        cerc.setFillColor(RGB(0,0,124));
-        cerc.setPosition(getPosition(x, y));
-    }
-    window.draw(rect);
-    window.draw(cerc);
 }
 
 void arcade::libSfml::displayMap(std::array<std::string, 23> map, std::size_t size)

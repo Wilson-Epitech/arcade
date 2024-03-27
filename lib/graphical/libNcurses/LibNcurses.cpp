@@ -9,6 +9,11 @@
 
 arcade::libNcurses::libNcurses()
 {
+    return;
+}
+
+void arcade::libNcurses::init(std::map<std::string, Color> pattern)
+{
     initscr();
     noecho();
     nodelay(stdscr, TRUE);
@@ -16,23 +21,49 @@ arcade::libNcurses::libNcurses()
     keypad(stdscr, TRUE);
     curs_set(FALSE);
     init_pair(DEFAULT, COLOR_WHITE, COLOR_BLACK);
-    init_pair(RED, COLOR_RED, COLOR_RED);
-    init_pair(GREEN, COLOR_GREEN, COLOR_GREEN);
-    init_pair(BLUE, COLOR_BLUE, COLOR_BLUE);
-    init_pair(CYAN, COLOR_CYAN, COLOR_BLACK);
-    init_pair(BLACK, COLOR_BLACK, COLOR_BLACK);
-    init_pair(WHITE, COLOR_WHITE, COLOR_WHITE);
-    init_color(100, 150, 150, 150);
-    init_pair(YELLOW, COLOR_YELLOW, COLOR_YELLOW);
-    init_pair(GRAY, 100, 100);
     win = newwin(500 , 500, 0, 0);
     wclear(win);
     keyPressed = false;
+    pickColor(pattern);
 }
 
-void arcade::libNcurses::init(std::map<std::string, Color> pattern)
+void arcade::libNcurses::pickColor(std::map<std::string, Color> patternMap)
 {
-    return;
+    for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
+        if (tt->second == arcade::BLACK) {
+            init_pair(arcade::BLACK, COLOR_BLACK, COLOR_BLACK);
+            charMap.insert({tt->first, arcade::BLACK});
+        }
+        if (tt->second == arcade::WHITE) {
+            init_pair(arcade::WHITE, COLOR_WHITE, COLOR_BLACK);
+            charMap.insert({tt->first, arcade::WHITE});
+        }
+        if (tt->second == arcade::RED) {
+            init_pair(arcade::RED, COLOR_RED, COLOR_RED);
+            charMap.insert({tt->first, arcade::RED});
+        }
+        if (tt->second == arcade::BLUE) {
+            init_pair(arcade::BLUE, COLOR_BLUE, COLOR_BLUE);
+            charMap.insert({tt->first, arcade::BLUE});
+        }
+        if (tt->second == arcade::GREEN) {
+            init_pair(arcade::GREEN, COLOR_GREEN, COLOR_GREEN);
+            charMap.insert({tt->first, arcade::GREEN});
+        }
+        if (tt->second == arcade::YELLOW) {
+            init_pair(arcade::YELLOW, COLOR_YELLOW, COLOR_YELLOW);
+            charMap.insert({tt->first, arcade::YELLOW});
+        }
+        if (tt->second == arcade::GRAY) {
+            init_color(100, 150, 150, 150);
+            init_pair(arcade::GRAY, 100, 100);
+            charMap.insert({tt->first, arcade::GRAY});
+        }
+        if (tt->second == arcade::CYAN) {
+            init_pair(arcade::CYAN, COLOR_CYAN, COLOR_BLACK);
+            charMap.insert({tt->first, arcade::CYAN});
+        }
+    }
 }
 
 void arcade::libNcurses::stop() {
@@ -83,45 +114,17 @@ arcade::KeyPressed arcade::libNcurses::getKey()
 
 void arcade::libNcurses::checkTwoChar(std::size_t j, std::string str)
 {
-    if (str.at(j) == '#') {
-        wattron(win,COLOR_PAIR(GRAY));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == '8') {
-        wattron(win,COLOR_PAIR(GREEN));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == '=' || str.at(j) == '<') {
-        wattron(win,COLOR_PAIR(BLUE));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == ' ') {
-        wattron(win,COLOR_PAIR(BLACK));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == '[') {
-        wattron(win,COLOR_PAIR(RED));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == 'o') {
-        wattron(win,COLOR_PAIR(DEFAULT));
-        mvwprintw(win, y, x, "*");
-    }
-    if (str.at(j) == 'O') {
-        wattron(win,COLOR_PAIR(CYAN));
-        mvwprintw(win, y, x, "O");
-    }
-    if (str.at(j) == 'P') {
-        wattron(win,COLOR_PAIR(YELLOW));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == 'M') {
-        wattron(win,COLOR_PAIR(RED));
-        mvwprintw(win, y, x, " ");
-    }
-    if (str.at(j) == 'F') {
-        wattron(win,COLOR_PAIR(BLUE));
-        mvwprintw(win, y, x, " ");
+    for (auto tt = charMap.begin(); tt != charMap.end(); tt++) {
+        if (tt->first.at(0) == str.at(j)) {
+            wattron(win,COLOR_PAIR(tt->second));
+            if (str.at(j) == 'o') {
+                mvwprintw(win, y, x, "*");
+            } else if (str.at(j) == 'O') {
+                mvwprintw(win, y, x, "O");
+            } else {
+                mvwprintw(win, y, x, " ");
+            }
+        }
     }
 }
 

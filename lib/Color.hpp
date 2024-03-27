@@ -19,7 +19,7 @@ namespace arcade
         BLUE,
         GREEN,
         YELLOW,
-        GREY,
+        GRAY,
         CYAN
     };
 }
