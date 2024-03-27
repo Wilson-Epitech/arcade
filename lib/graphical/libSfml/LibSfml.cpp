@@ -14,12 +14,49 @@ arcade::libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_st
     squareSize = 30;
     keyPressed = false;
     _font.loadFromFile(FONT_PATH.c_str());
-    
 }
 
 void arcade::libSfml::init(std::map<std::string, Color> pattern)
 {
     return;
+}
+
+sf::RectangleShape arcade::libSfml::madeRectangle(sf::Color color, float size)
+{
+    sf::RectangleShape rect;
+    rect.setSize(getPosition(size, size));
+    rect.setFillColor(color);
+    return rect;
+}
+
+void arcade::libSfml::pickColor(std::map<std::string, arcade::Color> patternMap)
+{
+    for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
+        if (tt->second == arcade::BLACK) {
+            charMap.insert({tt->first, madeRectangle(RGB(0,0,0), squareSize)});
+        }
+        if (tt->second == arcade::WHITE) {
+            charMap.insert({tt->first, madeRectangle(RGB(255,255,255), squareSize / 8)});
+        }
+        if (tt->second == arcade::RED) {
+            charMap.insert({tt->first, madeRectangle(RGB(255,0,0), squareSize)});
+        }
+        if (tt->second == arcade::BLUE) {
+            charMap.insert({tt->first, madeRectangle(RGB(0,0,255), squareSize)});
+        }
+        if (tt->second == arcade::GREEN) {
+            charMap.insert({tt->first, madeRectangle(RGB(0,255,0), squareSize)});
+        }
+        if (tt->second == arcade::YELLOW) {
+            charMap.insert({tt->first, madeRectangle(RGB(255,240,0), squareSize)});
+        }
+        if (tt->second == arcade::GREY) {
+            charMap.insert({tt->first, madeRectangle(RGB(50,50,50), squareSize)});
+        }
+        if (tt->second == arcade::CYAN) {
+            charMap.insert({tt->first, madeRectangle(RGB(74,86,237), squareSize)});
+        }
+    }
 }
 
 void arcade::libSfml::stop() {
@@ -35,30 +72,18 @@ arcade::KeyPressed arcade::libSfml::getKey()
         return arcade::QUITE;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == true) {
-        key = arcade::KeyPressed::UP;
-        pressed = true;
+        return arcade::KeyPressed::UP;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) == true) {
-        key = arcade::KeyPressed::DOWN;
-        pressed = true;
+        return arcade::KeyPressed::DOWN;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) == true) {
-        key = arcade::KeyPressed::LEFT;
-        pressed = true;
+        return arcade::KeyPressed::LEFT;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) == true) {
-        key = arcade::KeyPressed::RIGHT;
-        pressed = true;
+        return arcade::KeyPressed::RIGHT;
     }
-    if (!pressed) {
-        keyPressed = false;
-        return arcade::KeyPressed::OTHER;
-    } else if (keyPressed == false) {
-        keyPressed = true;
-        return key;
-    } else {
-        return arcade::KeyPressed::OTHER;
-    }
+    return key;
 }
 
 void arcade::libSfml::game()

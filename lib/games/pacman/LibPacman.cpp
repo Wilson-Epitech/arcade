@@ -49,6 +49,7 @@ void arcade::LibPacman::init()
     timeStart = std::chrono::steady_clock::now();
     timeEatBuff = std::chrono::steady_clock::now();
     pacBuff = false;
+    oldkeyPressed = arcade::OTHER;
 }
 
 std::array<std::string, 23> arcade::LibPacman::getMap()
@@ -147,7 +148,10 @@ arcade::GameStatus arcade::LibPacman::updateMap(arcade::KeyPressed key)
     }
     launchMooveGhost();
     changeGhostState();
-    moovePlayer(key);
+    if (key != arcade::OTHER) {
+        oldkeyPressed = key;
+    }
+    moovePlayer(oldkeyPressed);
     return gameStatus;
 }
 
@@ -261,4 +265,18 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibPacman::getT
     scoreTxt.append(std::to_string(score));
     textToDisplay.push_back({scoreTxt, {200, 10}});
     return textToDisplay;
+}
+
+std::map<std::string, arcade::Color> arcade::LibPacman::getPattern()
+{
+    std::map<std::string, arcade::Color> pattern;
+    pattern.insert({" ", arcade::BLACK});
+    pattern.insert({"#", arcade::GREY});
+    pattern.insert({"o", arcade::WHITE});
+    pattern.insert({"O", arcade::CYAN});
+    pattern.insert({"|", arcade::BLACK});
+    pattern.insert({"M", arcade::RED});
+    pattern.insert({"P", arcade::YELLOW});
+    pattern.insert({"F", arcade::BLUE});
+    return pattern;
 }

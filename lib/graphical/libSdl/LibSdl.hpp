@@ -43,6 +43,7 @@ namespace arcade
             float y;
             float squareSize;
             TTF_Font* _font;
+            KeyPressed oldKeyPressed;
 
             void checkTwoChar(std::size_t j, std::string str);
     };

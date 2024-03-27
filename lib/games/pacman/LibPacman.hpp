@@ -23,7 +23,7 @@ namespace arcade {
             ~LibPacman() {};
             void resetGame() override {};
             std::array<std::string, 23> getMap() override;
-            std::map<std::string, Color> getPattern() override {};
+            std::map<std::string, Color> getPattern() override;
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
@@ -61,6 +61,7 @@ namespace arcade {
             int score;
             bool pacBuff;
             std::chrono::_V2::steady_clock::time_point timeEatBuff;
+            KeyPressed oldkeyPressed;
 
             std::size_t ghostX;
             std::size_t ghostY;

@@ -32,7 +32,7 @@ namespace arcade
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void pickColor(std::map<std::string, Color> patternMap) override {};
+            void pickColor(std::map<std::string, Color> patternMap) override;
         private:
             sf::RenderWindow window;
             float x;
@@ -42,9 +42,11 @@ namespace arcade
             bool keyPressed;
             sf::Font _font;
 
+            sf::RectangleShape madeRectangle(sf::Color color, float size);
             void checkTwoChar(std::size_t j, std::string str);
             sf::Vector2f getPosition(float x, float y);
             sf::Color RGB(int r, int g, int b);
+            std::map<std::string, sf::RectangleShape> charMap;
     };
 };
 

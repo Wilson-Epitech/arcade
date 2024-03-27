@@ -16,6 +16,7 @@ arcade::libSdl::libSdl()
     squareSize = 30;
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH.c_str(), 28);
+    oldKeyPressed = arcade::OTHER;
 }
 
 void arcade::libSdl::init(std::map<std::string, Color> pattern)
@@ -123,33 +124,28 @@ void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t siz
     x = BASE_X;
     y = BASE_Y;
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
+    switch (event.type) {
+        case SDL_QUIT:
+            oldKeyPressed = arcade::QUITE;
+    }
 }
 
 arcade::KeyPressed arcade::libSdl::getKey()
 {
-    switch (event.type) {
-        case SDL_QUIT:
-            return QUITE;
+    if (oldKeyPressed != arcade::OTHER) {
+        return arcade::QUITE;
     }
-    switch(event.type) {
-        case SDL_KEYDOWN:
-            switch(event.key.keysym.sym) {
-                case SDLK_LEFT:
-                    return arcade::LEFT;
-                    break;
-                case SDLK_RIGHT:
-                    return arcade::RIGHT;
-                    break;
-                case SDLK_UP:
-                    return arcade::UP;
-                    break;
-                case SDLK_DOWN:
-                    return arcade::DOWN;
-                    break;
-                default:
-                    return arcade::OTHER;
-                    break;
-            }
+    
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_LEFT]) {
+        return arcade::LEFT;
+    } else if (state[SDL_SCANCODE_RIGHT]) {
+        return arcade::RIGHT;
+    } else if (state[SDL_SCANCODE_UP]) {
+        return arcade::UP;
+    } else if (state[SDL_SCANCODE_DOWN]) {
+        return arcade::DOWN;
     }
+
     return arcade::OTHER;
 }

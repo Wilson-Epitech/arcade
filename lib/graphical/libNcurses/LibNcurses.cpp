@@ -62,16 +62,16 @@ arcade::KeyPressed arcade::libNcurses::getKey()
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     int c = getch();
     if (c == KEY_UP) {
-        key = arcade::KeyPressed::UP;
+        return arcade::KeyPressed::UP;
     }
     if (c == KEY_DOWN) {
-        key = arcade::KeyPressed::DOWN;
+        return arcade::KeyPressed::DOWN;
     }
     if (c == KEY_LEFT) {
-        key = arcade::KeyPressed::LEFT;
+        return arcade::KeyPressed::LEFT;
     }
     if (c == KEY_RIGHT) {
-        key = arcade::KeyPressed::RIGHT;
+        return arcade::KeyPressed::RIGHT;
     }
     if (c == 'q') {
         delwin(win);
