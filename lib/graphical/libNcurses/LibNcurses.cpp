@@ -107,7 +107,7 @@ arcade::KeyPressed arcade::libNcurses::getKey()
     if (c == 'q') {
         delwin(win);
         endwin();
-        return arcade::QUITE;
+        return arcade::CLOSE_BUTTON;
     }
     return key;
 }

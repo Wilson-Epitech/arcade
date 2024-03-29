@@ -17,7 +17,12 @@ namespace arcade
         DOWN,
         LEFT,
         RIGHT,
-        QUITE
+        R,
+        P,
+        N,
+        G,
+        BACKSPACE,
+        CLOSE_BUTTON,
     };
 }
 

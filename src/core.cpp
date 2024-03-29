@@ -164,6 +164,7 @@ int main(int argc, char **argv)
     arcade::KeyPressed key = arcade::OTHER;
     arcade::GameStatus status = arcade::PLAYING;
     lib_graphical->init(libGame->getPattern());
+    int gameSpeed = 150;
 
     while (status == arcade::PLAYING) {
         lib_graphical->game();
@@ -171,16 +172,22 @@ int main(int argc, char **argv)
         auto time2 = std::chrono::steady_clock::now();
         auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
 
-        if (elapsed.count() >= 150) {
+        if (elapsed.count() >= gameSpeed) {
             key = lib_graphical->getKey();
-            if (key == arcade::QUITE) {
+            if (key == arcade::CLOSE_BUTTON) {
                 return 0;
             }
             status = libGame->updateMap(key);
             time1 = std::chrono::steady_clock::now();
         }
         lib_graphical->displayMap(libGame->getMap(), libGame->getMapCellSize());
-    }
+        if (status == arcade::WON_AND_RELOADED) {
+            status = arcade::PLAYING;
+            libGame->resetGame();
+            gameSpeed -= 15;
+
+        }
+     }
     dlclose(lib.second);
     dlclose(gameLib.second);
     return 0;

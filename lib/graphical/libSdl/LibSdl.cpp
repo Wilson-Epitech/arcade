@@ -142,16 +142,16 @@ void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t siz
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
     switch (event.type) {
         case SDL_QUIT:
-            oldKeyPressed = arcade::QUITE;
+            oldKeyPressed = arcade::CLOSE_BUTTON;
     }
 }
 
 arcade::KeyPressed arcade::libSdl::getKey()
 {
     if (oldKeyPressed != arcade::OTHER) {
-        return arcade::QUITE;
+        return arcade::CLOSE_BUTTON;
     }
-    
+
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_LEFT]) {
         return arcade::LEFT;
@@ -161,6 +161,8 @@ arcade::KeyPressed arcade::libSdl::getKey()
         return arcade::UP;
     } else if (state[SDL_SCANCODE_DOWN]) {
         return arcade::DOWN;
+    } else {
+        return arcade::OTHER;
     }
 
     return arcade::OTHER;

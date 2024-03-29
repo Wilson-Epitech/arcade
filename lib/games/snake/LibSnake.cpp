@@ -66,7 +66,7 @@ void arcade::LibSnake::getSnakeLenght()
 {
     std::size_t y = playerY;
     std::size_t x = playerX;
-    size_t i = 0;
+   std::size_t i = 0;
     for (; map[y][x] != '<'; i++)
         x--;
     SnakeLenght = i;

@@ -9,6 +9,7 @@
 
 arcade::LibPacman::LibPacman()
 {
+    score = 0;
     init();
 }
 
@@ -23,11 +24,11 @@ void arcade::LibPacman::init()
         "#o####o##o###########o##o####o#",
         "#o####o##oooooo##ooooo##o####o#",
         "#oooooo#######o##o######oooooo#",
-        "######o##ooooooooooooo##o######",
+        "######o##ooooo   ooooo##o######",
         "###oooo##o####   ####o##oooo###",
-        "###o##o##o### M M ###o##o##o###",
-        "|ooooooooo### M M ###ooooooooo|",
-        "#o####o######     ######o####o#",
+        "###o##o##o###|M M|###o##o##o###",
+        "|ooooooooo###|M M|###ooooooooo|",
+        "#o####o######|||||######o####o#",
         "|ooooooooo###     ###ooooooooo|",
         "#o####o##o###########o##o####o#",
         "#Ooo##oooooooooPooooooooo##ooO#",
@@ -38,18 +39,29 @@ void arcade::LibPacman::init()
         "#ooooooooooooooooooooooooooooo#",
         "###############################"
     };
-    tt = 0;
+    ghostID = 0;
     mapSize = 1;
     playerX = 0;
     playerY = 0;
     gameStatus = arcade::PLAYING;
     keyPressed = arcade::OTHER;
     keyPressedGhost = arcade::UP;
-    score = 0;
     timeStart = std::chrono::steady_clock::now();
     timeEatBuff = std::chrono::steady_clock::now();
     pacBuff = false;
     oldkeyPressed = arcade::OTHER;
+    ghostX = 0;
+    ghostY = 0;
+    ghostChar = 'M';
+    ghostEat.first = 0;
+    ghostEat.second = 0;
+    ghostCanMoove = false;
+    getNexGhost();
+}
+
+void arcade::LibPacman::resetGame()
+{
+    init();
 }
 
 std::array<std::string, 23> arcade::LibPacman::getMap()
@@ -102,19 +114,21 @@ void arcade::LibPacman::changeGhostState(void)
 {
     auto timeNow = std::chrono::steady_clock::now();
     auto timeElapsed= std::chrono::duration_cast <std::chrono::milliseconds>(timeNow - timeEatBuff);
-    if (timeElapsed.count() < 5000) {
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.at(i).size(); j++) {
+    if (timeElapsed.count() < 10000 && ghostCanMoove == true) {
+        ghostChar = 'F';
+        for (std::size_t i = 0; i < map.size(); i++) {
+            for (std::size_t j = 0; j < map.at(i).size(); j++) {
                 if (map.at(i).at(j) == 'M') {
-                    map.at(i).at(j) = 'F';
+                    map.at(i).at(j) = ghostChar;
                 }
             }
         }
     } else {
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.at(i).size(); j++) {
+        ghostChar = 'M';
+        for (std::size_t i = 0; i < map.size(); i++) {
+            for (std::size_t j = 0; j < map.at(i).size(); j++) {
                 if (map.at(i).at(j) == 'F') {
-                    map.at(i).at(j) = 'M';
+                    map.at(i).at(j) = ghostChar;
                 }
             }
         }
@@ -123,35 +137,29 @@ void arcade::LibPacman::changeGhostState(void)
 
 void arcade::LibPacman::isGameWin(void)
 {
-    for (int i = 0; i < map.size(); i++) {
-        for (int j = 0; j < map.at(i).size(); j++) {
+    for (std::size_t i = 0; i < map.size(); i++) {
+        for (std::size_t j = 0; j < map.at(i).size(); j++) {
             if (map.at(i).at(j) == 'o' || map.at(i).at(j) == 'O') {
                 return;
             }
         }
     }
-    gameStatus = arcade::WON;
+    gameStatus = arcade::WON_AND_RELOADED;
 }
 
 arcade::GameStatus arcade::LibPacman::updateMap(arcade::KeyPressed key)
 {
-    if (key == arcade::QUITE) {
+    if (key == arcade::CLOSE_BUTTON) {
         return arcade::QUIT;
     }
     findPlayer();
-    for (int i = 0; i < map.size(); i++) {
-        for (int j = 0; j < map.at(i).size(); j++) {
-            if (map.at(i).at(j) == 'F') {
-                map.at(i).at(j) = 'M';
-            }
-        }
-    }
     launchMooveGhost();
     changeGhostState();
     if (key != arcade::OTHER) {
         oldkeyPressed = key;
     }
     moovePlayer(oldkeyPressed);
+    isGameWin();
     return gameStatus;
 }
 
@@ -236,23 +244,18 @@ void arcade::LibPacman::addScore(char c)
         score += 50;
         timeEatBuff = std::chrono::steady_clock::now();
         pacBuff = true;
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.at(i).size(); j++) {
+        for (std::size_t i = 0; i < map.size(); i++) {
+            for (std::size_t j = 0; j < map.at(i).size(); j++) {
                 if (map.at(i).at(j) == 'M') {
-                    map.at(i).at(j) = 'F';
+                    map.at(i).at(j) = ghostChar;
                 }
             }
         }
     }
     if (c == 'F') {
         score += 200;
-        map.at(10).at(15) = 'M';
-    }
-}
-
-extern "C" {
-    arcade::IGameModule *entryPoint() {
-        return (new arcade::LibPacman);
+        ghostEat.first = playerX;
+        ghostEat.second = playerY;
     }
 }
 
@@ -279,4 +282,10 @@ std::map<std::string, arcade::Color> arcade::LibPacman::getPattern()
     pattern.insert({"P", arcade::YELLOW});
     pattern.insert({"F", arcade::BLUE});
     return pattern;
+}
+
+extern "C" {
+    arcade::IGameModule *entryPoint() {
+        return (new arcade::LibPacman);
+    }
 }

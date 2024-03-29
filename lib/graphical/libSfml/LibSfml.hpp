@@ -32,13 +32,13 @@ namespace arcade
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() override;
             void setKey(arcade::KeyPressed newValue) override {};
+            void changeColor(std::map<std::string, Color> patternMap) override {};
         private:
             sf::RenderWindow window;
             float x;
             float y;
             float squareSize;
             sf::Event event;
-            bool keyPressed;
             sf::Font _font;
             std::map<std::string, sf::RectangleShape> charMap;
 

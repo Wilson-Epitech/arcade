@@ -17,7 +17,6 @@ void arcade::libSfml::init(std::map<std::string, Color> pattern)
     x = BASE_X;
     y = BASE_Y;
     squareSize = 30;
-    keyPressed = false;
     _font.loadFromFile(FONT_PATH.c_str());
     pickColor(pattern);
     return;
@@ -70,7 +69,7 @@ arcade::KeyPressed arcade::libSfml::getKey()
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     if (event.type == sf::Event::Closed) {
         window.close();
-        return arcade::QUITE;
+        return arcade::CLOSE_BUTTON;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == true) {
         return arcade::KeyPressed::UP;

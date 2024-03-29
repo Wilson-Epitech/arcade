@@ -21,7 +21,7 @@ namespace arcade {
         public:
             LibPacman();
             ~LibPacman() {};
-            void resetGame() override {};
+            void resetGame() override;
             std::array<std::string, 23> getMap() override;
             std::map<std::string, Color> getPattern() override;
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
@@ -67,7 +67,10 @@ namespace arcade {
             std::size_t ghostY;
             std::array<arcade::KeyPressed, 4> keyGhost = {arcade::UP, arcade::UP, arcade::UP, arcade::UP};
             std::array<std::pair<std::pair<std::size_t, std::size_t>, char>, 4> ghostPos;
-            int tt;
+            std::pair<std::size_t, std::size_t> ghostEat;
+            int ghostID;
+            char ghostChar;
+            bool ghostCanMoove;
             
             std::chrono::_V2::steady_clock::time_point timeStart;
     };

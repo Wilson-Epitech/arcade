@@ -11,14 +11,9 @@ OBJ = $(SRC:.cpp=.o)
 
 CFLAGS = -Wall -Wextra -I lib/graphical -lsfml-graphics -lSDL2 -lSDL2_ttf -lncurses
 
-FLAGS_DEBUG = -g3
-
 BIN_NAME = arcade
 
 CC = g++
-
-debug: CFLAGS += $(FLAGS_DEBUG)
-debug: all
 
 core: $(OBJ)
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)

@@ -29,7 +29,7 @@ bool arcade::LibPacman::isAvailableGhost(char c)
     if (c == '#') {
         return false;
     }
-    if (c == 'M') {
+    if (c == ghostChar) {
         return false;
     }
     if (c == '|') {
@@ -48,7 +48,7 @@ void arcade::LibPacman::wallBoxGhost(void)
     int y = 9;
     while (y < 14) {
         while (x < 18) {
-            if (map.at(y).at(x) == 'M' || map.at(y).at(x) == 'F') {
+            if (map.at(y).at(x) == ghostChar) {
                 return;
             }
             x++;
@@ -56,9 +56,6 @@ void arcade::LibPacman::wallBoxGhost(void)
         x = 13;
         y++;
     }
-    map.at(9).at(14) = '#';
-    map.at(9).at(15) = '#';
-    map.at(9).at(16) = '#';
     x = 13;
     y = 9;
     while (y < 14) {
@@ -76,19 +73,16 @@ void arcade::LibPacman::wallBoxGhost(void)
     map.at(9).at(16) = '#';
 }
 
-
 void arcade::LibPacman::launchMooveGhost()
 {
     auto timeNow = std::chrono::steady_clock::now();
     auto timeElapsed= std::chrono::duration_cast <std::chrono::milliseconds>(timeNow - timeStart);
-    if (timeElapsed.count() < (100)) {
+    if (timeElapsed.count() < (10000)) {
         srand(time(NULL));
         return;
     }
-    ghostX = 0;
-    ghostY = 0;
-    getNexGhost();
-    if (timeElapsed.count() < (400)) {
+    ghostCanMoove = true;
+    if (timeElapsed.count() < (10400)) {
         for (int i = 0; i < 4; i++) {
             ghostX = ghostPos.at(i).first.first;
             ghostY = ghostPos.at(i).first.second;
@@ -102,9 +96,16 @@ void arcade::LibPacman::launchMooveGhost()
     }
     wallBoxGhost();
     for (int i = 0; i < 4; i++) {
-        tt = i;
+        ghostID = i;
+        if (ghostEat.first == ghostPos.at(i).first.first && ghostEat.second == ghostPos.at(i).first.second) {
+            ghostPos.at(i).first.first = 15;
+            ghostPos.at(i).first.second = 8;
+            ghostEat.first = 0;
+            ghostEat.second = 0;
+        }
         ghostX = ghostPos.at(i).first.first;
         ghostY = ghostPos.at(i).first.second;
+        
         keyGhost.at(i) = changeGhostKey(keyGhost.at(i));
         keyPressedGhost = keyGhost.at(i);
         if (ghostPos.at(i).second == 'P') {
@@ -125,11 +126,13 @@ arcade::KeyPressed arcade::LibPacman::mooveGhost(arcade::KeyPressed key)
         return key;
     }
     if (isAvailableGhost(map.at(ghostY).at(ghostX)) == true) {
-        map[defaultY][defaultX] = ghostPos.at(tt).second;
-        ghostPos.at(tt).second = map[ghostY][ghostX];
-        map[ghostY][ghostX] = 'M';
+        map[defaultY][defaultX] = ghostPos.at(ghostID).second;
+        ghostPos.at(ghostID).second = map[ghostY][ghostX];
+        map[ghostY][ghostX] = ghostChar;
         return key;
     }
+    ghostX = defaultX;
+    ghostY = defaultY;
     return key;
 }
 
@@ -137,17 +140,17 @@ bool arcade::LibPacman::tpGhostSide(arcade::KeyPressed key, int defaultX, int de
 {
     if (ghostX >= map.at(ghostY).size() && key == arcade::RIGHT) {
         ghostX = 0;
-        map[defaultY][defaultX] = ghostPos.at(tt).second;
-        ghostPos.at(tt).second = map[ghostY][ghostX];
-        map[ghostY][ghostX] = 'M';
+        map[defaultY][defaultX] = ghostPos.at(ghostID).second;
+        ghostPos.at(ghostID).second = map[ghostY][ghostX];
+        map[ghostY][ghostX] = ghostChar;
         return true;
     }
     if (isAvailableGhost(map.at(ghostY).at(ghostX)) == true) {
         if (ghostX == 0 && key == arcade::LEFT) {
-            map[defaultY][defaultX] = ghostPos.at(tt).second;
+            map[defaultY][defaultX] = ghostPos.at(ghostID).second;
             ghostX = map.at(ghostY).size() - 1;
-            ghostPos.at(tt).second = map[ghostY][ghostX];
-            map[ghostY][ghostX] = 'M';
+            ghostPos.at(ghostID).second = map[ghostY][ghostX];
+            map[ghostY][ghostX] = ghostChar;
             return true;
         }
     }
@@ -207,6 +210,4 @@ arcade::KeyPressed arcade::LibPacman::changeGhostKey(arcade::KeyPressed key)
     if (oldKey == arcade::RIGHT && key == arcade::LEFT)
         return arcade::UP;
     return key;
-    std::cout << "pass\n";
-    return randKey(randKey(arcade::DOWN, arcade::LEFT, arcade::UP), randKey(arcade::UP, arcade::LEFT, arcade::RIGHT), randKey(arcade::DOWN, arcade::LEFT, arcade::RIGHT));
 }
