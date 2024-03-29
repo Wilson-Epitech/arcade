@@ -20,7 +20,7 @@ namespace arcade {
             ~LibSnake() {};
             void resetGame() override {};
             std::array<std::string, 23> getMap() override;
-            std::map<std::string, Color> getPattern() override {};
+            std::map<std::string, Color> getPattern() override;
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
@@ -28,15 +28,30 @@ namespace arcade {
             std::pair<std::size_t, std::size_t> getIndexes() override {};
         protected:
         private:
+            void getQueue();
+            int findPlayer();
+            void updateKeyPressed(arcade::KeyPressed key);
             bool isAvailable(char c);
             void getSnakeLenght();
             void init();
+            void moovePlayer(arcade::KeyPressed key);
+            std::vector<std::pair<int, int>> MyVector;
+            KeyPressed keyPressed;
+            std::size_t queueY;
+            std::size_t queueX;
             std::size_t playerX;
             std::size_t playerY;
             std::size_t mapSize;
             GameStatus gameStatus;
             std::size_t SnakeLenght;
             std::array<std::string, 23> map;
+            enum Direction {
+                DROITE,
+                HAUT,
+                GAUCHE,
+                BAS
+                };
+            Direction direction;
     };
 }
 
