@@ -11,7 +11,7 @@
     #include <string>
     #include <iostream>
     #include <SFML/Graphics.hpp>
-    #include "../../IDisplayModule.hpp"
+    #include "../../includes/IDisplayModule.hpp"
 
 static const int BASE_X = 30;
 static const int BASE_Y = 60;

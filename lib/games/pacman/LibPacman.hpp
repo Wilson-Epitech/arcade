@@ -8,10 +8,10 @@
 #ifndef LIBPACMAN_HPP_
 #define LIBPACMAN_HPP_
 
-#include "../../IGameModule.hpp"
-#include "../../Color.hpp"
-#include "../../KeyPressed.hpp"
-#include "../../GameStatus.hpp"
+#include "../../includes/IGameModule.hpp"
+#include "../../includes/Color.hpp"
+#include "../../includes/KeyPressed.hpp"
+#include "../../includes/GameStatus.hpp"
 #include <string>
 #include <iostream>
 #include <chrono>
@@ -27,6 +27,8 @@ namespace arcade {
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
+            void initText(std::vector<std::string>, std::vector<std::string>) override {};
+            std::pair<std::size_t, std::size_t> getIndexes() override {};
         private:
             void init();
             int findPlayer();

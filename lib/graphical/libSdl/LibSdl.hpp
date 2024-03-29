@@ -10,7 +10,7 @@
 
     #include <string>
     #include <iostream>
-    #include "../../IDisplayModule.hpp"
+    #include "../../includes/IDisplayModule.hpp"
     #include <SDL2/SDL.h>
     #include <SDL2/SDL_ttf.h>
 

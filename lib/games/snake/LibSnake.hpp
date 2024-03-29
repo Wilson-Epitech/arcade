@@ -8,10 +8,10 @@
 #ifndef MAIN_HPP_
 #define MAIN_HPP_
 
-#include "../../IGameModule.hpp"
-#include "../../Color.hpp"
-#include "../../KeyPressed.hpp"
-#include "../../GameStatus.hpp"
+#include "../../includes/IGameModule.hpp"
+#include "../../includes/Color.hpp"
+#include "../../includes/KeyPressed.hpp"
+#include "../../includes/GameStatus.hpp"
 
 namespace arcade {
     class LibSnake : virtual public arcade::IGameModule {
@@ -24,6 +24,8 @@ namespace arcade {
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
+            void initText(std::vector<std::string>, std::vector<std::string>) override {};
+            std::pair<std::size_t, std::size_t> getIndexes() override {};
         protected:
         private:
             bool isAvailable(char c);

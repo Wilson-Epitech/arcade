@@ -10,10 +10,10 @@
 #include <dlfcn.h>
 #include <string>
 #include <string.h>
-#include "../lib/IDisplayModule.hpp"
-#include "../lib/KeyPressed.hpp"
-#include "../lib/IGameModule.hpp"
-#include "../lib/Color.hpp"
+#include "../lib/includes/IDisplayModule.hpp"
+#include "../lib/includes/KeyPressed.hpp"
+#include "../lib/includes/IGameModule.hpp"
+#include "../lib/includes/Color.hpp"
 #include <gnu/lib-names.h>
 #include "core.hpp"
 #include <iostream>

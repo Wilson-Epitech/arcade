@@ -11,7 +11,7 @@
     #include <string>
     #include <iostream>
     #include <ncurses.h>
-    #include "../../IDisplayModule.hpp"
+    #include "../../includes/IDisplayModule.hpp"
 
 static const int BASE_X = 2;
 static const int BASE_Y = 3;
