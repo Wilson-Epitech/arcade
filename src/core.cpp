@@ -108,7 +108,7 @@ std::pair <arcade::IGameModule *,void *> entryPointGame(void)
     arcade::IGameModule * (*do_somthing)(void);
     char *err;
 
-    handle = dlopen("./lib/arcade_pacman.so", RTLD_LAZY);
+    handle = dlopen("./lib/arcade_snake.so", RTLD_LAZY);
     if (!handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(84);
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 
     while (status == arcade::PLAYING) {
         lib_graphical->game();
-        lib_graphical->displayText(libGame->getText());
+        //lib_graphical->displayText(libGame->getText());
         auto time2 = std::chrono::steady_clock::now();
         auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
 

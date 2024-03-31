@@ -32,9 +32,14 @@ namespace arcade {
             int findPlayer();
             void updateKeyPressed(arcade::KeyPressed key);
             bool isAvailable(char c);
+            bool isAvailableFood(char c);
             void getSnakeLenght();
             void init();
-            void moovePlayer(arcade::KeyPressed key);
+            int moovePlayer(arcade::KeyPressed Key);
+            int moove();
+            void changePlayerPos();
+            void placeFood();
+            void fillVector();
             std::vector<std::pair<int, int>> MyVector;
             KeyPressed keyPressed;
             std::size_t queueY;
@@ -52,6 +57,7 @@ namespace arcade {
                 BAS
                 };
             Direction direction;
+            size_t score;
     };
 }
 
