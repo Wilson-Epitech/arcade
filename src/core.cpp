@@ -13,7 +13,7 @@ std::pair <arcade::IGameModule *,void *> entryPointGame(void)
     arcade::IGameModule * (*do_somthing)(void);
     char *err;
 
-    handle = dlopen("./lib/arcade_snake.so", RTLD_LAZY);
+    handle = dlopen("./lib/arcade_pacman.so", RTLD_LAZY);
     if (!handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(84);
