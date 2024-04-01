@@ -104,6 +104,15 @@ arcade::KeyPressed arcade::libNcurses::getKey()
     if (c == KEY_RIGHT) {
         return arcade::KeyPressed::RIGHT;
     }
+    if (c == 'g' || c == 'G') {
+        return arcade::KeyPressed::G;
+    }
+    if (c == 'n' || c == 'N') {
+        return arcade::KeyPressed::N;
+    }
+    if (c == 'p' || c == 'P') {
+        return arcade::KeyPressed::P;
+    }
     if (c == 'q') {
         delwin(win);
         endwin();
@@ -143,7 +152,6 @@ void arcade::libNcurses::displayMap(std::array<std::string, 23> map, std::size_t
     }
     x = BASE_X;
     y = BASE_Y;
-    wrefresh(win);
 }
 
 void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
@@ -152,4 +160,5 @@ void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pai
     for (size_t i = 0; i < textToDisplay.size(); i++) {
         mvwprintw(win, (textToDisplay.at(i).second.second * 0.1), (textToDisplay.at(i).second.first * 0.04), "%s", textToDisplay.at(i).first.c_str());
     }
+    wrefresh(win);
 }

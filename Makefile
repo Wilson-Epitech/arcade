@@ -5,7 +5,8 @@
 ## Makefile
 ##
 
-SRC = ./src/core.cpp
+SRC = ./src/core.cpp	\
+	./src/dlLoader.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

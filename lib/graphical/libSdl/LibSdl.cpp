@@ -99,6 +99,7 @@ void arcade::libSdl::displayText(std::vector<std::pair<std::string, std::pair<in
         SDL_DestroyTexture(Message);
         SDL_FreeSurface(surfaceMessage);
     }
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
 }
 
 void arcade::libSdl::checkTwoChar(std::size_t j, std::string str)
@@ -139,7 +140,6 @@ void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t siz
     }
     x = BASE_X;
     y = BASE_Y;
-    SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
     switch (event.type) {
         case SDL_QUIT:
             oldKeyPressed = arcade::CLOSE_BUTTON;
@@ -160,6 +160,12 @@ arcade::KeyPressed arcade::libSdl::getKey()
     } else if (state[SDL_SCANCODE_UP]) {
         return arcade::UP;
     } else if (state[SDL_SCANCODE_DOWN]) {
+        return arcade::DOWN;
+    } else if (state[SDL_SCANCODE_N]) {
+        return arcade::N;
+    } else if (state[SDL_SCANCODE_P]) {
+        return arcade::P;
+    } else if (state[SDL_SCANCODE_G]) {
         return arcade::DOWN;
     } else {
         return arcade::OTHER;

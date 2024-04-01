@@ -83,6 +83,15 @@ arcade::KeyPressed arcade::libSfml::getKey()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) == true) {
         return arcade::KeyPressed::RIGHT;
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) == true) {
+        return arcade::KeyPressed::N;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::P) == true) {
+        return arcade::KeyPressed::P;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) == true) {
+        return arcade::KeyPressed::G;
+    }
     return key;
 }
 
@@ -154,7 +163,6 @@ void arcade::libSfml::displayMap(std::array<std::string, 23> map, std::size_t si
     }
     x = BASE_X;
     y = BASE_Y;
-    window.display();
 }
 
 void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
@@ -168,6 +176,7 @@ void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<i
         txt.setString(textToDisplay.at(i).first.c_str());
         window.draw(txt);
     }
+    window.display();
 }
 
 sf::Color arcade::libSfml::RGB(int r, int g, int b)
