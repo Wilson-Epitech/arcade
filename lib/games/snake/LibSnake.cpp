@@ -46,6 +46,7 @@ void arcade::LibSnake::init()
     direction = DROITE;
     SnakeLenght = 4;
     fillVector();
+    srand(time(NULL));
     placeFood();
 }
 
@@ -78,10 +79,10 @@ int arcade::LibSnake::findPlayer()
 void arcade::LibSnake::placeFood()
 {
     size_t foodY = rand() % 20;
-    size_t foodX = rand() % 20;
+    size_t foodX = rand() % 31;
     while (isAvailableFood(map.at(foodY).at(foodX)) != true) {
         foodY = rand() % 20;
-        foodX = rand() % 20;
+        foodX = rand() % 31;
     }
     map[foodY][foodX] = '|';
 }
@@ -167,8 +168,17 @@ std::map<std::string, arcade::Color> arcade::LibSnake::getPattern()
     return pattern;
 }
 
-void arcade::LibSnake::changePlayerPos()
+int arcade::LibSnake::changePlayerPos(std::string str)
 {
+
+    std::cout << score<< std::endl;
+    for(int i = 0; i < (MyVector.size()); i++) {
+        std :: cout << "first " << MyVector[i].first << "  " << MyVector[i].second << std::endl;
+    }
+    if (map[playerY][playerX] == '|') {
+        score++;
+        placeFood();
+    }
     map[playerY][playerX] = '8';
     map[MyVector[0].first][MyVector[0].second] = ' ';
     for(int i = 0; i < (MyVector.size() - 1); i++) {
@@ -179,6 +189,7 @@ void arcade::LibSnake::changePlayerPos()
     for(int i = 1; i < (MyVector.size() - 1); i++) {
         map[MyVector[i].first][MyVector[i].second] = '=';
         }
+    return 0;
 }
 
 int arcade::LibSnake::moovePlayer(arcade::KeyPressed key)
@@ -187,11 +198,7 @@ int arcade::LibSnake::moovePlayer(arcade::KeyPressed key)
         if (isAvailable(map.at(playerY).at(playerX + 1)) == true) {
             direction = DROITE;
             playerX++;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("droite");
             MyVector[SnakeLenght - 1].second++;
             return 1;
         } else return -1;
@@ -201,11 +208,7 @@ int arcade::LibSnake::moovePlayer(arcade::KeyPressed key)
         if (isAvailable(map.at(playerY - 1).at(playerX)) == true) {
             direction = HAUT;
             playerY--;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("haut");
             MyVector[SnakeLenght - 1].first--;
             return 1;
         } else return -1;
@@ -214,11 +217,7 @@ int arcade::LibSnake::moovePlayer(arcade::KeyPressed key)
         if (isAvailable(map.at(playerY + 1).at(playerX)) == true) {
             direction = BAS;
             playerY++;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("bas");
             MyVector[SnakeLenght - 1].first++;
             return 1;
         } else return -1;
@@ -227,11 +226,7 @@ int arcade::LibSnake::moovePlayer(arcade::KeyPressed key)
         if (isAvailable(map.at(playerY).at(playerX - 1)) == true) {
             direction = GAUCHE;
             playerX--;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("gauche");
             MyVector[SnakeLenght - 1].second--;
             return 1;
         } else return -1;
@@ -244,44 +239,28 @@ int arcade::LibSnake::moove()
     if (direction == DROITE) {
             if (isAvailable(map.at(playerY).at(playerX + 1)) == true) {
             playerX++;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("droite");
             MyVector[SnakeLenght - 1].second++;
         } else return -1;
     }
     if (direction == GAUCHE) {
             if (isAvailable(map.at(playerY).at(playerX - 1)) == true) {
             playerX--;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("gauche");
             MyVector[SnakeLenght - 1].second--;
         } else return -1;
     }
     if (direction == BAS) {
             if (isAvailable(map.at(playerY + 1).at(playerX)) == true) {
             playerY++;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("bas");
             MyVector[SnakeLenght - 1].first++;
         } else return -1;
     }
     if (direction == HAUT) {
             if (isAvailable(map.at(playerY - 1).at(playerX)) == true) {
             playerY--;
-            if (map[playerY][playerX] == '|') {
-                score++;
-                placeFood();
-            }
-            changePlayerPos();
+            changePlayerPos("haut");
             MyVector[SnakeLenght - 1].first--;
         } else return -1;
     }
@@ -296,10 +275,23 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
     if (moovePlayer(key) == -1) {
         return arcade::LOOSE;
     }
+    if (moovePlayer(key) == 1) {
+        return arcade::PLAYING;
+    }
     if (moovePlayer(key) == 0) {
         if (moove() == -1)
             return arcade::LOOSE;
     }
-    std::cout << score<< std::endl;
     return arcade::PLAYING;
+}
+
+std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibSnake::getText()
+{
+    std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
+    textToDisplay.push_back({"Snake", {10, 10}});
+    std::string scoreTxt;
+    scoreTxt = "Score : ";
+    scoreTxt.append(std::to_string(score));
+    textToDisplay.push_back({scoreTxt, {200, 10}});
+    return textToDisplay;
 }

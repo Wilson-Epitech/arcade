@@ -21,7 +21,7 @@ namespace arcade {
             void resetGame() override {};
             std::array<std::string, 23> getMap() override;
             std::map<std::string, Color> getPattern() override;
-            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override {};
+            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::size_t getMapCellSize() override;
             void initText(std::vector<std::string>, std::vector<std::string>) override {};
@@ -37,7 +37,7 @@ namespace arcade {
             void init();
             int moovePlayer(arcade::KeyPressed Key);
             int moove();
-            void changePlayerPos();
+            int changePlayerPos(std::string str);
             void placeFood();
             void fillVector();
             std::vector<std::pair<int, int>> MyVector;
