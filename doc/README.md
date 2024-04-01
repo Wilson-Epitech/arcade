@@ -30,5 +30,4 @@ Le Coeur du programme est initialisé dans le fichier core.cpp. Il permet le cha
 
 ## Diagramme de classe
 
-![diagramme img](./DIAGRAMME/diagramme_classe.jpg){ width=400 }
-
+<img src="DIAGRAMME/diagramme_classe.jpg" width="400"/>
