@@ -17,6 +17,7 @@ Cette documentation a pour but de comprendre le fonctionnement du projet et comm
         - Compilation
         - NCURSES
         - SFML
+        - SDL2
 
     - Librairies de jeux
         - Compilation
