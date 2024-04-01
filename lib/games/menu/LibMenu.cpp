@@ -21,11 +21,11 @@ void arcade::LibMenu::resetGame()
 {
 }
 
-std::array<std::string, 23> arcade::LibMenu::getMap()
+std::array<std::string, 23> arcade::LibMenu::getMap() const
 {
 }
 
-std::size_t arcade::LibMenu::getMapCellSize()
+std::size_t arcade::LibMenu::getMapCellSize() const
 {
 }
 
@@ -33,7 +33,7 @@ arcade::GameStatus arcade::LibMenu::updateMap(arcade::KeyPressed key)
 {
 }
 
-std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getText()
+std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
     int x = 50;
@@ -50,9 +50,9 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getTex
     return textToDisplay;
 }
 
-std::map<std::string, arcade::Color> arcade::LibMenu::getPattern()
+std::unordered_map<std::string, arcade::Color> arcade::LibMenu::getPattern() const
 {
-    std::map<std::string, arcade::Color> pattern;
+    std::unordered_map<std::string, arcade::Color> pattern;
     pattern.insert({" ", arcade::BLACK});
     pattern.insert({"#", arcade::GRAY});
     pattern.insert({"o", arcade::WHITE});

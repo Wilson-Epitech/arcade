@@ -22,13 +22,15 @@ namespace arcade {
             LibMenu();
             ~LibMenu() {};
             void resetGame() override;
-            std::array<std::string, 23> getMap() override;
-            std::map<std::string, Color> getPattern() override;
-            std::vector<std::pair<std::string, std::pair<int, int>>> getText() override;
+            std::array<std::string, 23> getMap() const override;
+            std::size_t getMapCellSize() const override;
+            std::unordered_map<std::string, Color> getPattern() const override;
+            std::vector<std::pair<std::string, std::pair<int, int>>> getText() const override;
+            void incrementTime() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
-            std::size_t getMapCellSize() override;
-            void initText(std::vector<std::string>, std::vector<std::string>) override;
-            std::pair<std::size_t, std::size_t> getIndexes() override {};
+            std::pair<std::size_t, std::size_t> getIndexes() const override {};
+            void keyEnter(const KeyPressed key) override {};
+            void initText(const std::vector<std::string>, const std::vector<std::string>) override {};
         private:
             std::vector<std::string> _gameLibName;
             std::vector<std::string> _graphicalName;

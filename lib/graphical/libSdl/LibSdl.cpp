@@ -12,7 +12,7 @@ arcade::libSdl::libSdl()
     return;
 }
 
-void arcade::libSdl::init(std::map<std::string, Color> pattern)
+void arcade::libSdl::init(const std::unordered_map<std::string, Color> pattern)
 {
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, 0);
     render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -34,7 +34,7 @@ SDL_Texture* arcade::libSdl::madeRectangle(int r, int g, int b)
     return texture;
 }
 
-void arcade::libSdl::pickColor(std::map<std::string, arcade::Color> patternMap)
+void arcade::libSdl::pickColor(const std::unordered_map<std::string, Color> patternMap)
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
         if (tt->second == arcade::BLACK) {
@@ -70,8 +70,9 @@ void arcade::libSdl::stop()
     SDL_DestroyWindow(window);
 }
 
-void arcade::libSdl::game()
+void arcade::libSdl::game(const std::string gameName)
 {
+    _gameName = gameName;
     SDL_RenderPresent(render);
     SDL_PollEvent(&event);
     SDL_RenderClear(render);
@@ -146,7 +147,7 @@ void arcade::libSdl::displayMap(std::array<std::string, 23> map, std::size_t siz
     }
 }
 
-arcade::KeyPressed arcade::libSdl::getKey()
+arcade::KeyPressed arcade::libSdl::getKey() const
 {
     if (oldKeyPressed != arcade::OTHER) {
         return arcade::CLOSE_BUTTON;
@@ -172,4 +173,9 @@ arcade::KeyPressed arcade::libSdl::getKey()
     }
 
     return arcade::OTHER;
+}
+
+std::string arcade::libSdl::getPlayerName() const
+{
+    return _playerName;
 }

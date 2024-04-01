@@ -12,7 +12,7 @@ arcade::libNcurses::libNcurses()
     return;
 }
 
-void arcade::libNcurses::init(std::map<std::string, Color> pattern)
+void arcade::libNcurses::init(const std::unordered_map<std::string, Color> pattern)
 {
     initscr();
     noecho();
@@ -27,7 +27,7 @@ void arcade::libNcurses::init(std::map<std::string, Color> pattern)
     pickColor(pattern);
 }
 
-void arcade::libNcurses::pickColor(std::map<std::string, Color> patternMap)
+void arcade::libNcurses::pickColor(const std::unordered_map<std::string, Color> patternMap)
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
         if (tt->second == arcade::BLACK) {
@@ -73,8 +73,9 @@ void arcade::libNcurses::stop() {
     endwin();
 }
 
-void arcade::libNcurses::game()
+void arcade::libNcurses::game(const std::string gameName)
 {
+    _gameName = gameName;
     werase(win);
 }
 
@@ -88,7 +89,7 @@ void arcade::libNcurses::color_remove(void) {
     wattron(win,COLOR_PAIR(DEFAULT));
 }
 
-arcade::KeyPressed arcade::libNcurses::getKey()
+arcade::KeyPressed arcade::libNcurses::getKey() const
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     int c = getch();
@@ -162,3 +163,9 @@ void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pai
     }
     wrefresh(win);
 }
+
+std::string arcade::libNcurses::getPlayerName() const
+{
+    return _playerName;
+}
+

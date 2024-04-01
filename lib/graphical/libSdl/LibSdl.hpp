@@ -27,14 +27,15 @@ namespace arcade
         public:
             libSdl();
             ~libSdl() {};
-            void init(std::map<std::string, Color> pattern) override;
+            void init(const std::unordered_map<std::string, Color> pattern) override;
             void stop() override;
-            void game() override;
+            void game(const std::string gameName) override;
             void displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay) override;
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
-            arcade::KeyPressed getKey() override;
+            arcade::KeyPressed getKey() const override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void changeColor(std::map<std::string, Color> patternMap) override {};
+            void changeColor(const std::unordered_map<std::string, Color> patternMap) override {};
+            std::string getPlayerName() const override;
         private:
             SDL_Window* window;
             SDL_Event event;
@@ -45,8 +46,10 @@ namespace arcade
             TTF_Font* _font;
             KeyPressed oldKeyPressed;
             std::map<std::string, SDL_Texture*> charMap;
+            std::string _gameName;
+            std::string _playerName;
 
-            void pickColor(std::map<std::string, Color> patternMap);
+            void pickColor(const std::unordered_map<std::string, Color> patternMap);
             void checkTwoChar(std::size_t j, std::string str);
             SDL_Texture* madeRectangle(int r, int g, int b);
     };

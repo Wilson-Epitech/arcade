@@ -12,7 +12,7 @@ arcade::libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_st
     return;
 }
 
-void arcade::libSfml::init(std::map<std::string, Color> pattern)
+void arcade::libSfml::init(const std::unordered_map<std::string, Color> pattern)
 {
     x = BASE_X;
     y = BASE_Y;
@@ -30,7 +30,7 @@ sf::RectangleShape arcade::libSfml::madeRectangle(sf::Color color, float size)
     return rect;
 }
 
-void arcade::libSfml::pickColor(std::map<std::string, arcade::Color> patternMap)
+void arcade::libSfml::pickColor(const std::unordered_map<std::string, Color> patternMap)
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
         if (tt->second == arcade::BLACK) {
@@ -64,11 +64,10 @@ void arcade::libSfml::stop() {
     window.close();
 }
 
-arcade::KeyPressed arcade::libSfml::getKey()
+arcade::KeyPressed arcade::libSfml::getKey() const
 {
     arcade::KeyPressed key = arcade::KeyPressed::OTHER;
-    if (event.type == sf::Event::Closed) {
-        window.close();
+    if (_keyClose == CLOSE_BUTTON) {
         return arcade::CLOSE_BUTTON;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) == true) {
@@ -95,9 +94,14 @@ arcade::KeyPressed arcade::libSfml::getKey()
     return key;
 }
 
-void arcade::libSfml::game()
+void arcade::libSfml::game(const std::string gameName)
 {
+    _gameName = gameName;
     window.pollEvent(event);
+    if (event.type == sf::Event::Closed) {
+        window.close();
+        _keyClose = CLOSE_BUTTON;
+    }
     window.clear();
 }
 
@@ -195,4 +199,9 @@ sf::Vector2f arcade::libSfml::getPosition(float x, float y)
     vector.x = x;
     vector.y = y;
     return (vector);
+}
+
+std::string arcade::libSfml::getPlayerName() const
+{
+    return _playerName;
 }

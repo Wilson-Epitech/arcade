@@ -49,12 +49,12 @@ void arcade::LibSnake::init()
     placeFood();
 }
 
-std::array<std::string, 23> arcade::LibSnake::getMap()
+std::array<std::string, 23> arcade::LibSnake::getMap() const
 {
     return map;
 }
 
-std::size_t arcade::LibSnake::getMapCellSize()
+std::size_t arcade::LibSnake::getMapCellSize() const
 {
     return mapSize;
 }
@@ -153,9 +153,9 @@ void arcade::LibSnake::updateKeyPressed(arcade::KeyPressed key)
     }
 }
 
-std::map<std::string, arcade::Color> arcade::LibSnake::getPattern()
+std::unordered_map<std::string, arcade::Color> arcade::LibSnake::getPattern() const
 {
-    std::map<std::string, arcade::Color> pattern;
+    std::unordered_map<std::string, arcade::Color> pattern;
     pattern.insert({" ", arcade::BLACK});
     pattern.insert({"#", arcade::GRAY});
     pattern.insert({"o", arcade::WHITE});

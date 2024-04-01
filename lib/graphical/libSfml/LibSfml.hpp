@@ -25,14 +25,15 @@ namespace arcade
         public:
             libSfml();
             ~libSfml() {};
-            void init(std::map<std::string, Color> pattern) override;
+            void init(const std::unordered_map<std::string, Color> pattern) override;
             void stop() override;
-            void game() override;
+            void game(const std::string gameName) override;
             void displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay) override;
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
-            arcade::KeyPressed getKey() override;
+            arcade::KeyPressed getKey() const override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void changeColor(std::map<std::string, Color> patternMap) override {};
+            void changeColor(const std::unordered_map<std::string, Color> patternMap) override {};
+            std::string getPlayerName() const override;
         private:
             sf::RenderWindow window;
             float x;
@@ -41,8 +42,11 @@ namespace arcade
             sf::Event event;
             sf::Font _font;
             std::map<std::string, sf::RectangleShape> charMap;
+            std::string _gameName;
+            std::string _playerName;
+            arcade::KeyPressed _keyClose;
 
-            void pickColor(std::map<std::string, Color> patternMap);
+            void pickColor(const std::unordered_map<std::string, Color> patternMap);
             sf::RectangleShape madeRectangle(sf::Color color, float size);
             bool displayRoundShape(sf::RectangleShape rect, char c);
             void checkTwoChar(std::size_t j, std::string str);
