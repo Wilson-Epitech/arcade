@@ -113,25 +113,36 @@ arcade::GameStatus arcade::LibMenu::updateMap(arcade::KeyPressed key)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    int x = 50;
-    int y = 50;
+    int x = 100;
+    int y = 100;
+    if (_libTypeSelected == 1) {
+        x = 1300;
+    }
+    textToDisplay.push_back({"     |", {x + 50, y}});
+    y += 25;
+    textToDisplay.push_back({"     |", {x + 50, y}});
+    y += 25;
+    textToDisplay.push_back({"     \\/", {x + 50, y}});
+    y += 60;
+    x = 100;
+    int defaultY = y;
     for (std::size_t i = 0; i < _gameLibName.size(); i++) {
         std::string actualLib = _gameLibName.at(i);
         if (_SelectedGameIndex == i) {
             actualLib.append(" <--");
         }
         textToDisplay.push_back({actualLib, {x, y}});
-        y += 50;
+        y += 75;
     }
-    y = 50;
-    x = 800;
+    y = defaultY;
+    x = 1300;
     for (std::size_t i = 0; i < _graphicalName.size(); i++) {
         std::string actualLib = _graphicalName.at(i);
         if (_SelectedLibIndex == i) {
             actualLib.append(" <--");
         }
         textToDisplay.push_back({actualLib, {x, y}});
-        y += 50;
+        y += 75;
     }
     return textToDisplay;
 }

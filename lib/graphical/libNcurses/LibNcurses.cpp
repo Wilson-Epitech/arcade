@@ -21,7 +21,7 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     keypad(stdscr, TRUE);
     curs_set(FALSE);
     init_pair(DEFAULT, COLOR_WHITE, COLOR_BLACK);
-    win = newwin(500 , 500, 0, 0);
+    win = newwin(1920 , 1080, 0, 0);
     wclear(win);
     keyPressed = false;
     pickColor(pattern);
@@ -182,7 +182,7 @@ void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pai
 {
     wattron(win,COLOR_PAIR(DEFAULT));
     for (size_t i = 0; i < textToDisplay.size(); i++) {
-        mvwprintw(win, (textToDisplay.at(i).second.second * 0.1), (textToDisplay.at(i).second.first * 0.04), "%s", textToDisplay.at(i).first.c_str());
+        mvwprintw(win, (textToDisplay.at(i).second.second * 0.04), (textToDisplay.at(i).second.first * 0.04), "%s", textToDisplay.at(i).first.c_str());
     }
     wrefresh(win);
 }

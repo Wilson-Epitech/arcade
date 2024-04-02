@@ -20,7 +20,9 @@ OBJ = $(SRC:.cpp=.o)
 
 CXX = g++
 
-CXXFLAGS = -Wall -Wextra -lncurses -fPIC
+CXXFLAGS = -fPIC -Wall -Wextra
+
+LDLIBS = -lncurses
 
 LDFLAGS = -shared
 
@@ -30,11 +32,8 @@ BIN_NAME = arcade_ncurses.so
 
 all: $(OBJ) msg
 	$(CXX) -c $(CXXFLAGS) $(SRC)
-	$(CXX) $(LDFLAGS) -o $(BIN_NAME) $(OBJ)
+	$(CXX) $(LDFLAGS) -o $(BIN_NAME) $(LDLIBS) $(OBJ)
 	mv $(BIN_NAME) ../../
-
-debug: CFLAGS += $(FLAGS_DEBUG)
-debug: all
 
 clean:
 	rm -f $(OBJ)

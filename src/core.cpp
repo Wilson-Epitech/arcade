@@ -77,6 +77,9 @@ void Core::changeGameLib(void)
 
 void Core::changeLibrary()
 {
+    if (_gameLibIndex == -1) {
+        return;
+    }
     if (_key == arcade::N && pass == 0) {
         _graphicalLibIndex = changeLibIndex(_graphicalLibIndex, 1, _libGraphicalLen);
         changeGraphicalLib();

@@ -18,7 +18,7 @@ SRC = ./src/core.cpp	\
 
 OBJ = $(SRC:.cpp=.o)
 
-CFLAGS = -Wall -Wextra -I lib/graphical -lsfml-graphics -lSDL2 -lSDL2_ttf -lncurses
+CFLAGS = -Wall -Wextra -I lib/includes
 
 BIN_NAME = arcade
 
@@ -28,19 +28,25 @@ core: $(OBJ) msg
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)
 
 graphicals:
-	cd ./lib/graphical/libSfml/ && make re -j5
-	cd ./lib/graphical/libSdl/ && make re -j5
-	cd ./lib/graphical/libNcurses/ && make re -j5
+	cd ./lib/graphical/libSfml/ && make re
+	cd ./lib/graphical/libSdl/ && make re
+	cd ./lib/graphical/libNcurses/ && make re
 
 games:
-	cd ./lib/games/pacman/ && make re -j5
-	cd ./lib/games/snake/ && make re -j5
-	cd ./lib/games/menu/ && make re -j5
+	cd ./lib/games/pacman/ && make re
+	cd ./lib/games/snake/ && make re
+	cd ./lib/games/menu/ && make re
 
 all: core graphicals games
 
 clean:
 	rm -f $(OBJ)
+	cd ./lib/graphical/libSfml/ && make clean
+	cd ./lib/graphical/libSdl/ && make clean
+	cd ./lib/graphical/libNcurses/ && make clean
+	cd ./lib/games/pacman/ && make clean
+	cd ./lib/games/snake/ && make clean
+	cd ./lib/games/menu/ && make clean
 
 fclean: clean
 	rm -f $(BIN_NAME)
