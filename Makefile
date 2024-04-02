@@ -4,6 +4,14 @@
 ## File description:
 ## Makefile
 ##
+msg:
+	@echo -e "\x1b[1m\x1b[38;2;0;0;255m ####                               ####                        #     #                 #  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;42;0;213m#    #  ###    ###    ###          #    #  ###   ## #   #####         #       ###       #  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;84;0;171m#      #   #  #      #   #         #      #   #  # # #  #    # ##     #      #   #   ####  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;126;0;129m#      #   #  #      ####          #      #   #  # # #  #    #  #     #      ####   #   #  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;168;0;87m#    # #   #  #      #             #    # #   #  # # #  #####   #     #      #      #   #  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;210;0;45m ####   ###   #       ####          ####   ###   # # #  #      ###     ##     ####   ####  \x1b[0m"
+	@echo -e "\x1b[1m\x1b[38;2;252;0;3m                                                        #                                  \x1b[0m"
 
 SRC = ./src/core.cpp	\
 	./src/dlLoader.cpp
@@ -16,7 +24,7 @@ BIN_NAME = arcade
 
 CC = g++
 
-core: $(OBJ)
+core: $(OBJ) msg
 	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)
 
 graphicals:
@@ -29,8 +37,7 @@ games:
 	cd ./lib/games/snake/ && make re -j5
 	cd ./lib/games/menu/ && make re -j5
 
-all: $(OBJ)	graphicals games
-	$(CC) -o $(BIN_NAME) $(OBJ) $(CFLAGS)
+all: core graphicals games
 
 clean:
 	rm -f $(OBJ)

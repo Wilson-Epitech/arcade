@@ -40,7 +40,7 @@ int Core::getLibIndex(std::string path)
 
 void Core::saveScore(std::string playerName, std::string gameName, std::size_t score)
 {
-    if (_gameLibIndex < 0 || score <= 0) {
+    if (_gameLibIndex < 0 || score <= 0 || gameName.compare("menu") == 0) {
         return;
     }
     std::string fileName = "./lib/games/score/";
@@ -148,8 +148,11 @@ void Core::gameLoop(void)
         if (elapsed.count() >= _gameSpeed) {
             _key = _graphicalLib->getKey();
             if (_key == arcade::CLOSE_BUTTON) {
-                saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
-                exit(0);
+                break;
+            }
+            if (_key == arcade::BACKSPACE) {
+                _graphicalLib->stop();
+                break;
             }
             status = _gameLib->updateMap(_key);
             if (_gameLibIndex == -1 && _key == arcade::ENTER) {
@@ -170,6 +173,13 @@ void Core::gameLoop(void)
 
         }
         _graphicalLib->displayText(_gameLib->getText());
+        if (status == arcade::LOOSE) {
+            status = arcade::PLAYING;
+            saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
+            _gameLibIndex = -1;
+            _key = arcade::M;
+            changeLibrary();
+        }
     }
     saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
 }

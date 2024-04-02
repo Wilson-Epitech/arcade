@@ -158,7 +158,6 @@ arcade::KeyPressed arcade::libSdl::getKey() const
     if (oldKeyPressed != arcade::OTHER) {
         return arcade::CLOSE_BUTTON;
     }
-
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_LEFT])
         return arcade::LEFT;
@@ -176,13 +175,13 @@ arcade::KeyPressed arcade::libSdl::getKey() const
         return arcade::G;
     if (state[SDL_SCANCODE_R])
         return arcade::R;
-    if (state[SDL_SCANCODE_M])
+    if (state[SDL_SCANCODE_SEMICOLON]) {
         return arcade::M;
+    }
     if (state[SDL_SCANCODE_BACKSPACE])
         return arcade::BACKSPACE;
-    if (state[SDL_SCANCODE_KP_ENTER])
+    if (state[SDL_SCANCODE_RETURN])
         return arcade::ENTER;
-
     return arcade::OTHER;
 }
 
