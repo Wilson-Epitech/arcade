@@ -7,28 +7,6 @@
 
 #include "core.hpp"
 
-std::pair <arcade::IGameModule *,void *> entryPointGame(void)
-{
-    void *handle;
-    arcade::IGameModule * (*do_somthing)(void);
-    char *err;
-
-    handle = dlopen("./lib/arcade_snake.so", RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "%s\n", dlerror());
-        exit(84);
-    }
-    dlerror();
-    do_somthing = (arcade::IGameModule * (*)(void)) dlsym(handle, "entryPoint");
-    err = dlerror();
-    if (err != NULL) {
-        fprintf(stderr, "%s\n", err);
-        exit(84);
-    }
-    return {(*do_somthing)(), handle};
-}
-
-
 int Core::changeLibIndex(int index, int change, std::size_t nbLib)
 {
     if ((index + change) < nbLib && (index + change) >= 0) {
@@ -60,42 +38,61 @@ int Core::getLibIndex(std::string path)
     return -1;
 }
 
+void Core::changeGraphicalLib(void)
+{
+    _graphicalLib->stop();
+    dlclose(_graphicalLibAndHandler.second);
+    _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
+    _graphicalLib = _graphicalLibAndHandler.first;
+    _graphicalLib->init(_gameLib->getPattern());
+    pass = 1;
+}
+
+void Core::changeGameLib(void)
+{
+    dlclose(_gameLibAndHandler.second);
+    _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
+    _gameLib = _gameLibAndHandler.first;
+    _graphicalLib->changeColor(_gameLib->getPattern());
+    pass = 1;
+}
+
 void Core::changeLibrary()
 {
     if (_key == arcade::N && pass == 0) {
         _graphicalLibIndex = changeLibIndex(_graphicalLibIndex, 1, _libGraphicalLen);
-        _graphicalLib->stop();
-        dlclose(_graphicalLibAndHandler.second);
-        _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
-        _graphicalLib = _graphicalLibAndHandler.first;
-        _graphicalLib->init(_gameLib->getPattern());
-        pass = 1;
+        changeGraphicalLib();
     }
     if (_key != arcade::N && pass == 1) {
         pass = 0;
     }
     if (_key == arcade::P && pass == 0) {
         _graphicalLibIndex = changeLibIndex(_graphicalLibIndex, -1, _libGraphicalLen);
-        _graphicalLib->stop();
-        dlclose(_graphicalLibAndHandler.second);
-        _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
-        _graphicalLib = _graphicalLibAndHandler.first;
-        _graphicalLib->init(_gameLib->getPattern());
-        pass = 1;
+        changeGraphicalLib();
     }
     if (_key != arcade::P && pass == 1) {
         pass = 0;
     }
     if (_key == arcade::G && pass == 0) {
         _gameLibIndex = changeLibIndex(_gameLibIndex, 1, _libGameLen);
-        _gameLib->resetGame();
-        dlclose(_gameLibAndHandler.second);
-        _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
-        _gameLib = _gameLibAndHandler.first;
-        _graphicalLib->init(_gameLib->getPattern());
-        pass = 1;
+        changeGameLib();
     }
     if (_key != arcade::G && pass == 1) {
+        pass = 0;
+    }
+    if (_key == arcade::M && pass == 0) {
+        _gameLibIndex = -1;
+        changeGameLib();
+        _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
+    }
+    if (_key != arcade::M && pass == 1) {
+        pass = 0;
+    }
+    if (_key == arcade::R && pass == 0) {
+        _gameLib->resetGame();
+        pass = 1;
+    }
+    if (_key != arcade::R && pass == 1) {
         pass = 0;
     }
 }
@@ -113,10 +110,12 @@ Core::Core(int argc, char **argv)
         exit(84);
     }
 
-    _gameLibAndHandler = entryPointGame();
-    _gameLib = _gameLibAndHandler.first;
     _key = arcade::OTHER;
     _gameSpeed = 150;
+    _gameLibIndex = -1;
+    _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
+    _gameLib = _gameLibAndHandler.first;
+    _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
     _graphicalLib->init(_gameLib->getPattern());
 }
 
@@ -133,8 +132,17 @@ void Core::gameLoop(void)
             if (_key == arcade::CLOSE_BUTTON) {
                 exit(0);
             }
-            changeLibrary();
             status = _gameLib->updateMap(_key);
+            if (_gameLibIndex == -1 && _key == arcade::ENTER) {
+                std::pair<std::size_t, std::size_t> indexPair = _gameLib->getIndexes();
+                _gameLibIndex = indexPair.second;
+                _graphicalLibIndex = indexPair.first;
+                std::cout << indexPair.first << " " << _gameLibIndex << std::endl;
+                std::cout << indexPair.second << " " << _graphicalLibIndex << std::endl;
+                changeGraphicalLib();
+                changeGameLib();
+            } 
+            changeLibrary();
             time1 = std::chrono::steady_clock::now();
         }
         _graphicalLib->displayMap(_gameLib->getMap(), _gameLib->getMapCellSize());

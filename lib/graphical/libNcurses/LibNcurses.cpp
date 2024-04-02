@@ -27,6 +27,12 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     pickColor(pattern);
 }
 
+void arcade::libNcurses::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
+{
+    charMap.clear();
+    pickColor(patternMap);
+}
+
 void arcade::libNcurses::pickColor(const std::unordered_map<std::string, Color> patternMap)
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
@@ -113,6 +119,18 @@ arcade::KeyPressed arcade::libNcurses::getKey() const
     }
     if (c == 'p' || c == 'P') {
         return arcade::KeyPressed::P;
+    }
+    if (c == 'r' || c == 'R') {
+        return arcade::KeyPressed::R;
+    }
+    if (c == 'm' || c == 'M') {
+        return arcade::KeyPressed::M;
+    }
+    if (c == KEY_BACKSPACE) {
+        return arcade::KeyPressed::BACKSPACE;
+    }
+    if (c == KEY_ENTER) {
+        return arcade::KeyPressed::ENTER;
     }
     if (c == 'q') {
         delwin(win);

@@ -32,7 +32,7 @@ namespace arcade
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() const override;
             void setKey(arcade::KeyPressed newValue) override {};
-            void changeColor(const std::unordered_map<std::string, Color> patternMap) override {};
+            void changeColor(const std::unordered_map<std::string, Color> patternMap) override;
             std::string getPlayerName() const override;
         private:
             sf::RenderWindow window;

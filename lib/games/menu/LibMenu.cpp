@@ -9,6 +9,34 @@
 
 arcade::LibMenu::LibMenu()
 {
+    map = {
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               ",
+        "                               "
+    };
+    _SelectedGameIndex = 0;
+    _SelectedLibIndex = 0;
+    _libTypeSelected = 0;
+    oldKeyPressed = arcade::OTHER;
 }
 
 void arcade::LibMenu::initText(std::vector<std::string> gameLibName, std::vector<std::string> graphicalName)
@@ -23,14 +51,49 @@ void arcade::LibMenu::resetGame()
 
 std::array<std::string, 23> arcade::LibMenu::getMap() const
 {
+    return map;
 }
 
 std::size_t arcade::LibMenu::getMapCellSize() const
 {
+    return 1;
+}
+
+int arcade::LibMenu::changeLibIndex(int index, int change, std::size_t nbLib)
+{
+    if ((index + change) < nbLib && (index + change) >= 0) {
+        return (index + change);
+    }
+    if (index == (nbLib - 1) && change > 0) {
+        return 0;
+    }
+    if (index == 0 && change < 0) {
+        return (nbLib - 1);
+    }
+    return index;
 }
 
 arcade::GameStatus arcade::LibMenu::updateMap(arcade::KeyPressed key)
 {
+    if (key == arcade::UP) {
+        if (_libTypeSelected == 0)
+            _SelectedGameIndex = changeLibIndex(_SelectedGameIndex, -1, _gameLibName.size());
+        if (_libTypeSelected == 1)
+            _SelectedLibIndex = changeLibIndex(_SelectedLibIndex, -1, _graphicalName.size());
+    }
+    if (key == arcade::DOWN) {
+        if (_libTypeSelected == 0)
+            _SelectedGameIndex = changeLibIndex(_SelectedGameIndex, 1, _gameLibName.size());
+        if (_libTypeSelected == 1)
+            _SelectedLibIndex = changeLibIndex(_SelectedLibIndex, 1, _graphicalName.size());
+    }
+    if (key == arcade::LEFT) {
+        _libTypeSelected = 0;
+    }
+    if (key == arcade::RIGHT) {
+        _libTypeSelected = 1;
+    }
+    return arcade::PLAYING;
 }
 
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getText() const
@@ -39,33 +102,34 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getTex
     int x = 50;
     int y = 50;
     for (std::size_t i = 0; i < _gameLibName.size(); i++) {
-        textToDisplay.push_back({_gameLibName.at(i), {x, y}});
+        std::string actualLib = _gameLibName.at(i);
+        if (_SelectedGameIndex == i) {
+            actualLib.append(" <--");
+        }
+        textToDisplay.push_back({actualLib, {x, y}});
         y += 50;
     }
     y = 50;
+    x = 800;
     for (std::size_t i = 0; i < _graphicalName.size(); i++) {
-        textToDisplay.push_back({_graphicalName.at(i), {x, y}});
-        x += 50;
+        std::string actualLib = _graphicalName.at(i);
+        if (_SelectedLibIndex == i) {
+            actualLib.append(" <--");
+        }
+        textToDisplay.push_back({actualLib, {x, y}});
+        y += 50;
     }
     return textToDisplay;
+}
+
+std::pair<std::size_t, std::size_t> arcade::LibMenu::getIndexes() const
+{
+    return {_SelectedGameIndex, _SelectedLibIndex};
 }
 
 std::unordered_map<std::string, arcade::Color> arcade::LibMenu::getPattern() const
 {
     std::unordered_map<std::string, arcade::Color> pattern;
     pattern.insert({" ", arcade::BLACK});
-    pattern.insert({"#", arcade::GRAY});
-    pattern.insert({"o", arcade::WHITE});
-    pattern.insert({"O", arcade::CYAN});
-    pattern.insert({"|", arcade::BLACK});
-    pattern.insert({"M", arcade::RED});
-    pattern.insert({"P", arcade::YELLOW});
-    pattern.insert({"F", arcade::BLUE});
     return pattern;
-}
-
-extern "C" {
-    arcade::IGameModule *entryPoint() {
-        return (new arcade::LibMenu);
-    }
 }

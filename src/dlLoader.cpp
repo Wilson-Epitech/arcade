@@ -92,14 +92,14 @@ void DlLoader::entryPointGraphical(std::string path)
     realPath.append(path);
     handle = dlopen(realPath.c_str() , RTLD_LAZY);
     if (!handle) {
-        fprintf(stderr, "ooo%s\n", dlerror());
+        fprintf(stderr, "%s\n", dlerror());
         exit(84);
     }
     dlerror();
     do_somthing = (arcade::IDisplayModule * (*)(void)) dlsym(handle, "entryPoint");
     err = dlerror();
     if (err != NULL) {
-        fprintf(stderr, "ddd%s\n", dlerror());
+        fprintf(stderr, "%s\n", dlerror());
         exit(84);
     }
     _IDisplayModulePair = {(*do_somthing)(), handle};
@@ -121,14 +121,14 @@ void DlLoader::entryPointGame(std::string path)
     realPath.append(path);
     handle = dlopen(realPath.c_str() , RTLD_LAZY);
     if (!handle) {
-        fprintf(stderr, "ooo%s\n", dlerror());
+        fprintf(stderr, "%s\n", dlerror());
         exit(84);
     }
     dlerror();
     do_somthing = (arcade::IGameModule * (*)(void)) dlsym(handle, "entryPoint");
     err = dlerror();
     if (err != NULL) {
-        fprintf(stderr, "ddd%s\n", dlerror());
+        fprintf(stderr, "%s\n", dlerror());
         exit(84);
     }
     _IGameModulePair = {(*do_somthing)(), handle};
@@ -136,7 +136,12 @@ void DlLoader::entryPointGame(std::string path)
 
 std::pair <arcade::IGameModule *,void *> DlLoader::getAIGameModule(int index)
 {
-    std::string path = getGamePath().at(index);
+    std::string path;
+    if (index == -1) {
+        path = "arcade_menu.so";
+    } else {
+        path = getGamePath().at(index);
+    }
     entryPointGame(path);
     return _IGameModulePair;
 }

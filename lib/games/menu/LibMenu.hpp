@@ -28,15 +28,26 @@ namespace arcade {
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() const override;
             void incrementTime() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
-            std::pair<std::size_t, std::size_t> getIndexes() const override {};
+            std::pair<std::size_t, std::size_t> getIndexes() const override;
             void keyEnter(const KeyPressed key) override {};
-            void initText(const std::vector<std::string>, const std::vector<std::string>) override {};
+            void initText(const std::vector<std::string>, const std::vector<std::string>) override;
         private:
             std::vector<std::string> _gameLibName;
             std::vector<std::string> _graphicalName;
+            std::array<std::string, 23> map;
+            std::size_t _SelectedGameIndex;
+            std::size_t _SelectedLibIndex;
+            int _libTypeSelected;
+            arcade::KeyPressed oldKeyPressed;
 
+            int changeLibIndex(int index, int change, std::size_t nbLib);
     };
 }
 
+extern "C" {
+    arcade::IGameModule *entryPoint() {
+        return (new arcade::LibMenu);
+    }
+}
 
 #endif /* !LIBMENU_HPP_ */

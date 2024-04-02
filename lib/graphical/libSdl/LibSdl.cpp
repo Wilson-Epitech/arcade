@@ -25,6 +25,12 @@ void arcade::libSdl::init(const std::unordered_map<std::string, Color> pattern)
     pickColor(pattern);
 }
 
+void arcade::libSdl::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
+{
+    charMap.clear();
+    pickColor(patternMap);
+}
+
 SDL_Texture* arcade::libSdl::madeRectangle(int r, int g, int b)
 {
     SDL_Surface* surface = SDL_CreateRGBSurface(0, 1, 1, 32, 0, 0, 0, 0);
@@ -154,23 +160,28 @@ arcade::KeyPressed arcade::libSdl::getKey() const
     }
 
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_LEFT]) {
+    if (state[SDL_SCANCODE_LEFT])
         return arcade::LEFT;
-    } else if (state[SDL_SCANCODE_RIGHT]) {
+    if (state[SDL_SCANCODE_RIGHT])
         return arcade::RIGHT;
-    } else if (state[SDL_SCANCODE_UP]) {
+    if (state[SDL_SCANCODE_UP])
         return arcade::UP;
-    } else if (state[SDL_SCANCODE_DOWN]) {
+    if (state[SDL_SCANCODE_DOWN])
         return arcade::DOWN;
-    } else if (state[SDL_SCANCODE_N]) {
+    if (state[SDL_SCANCODE_N])
         return arcade::N;
-    } else if (state[SDL_SCANCODE_P]) {
+    if (state[SDL_SCANCODE_P])
         return arcade::P;
-    } else if (state[SDL_SCANCODE_G]) {
+    if (state[SDL_SCANCODE_G])
         return arcade::G;
-    } else {
-        return arcade::OTHER;
-    }
+    if (state[SDL_SCANCODE_R])
+        return arcade::R;
+    if (state[SDL_SCANCODE_M])
+        return arcade::M;
+    if (state[SDL_SCANCODE_BACKSPACE])
+        return arcade::BACKSPACE;
+    if (state[SDL_SCANCODE_KP_ENTER])
+        return arcade::ENTER;
 
     return arcade::OTHER;
 }

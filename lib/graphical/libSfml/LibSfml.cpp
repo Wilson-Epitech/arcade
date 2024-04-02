@@ -22,6 +22,12 @@ void arcade::libSfml::init(const std::unordered_map<std::string, Color> pattern)
     return;
 }
 
+void arcade::libSfml::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
+{
+    charMap.clear();
+    pickColor(patternMap);
+}
+
 sf::RectangleShape arcade::libSfml::madeRectangle(sf::Color color, float size)
 {
     sf::RectangleShape rect;
@@ -90,6 +96,18 @@ arcade::KeyPressed arcade::libSfml::getKey() const
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) == true) {
         return arcade::KeyPressed::G;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) == true) {
+        return arcade::KeyPressed::R;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) == true) {
+        return arcade::KeyPressed::M;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) == true) {
+        return arcade::KeyPressed::BACKSPACE;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) == true) {
+        return arcade::KeyPressed::ENTER;
     }
     return key;
 }

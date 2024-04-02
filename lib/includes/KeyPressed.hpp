@@ -17,12 +17,12 @@ namespace arcade
         DOWN,
         LEFT,
         RIGHT,
-        R, // reset
-        BACKSPACE, // exit game
-        CLOSE_BUTTON,
-        P, // previous lib graphic
-        N, // next lib graphic
-        G, // swith entre les jeux (en boucle)
+        R, // reset ----- done
+        BACKSPACE, // exit game  ----- done
+        CLOSE_BUTTON, // exit game  ----- done
+        P, // previous lib graphic  ----- done
+        N, // next lib graphic  ----- done
+        G, // swith entre les jeux (en boucle)  ----- done
         ENTER, // alors la c dur de savoir
         M // revenir au menu si on est pas deja dedan
     };

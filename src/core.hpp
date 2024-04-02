@@ -47,6 +47,8 @@ class Core {
         DlLoader *_dlLoader;
         int pass = 0;
 
+        void changeGraphicalLib(void);
+        void changeGameLib(void);
         int getLibIndex(std::string path);
         void changeLibrary();
         int changeLibIndex(int index, int change, std::size_t nbLib);
