@@ -29,7 +29,9 @@ void arcade::LibSnake::init()
         "#                             #",
         "#                             #",
         "#                             #",
+        "#                             #",
         "#             <==8            #",
+        "#                             #",
         "#                             #",
         "#                             #",
         "#                             #",
@@ -79,10 +81,10 @@ int arcade::LibSnake::findPlayer()
 
 void arcade::LibSnake::placeFood()
 {
-    size_t foodY = rand() % 20;
+    size_t foodY = rand() % 22;
     size_t foodX = rand() % 31;
     while (isAvailableFood(map.at(foodY).at(foodX)) != true) {
-        foodY = rand() % 20;
+        foodY = rand() % 22;
         foodX = rand() % 31;
     }
     map[foodY][foodX] = '|';
@@ -171,17 +173,24 @@ std::unordered_map<std::string, arcade::Color> arcade::LibSnake::getPattern() co
 
 int arcade::LibSnake::changePlayerPos(std::string str)
 {
-
-    std::cout << score<< std::endl;
-    for(std::size_t i = 0; i < (MyVector.size()); i++) {
-        std :: cout << "first " << MyVector[i].first << "  " << MyVector[i].second << std::endl;
-    }
     if (map[playerY][playerX] == '|') {
         score++;
+        if (str.compare("droite") == 0)
+            MyVector.insert(MyVector.begin(), std::make_pair(MyVector[0].first, (MyVector[0].second) - 1));
+        if (str.compare("gauche") == 0)
+            MyVector.insert(MyVector.begin(), std::make_pair(MyVector[0].first, (MyVector[0].second) + 1));
+        if (str.compare("haut") == 0)
+            MyVector.insert(MyVector.begin(), std::make_pair((MyVector[0].first) + 1, MyVector[0].second));
+        if (str.compare("bas") == 0)
+            MyVector.insert(MyVector.begin(), std::make_pair((MyVector[0].first - 1), MyVector[0].second));
+        map[MyVector[0].first][MyVector[0].second] = '<';
+        map[MyVector[1].first][MyVector[1].second] = '=';
+        SnakeLenght++;
         placeFood();
     }
     map[playerY][playerX] = '8';
-    map[MyVector[0].first][MyVector[0].second] = ' ';
+    if (map[MyVector[0].first][MyVector[0].second] != '#')
+        map[MyVector[0].first][MyVector[0].second] = ' ';
     for(std::size_t i = 0; i < (MyVector.size() - 1); i++) {
         MyVector[i].first = MyVector[i + 1].first;
         MyVector[i].second = MyVector[i + 1].second;
@@ -300,5 +309,6 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibSnake::getTe
 
 void arcade::LibSnake::resetGame()
 {
+    MyVector.clear();
     init();
 }
