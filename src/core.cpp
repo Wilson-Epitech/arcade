@@ -13,7 +13,7 @@ std::pair <arcade::IGameModule *,void *> entryPointGame(void)
     arcade::IGameModule * (*do_somthing)(void);
     char *err;
 
-    handle = dlopen("./lib/arcade_pacman.so", RTLD_LAZY);
+    handle = dlopen("./lib/arcade_snake.so", RTLD_LAZY);
     if (!handle) {
         fprintf(stderr, "%s\n", dlerror());
         exit(84);
@@ -86,6 +86,18 @@ void Core::changeLibrary()
     if (_key != arcade::P && pass == 1) {
         pass = 0;
     }
+    if (_key == arcade::G && pass == 0) {
+        _gameLibIndex = changeLibIndex(_gameLibIndex, 1, _libGameLen);
+        _gameLib->resetGame();
+        dlclose(_gameLibAndHandler.second);
+        _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
+        _gameLib = _gameLibAndHandler.first;
+        _graphicalLib->init(_gameLib->getPattern());
+        pass = 1;
+    }
+    if (_key != arcade::G && pass == 1) {
+        pass = 0;
+    }
 }
 
 Core::Core(int argc, char **argv)
@@ -95,7 +107,7 @@ Core::Core(int argc, char **argv)
     _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
     _graphicalLib = _graphicalLibAndHandler.first;
     _libGraphicalLen = _dlLoader->getGraphicalPath().size();
-    _libGameLen = _dlLoader->getGraphicalPath().size();
+    _libGameLen = _dlLoader->getGamePath().size();
     if (_graphicalLibIndex == -1) {
         std::cout << "lib : " << argv[1] << " not found." << std::endl;
         exit(84);
@@ -148,7 +160,6 @@ int main(int argc, char **argv)
         displayUsage();
         return 84;
     }
-    DlLoader dlLoader;
     Core core(argc, argv);
 
     core.gameLoop();

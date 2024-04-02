@@ -297,3 +297,8 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibSnake::getTe
     textToDisplay.push_back({scoreTxt, {200, 10}});
     return textToDisplay;
 }
+
+void arcade::LibSnake::resetGame()
+{
+    init();
+}

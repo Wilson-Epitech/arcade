@@ -167,7 +167,7 @@ arcade::KeyPressed arcade::libSdl::getKey() const
     } else if (state[SDL_SCANCODE_P]) {
         return arcade::P;
     } else if (state[SDL_SCANCODE_G]) {
-        return arcade::DOWN;
+        return arcade::G;
     } else {
         return arcade::OTHER;
     }
