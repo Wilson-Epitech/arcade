@@ -1,3 +1,11 @@
+                                    ###
+                                      ##
+ #####    ## ###    ####   #####      ##   ####
+##  ##     ### ##  ##     ##  ##   #####  ##  ##
+##  ##     ##  ##  ##     ##  ##  ##  ##  ######
+##  ##     ##      ##     ##  ##  ##  ##  ##
+ ### ##   ####      ####   ### ##  ### ##  ####
+
 # Documentation Arcade
 
 Cette documentation a pour but de comprendre le fonctionnement du projet et comment intégrer vos jeux et librairies graphiques
@@ -6,21 +14,24 @@ Cette documentation a pour but de comprendre le fonctionnement du projet et comm
 
 - Core
     - Fonctionnement du core
-    - DLloader
+    - DlLoader
 
 - Interfaces
     -IGameModule
     -IDisplayModule
 
+- Classes
+    -
+
 - Librairies
     - Librairies graphiques
-        - Compilation
+        - 
         - NCURSES
         - SFML
         - SDL2
 
     - Librairies de jeux
-        - Compilation
+        - 
         - Pacman
         - Snake
 
@@ -31,3 +42,9 @@ Le Coeur du programme est initialisé dans le fichier core.cpp. Il permet le cha
 ## Diagramme de classe
 
 <img src="DIAGRAMME/diagramme_classe.jpg" width="400"/>
+
+## Fonctionnement du Core
+
+## DlLoader
+
+La classe `DlLoader` permet de charger les librairies graphiques et les jeux.
