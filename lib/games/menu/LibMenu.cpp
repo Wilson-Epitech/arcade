@@ -45,6 +45,16 @@ void arcade::LibMenu::initText(std::vector<std::string> gameLibName, std::vector
     _graphicalName = graphicalName;
 }
 
+std::size_t arcade::LibMenu::getScore() const
+{
+    return -1;
+}
+
+std::string arcade::LibMenu::getGameName() const
+{
+    return "menu";
+}
+
 void arcade::LibMenu::resetGame()
 {
 }
@@ -59,7 +69,7 @@ std::size_t arcade::LibMenu::getMapCellSize() const
     return 1;
 }
 
-int arcade::LibMenu::changeLibIndex(int index, int change, std::size_t nbLib)
+int arcade::LibMenu::changeLibIndex(int index, int change, int nbLib)
 {
     if ((index + change) < nbLib && (index + change) >= 0) {
         return (index + change);
@@ -75,17 +85,21 @@ int arcade::LibMenu::changeLibIndex(int index, int change, std::size_t nbLib)
 
 arcade::GameStatus arcade::LibMenu::updateMap(arcade::KeyPressed key)
 {
+    int gameIndex = _SelectedGameIndex;
+    int libIndex = _SelectedLibIndex;
+    int gameLibSize = _gameLibName.size();
+    int graphLibSize = _graphicalName.size();
     if (key == arcade::UP) {
         if (_libTypeSelected == 0)
-            _SelectedGameIndex = changeLibIndex(_SelectedGameIndex, -1, _gameLibName.size());
+            _SelectedGameIndex = changeLibIndex(gameIndex, -1, gameLibSize);
         if (_libTypeSelected == 1)
-            _SelectedLibIndex = changeLibIndex(_SelectedLibIndex, -1, _graphicalName.size());
+            _SelectedLibIndex = changeLibIndex(libIndex, -1, graphLibSize);
     }
     if (key == arcade::DOWN) {
         if (_libTypeSelected == 0)
-            _SelectedGameIndex = changeLibIndex(_SelectedGameIndex, 1, _gameLibName.size());
+            _SelectedGameIndex = changeLibIndex(gameIndex, 1, gameLibSize);
         if (_libTypeSelected == 1)
-            _SelectedLibIndex = changeLibIndex(_SelectedLibIndex, 1, _graphicalName.size());
+            _SelectedLibIndex = changeLibIndex(libIndex, 1, graphLibSize);
     }
     if (key == arcade::LEFT) {
         _libTypeSelected = 0;

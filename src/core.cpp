@@ -38,6 +38,23 @@ int Core::getLibIndex(std::string path)
     return -1;
 }
 
+void Core::saveScore(std::string playerName, std::string gameName, std::size_t score)
+{
+    if (_gameLibIndex < 0 || score <= 0) {
+        return;
+    }
+    std::string fileName = "./lib/games/score/";
+    fileName.append(gameName);
+    fileName.append("_score.mbw");
+    std::ofstream file(fileName, std::ios::app);
+    std::string scoreLine = std::to_string(score);
+    scoreLine.append("\t");
+    scoreLine.append(playerName);
+    scoreLine.append("\n");
+    file.write(scoreLine.c_str(), strlen(scoreLine.c_str()));
+    file.close();
+}
+
 void Core::changeGraphicalLib(void)
 {
     _graphicalLib->stop();
@@ -50,6 +67,7 @@ void Core::changeGraphicalLib(void)
 
 void Core::changeGameLib(void)
 {
+    saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
     dlclose(_gameLibAndHandler.second);
     _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
     _gameLib = _gameLibAndHandler.first;
@@ -130,6 +148,7 @@ void Core::gameLoop(void)
         if (elapsed.count() >= _gameSpeed) {
             _key = _graphicalLib->getKey();
             if (_key == arcade::CLOSE_BUTTON) {
+                saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
                 exit(0);
             }
             status = _gameLib->updateMap(_key);
@@ -137,8 +156,6 @@ void Core::gameLoop(void)
                 std::pair<std::size_t, std::size_t> indexPair = _gameLib->getIndexes();
                 _gameLibIndex = indexPair.second;
                 _graphicalLibIndex = indexPair.first;
-                std::cout << indexPair.first << " " << _gameLibIndex << std::endl;
-                std::cout << indexPair.second << " " << _graphicalLibIndex << std::endl;
                 changeGraphicalLib();
                 changeGameLib();
             } 
@@ -154,6 +171,7 @@ void Core::gameLoop(void)
         }
         _graphicalLib->displayText(_gameLib->getText());
     }
+    saveScore(_graphicalLib->getPlayerName(), _gameLib->getGameName(), _gameLib->getScore());
 }
 
 void displayUsage(void)

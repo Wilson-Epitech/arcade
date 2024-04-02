@@ -56,12 +56,28 @@ void arcade::LibPacman::init()
     ghostEat.first = 0;
     ghostEat.second = 0;
     ghostCanMoove = false;
+    _gameName = "Pacman";
     getNexGhost();
 }
 
 void arcade::LibPacman::resetGame()
 {
     init();
+}
+
+std::size_t arcade::LibPacman::getScore() const
+{
+    return score;
+}
+
+std::string arcade::LibPacman::getGameName() const
+{
+    return _gameName;
+}
+
+std::pair<std::size_t, std::size_t> arcade::LibPacman::getIndexes() const
+{
+    return {0,0};
 }
 
 std::array<std::string, 23> arcade::LibPacman::getMap() const
@@ -262,7 +278,7 @@ void arcade::LibPacman::addScore(char c)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibPacman::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    textToDisplay.push_back({"Pacman", {10, 10}});
+    textToDisplay.push_back({_gameName, {10, 10}});
     std::string scoreTxt;
     scoreTxt = "Score : ";
     scoreTxt.append(std::to_string(score));

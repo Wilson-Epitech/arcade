@@ -12,6 +12,11 @@
 #include "../../includes/Color.hpp"
 #include "../../includes/KeyPressed.hpp"
 #include "../../includes/GameStatus.hpp"
+#include <iostream>
+#include <ostream>
+#include <functional>
+#include <utility>
+#include <vector>
 
 namespace arcade {
     class LibSnake : virtual public arcade::IGameModule {
@@ -25,8 +30,10 @@ namespace arcade {
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() const override;
             void incrementTime() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
-            std::pair<std::size_t, std::size_t> getIndexes() const override {};
+            std::pair<std::size_t, std::size_t> getIndexes() const override;
             void initText(const std::vector<std::string>, const std::vector<std::string>) override {};
+            std::string getGameName() const override;
+            std::size_t getScore() const override;
         protected:
         private:
             void getQueue();
@@ -41,6 +48,8 @@ namespace arcade {
             int changePlayerPos(std::string str);
             void placeFood();
             void fillVector();
+
+            std::string _gameName;
             std::vector<std::pair<int, int>> MyVector;
             KeyPressed keyPressed;
             std::size_t queueY;

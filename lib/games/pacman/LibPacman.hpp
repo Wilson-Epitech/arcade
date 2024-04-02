@@ -28,8 +28,10 @@ namespace arcade {
             std::vector<std::pair<std::string, std::pair<int, int>>> getText() const override;
             void incrementTime() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
-            std::pair<std::size_t, std::size_t> getIndexes() const override {};
+            std::pair<std::size_t, std::size_t> getIndexes() const override;
             void initText(const std::vector<std::string>, const std::vector<std::string>) override {};
+            std::string getGameName() const override;
+            std::size_t getScore() const override;
         private:
             void init();
             int findPlayer();
@@ -55,6 +57,7 @@ namespace arcade {
             void wallBoxGhost(void);
 
             std::array<std::string, 23> map;
+            std::string _gameName;
             std::size_t mapSize;
             std::size_t playerX;
             std::size_t playerY;

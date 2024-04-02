@@ -30,6 +30,8 @@ namespace arcade {
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::pair<std::size_t, std::size_t> getIndexes() const override;
             void initText(const std::vector<std::string>, const std::vector<std::string>) override;
+            std::string getGameName() const override;
+            std::size_t getScore() const override;
         private:
             std::vector<std::string> _gameLibName;
             std::vector<std::string> _graphicalName;
@@ -39,7 +41,7 @@ namespace arcade {
             int _libTypeSelected;
             arcade::KeyPressed oldKeyPressed;
 
-            int changeLibIndex(int index, int change, std::size_t nbLib);
+            int changeLibIndex(int index, int change, int nbLib);
     };
 }
 

@@ -5,12 +5,8 @@
 ** snake
 */
 
-#include <vector>
 #include "LibSnake.hpp"
-#include <iostream>
-#include <ostream>
-#include <functional>
-#include <utility>
+
 arcade::LibSnake::LibSnake()
 {
     init();
@@ -43,6 +39,7 @@ void arcade::LibSnake::init()
         "#                             #",
         "###############################"
     };
+    _gameName = "Snake";
     score = 0;
     mapSize = 1;
     direction = DROITE;
@@ -57,9 +54,24 @@ std::array<std::string, 23> arcade::LibSnake::getMap() const
     return map;
 }
 
+std::pair<std::size_t, std::size_t> arcade::LibSnake::getIndexes() const
+{
+    return {0,0};
+}
+
 std::size_t arcade::LibSnake::getMapCellSize() const
 {
     return mapSize;
+}
+
+std::string arcade::LibSnake::getGameName() const
+{
+    return _gameName;
+}
+
+std::size_t arcade::LibSnake::getScore() const
+{
+    return score;
 }
 
 int arcade::LibSnake::findPlayer()
@@ -299,7 +311,7 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibSnake::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    textToDisplay.push_back({"Snake", {10, 10}});
+    textToDisplay.push_back({_gameName, {10, 10}});
     std::string scoreTxt;
     scoreTxt = "Score : ";
     scoreTxt.append(std::to_string(score));

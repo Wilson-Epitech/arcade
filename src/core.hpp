@@ -25,6 +25,7 @@
     #include <unistd.h>
     #include <chrono>
     #include "dlLoader.hpp"
+    #include <fstream>
 
 class Core {
     public:
@@ -52,6 +53,7 @@ class Core {
         int getLibIndex(std::string path);
         void changeLibrary();
         int changeLibIndex(int index, int change, std::size_t nbLib);
+        void saveScore(std::string playerName, std::string gameName, std::size_t score);
 };
 
 

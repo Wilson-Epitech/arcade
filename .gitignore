@@ -2,5 +2,6 @@ arcade
 lib/*.so
 src/*.o
 lib/graphical/lib*/*.o
-lib/game/*/*.o
+lib/games/*/*.o
 src/main.cpp
+lib/games/score/*
