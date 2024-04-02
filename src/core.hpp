@@ -34,6 +34,7 @@ class Core {
         void gameLoop(void);
     private:
         arcade::IDisplayModule *_graphicalLib;
+        arcade::IDisplayModule *_DefaultGraphicalLib;
         arcade::IGameModule *_gameLib;
         std::vector<std::string> _allGamePath;
         std::vector<std::string> _allGraphicalPath;
@@ -47,6 +48,7 @@ class Core {
         int _gameSpeed;
         DlLoader *_dlLoader;
         int pass = 0;
+        std::string playerName;
 
         void changeGraphicalLib(void);
         void changeGameLib(void);

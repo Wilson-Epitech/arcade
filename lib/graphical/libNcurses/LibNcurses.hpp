@@ -39,7 +39,6 @@ namespace arcade
             int x;
             int y;
             bool keyPressed;
-            int quit;
             std::map<std::string, arcade::Color> charMap;
             std::string _gameName;
             std::string _playerName;

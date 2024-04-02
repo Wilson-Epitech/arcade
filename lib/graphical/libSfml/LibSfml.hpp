@@ -46,8 +46,10 @@ namespace arcade
             std::string _playerName;
             arcade::KeyPressed _keyClose;
             arcade::KeyPressed _key;
+            bool nextChar;
 
             void pickColor(const std::unordered_map<std::string, Color> patternMap);
+            void incertCharToPlayerName(void);
             sf::RectangleShape madeRectangle(sf::Color color, float size);
             bool displayRoundShape(sf::RectangleShape rect, char c);
             void checkTwoChar(std::size_t j, std::string str);

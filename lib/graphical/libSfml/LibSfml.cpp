@@ -7,7 +7,7 @@
 
 #include "LibSfml.hpp"
 
-arcade::libSfml::libSfml() : window(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str())
+arcade::libSfml::libSfml()
 {
     return;
 }
@@ -19,6 +19,9 @@ void arcade::libSfml::init(const std::unordered_map<std::string, Color> pattern)
     squareSize = 30;
     _font.loadFromFile(FONT_PATH.c_str());
     pickColor(pattern);
+    _keyClose = arcade::OTHER;
+    window.create(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str());
+    nextChar = true;
     return;
 }
 
@@ -117,9 +120,31 @@ void arcade::libSfml::setKey(arcade::KeyPressed newValue)
     _key = newValue;
 }
 
+void arcade::libSfml::incertCharToPlayerName(void)
+{
+    sf::Keyboard::Key k = event.key.code;
+    if (k <= sf::Keyboard::Z && k >= sf::Keyboard::A || k == sf::Keyboard::BackSpace) {
+        if (sf::Keyboard::isKeyPressed(k) && nextChar == true) {
+            if (k == sf::Keyboard::BackSpace && _playerName.size() > 0) {
+                _playerName.pop_back();
+                nextChar = false;
+                return;
+            }
+            char c = k + 'a';
+            _playerName.push_back(c);
+            nextChar = false;
+        } else {
+            nextChar = true;
+        }
+    }
+}
+
 void arcade::libSfml::game(const std::string gameName)
 {
     _gameName = gameName;
+    if (_gameName.compare("menu") == 0) {
+        incertCharToPlayerName();
+    }
     window.pollEvent(event);
     if (event.type == sf::Event::Closed) {
         window.close();
@@ -195,6 +220,9 @@ void arcade::libSfml::displayMap(std::array<std::string, 23> map, std::size_t si
 void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     sf::Text txt;
+    if (_gameName.compare("menu") == 0) {
+        textToDisplay.push_back({_playerName, {0,0}});
+    }
     for (size_t i = 0; i < textToDisplay.size(); i++) {
         txt.setFont(_font);
         txt.setCharacterSize(25);

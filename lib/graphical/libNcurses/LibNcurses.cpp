@@ -25,6 +25,8 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     wclear(win);
     keyPressed = false;
     pickColor(pattern);
+    x = 0;
+    y = 0;
 }
 
 void arcade::libNcurses::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)

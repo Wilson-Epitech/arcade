@@ -49,6 +49,7 @@ namespace arcade
             std::map<std::string, SDL_Texture*> charMap;
             std::string _gameName;
             std::string _playerName;
+            bool nextChar;
 
             void pickColor(const std::unordered_map<std::string, Color> patternMap);
             void checkTwoChar(std::size_t j, std::string str);

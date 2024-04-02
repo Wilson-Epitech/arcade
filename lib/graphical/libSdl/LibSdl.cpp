@@ -22,6 +22,8 @@ void arcade::libSdl::init(const std::unordered_map<std::string, Color> pattern)
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH.c_str(), 28);
     oldKeyPressed = arcade::OTHER;
+    _key = arcade::OTHER;
+    _gameName = "";
     pickColor(pattern);
 }
 
@@ -81,6 +83,20 @@ void arcade::libSdl::game(const std::string gameName)
     _gameName = gameName;
     SDL_RenderPresent(render);
     SDL_PollEvent(&event);
+    if (_gameName.compare("menu") == 0) {
+        switch (event.type) {
+            case SDL_TEXTINPUT:
+                _playerName.append(event.text.text);
+                break;
+            case SDL_KEYDOWN:
+                switch(event.key.keysym.sym) {
+                    case SDLK_BACKSPACE:
+                        if (_playerName.size() > 0)
+                            _playerName.pop_back();
+                        break;
+                }
+        }
+    }
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
 }
@@ -90,6 +106,9 @@ void arcade::libSdl::displayText(std::vector<std::pair<std::string, std::pair<in
     if (_font == NULL) {
         fprintf(stderr, "error: font not found\n");
         exit(84);
+    }
+    if (_gameName.compare("menu") == 0) {
+        textToDisplay.push_back({_playerName, {0,0}});
     }
     int text_size = 25;
     SDL_Color White = {255, 255, 255, 255};
