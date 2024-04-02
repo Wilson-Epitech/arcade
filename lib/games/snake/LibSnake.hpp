@@ -39,7 +39,7 @@ namespace arcade {
             void init();
             int moovePlayer(arcade::KeyPressed Key);
             int moove();
-            void changePlayerPos();
+            int changePlayerPos(std::string str);
             void placeFood();
             void fillVector();
             std::vector<std::pair<int, int>> MyVector;
