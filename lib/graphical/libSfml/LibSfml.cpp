@@ -112,6 +112,11 @@ arcade::KeyPressed arcade::libSfml::getKey() const
     return key;
 }
 
+void arcade::libSfml::setKey(arcade::KeyPressed newValue)
+{
+    _key = newValue;
+}
+
 void arcade::libSfml::game(const std::string gameName)
 {
     _gameName = gameName;

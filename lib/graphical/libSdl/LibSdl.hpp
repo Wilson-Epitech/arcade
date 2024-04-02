@@ -33,7 +33,7 @@ namespace arcade
             void displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay) override;
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() const override;
-            void setKey(arcade::KeyPressed newValue) override {};
+            void setKey(arcade::KeyPressed newValue) override;
             void changeColor(const std::unordered_map<std::string, Color> patternMap) override;
             std::string getPlayerName() const override;
         private:
@@ -45,6 +45,7 @@ namespace arcade
             float squareSize;
             TTF_Font* _font;
             KeyPressed oldKeyPressed;
+            KeyPressed _key;
             std::map<std::string, SDL_Texture*> charMap;
             std::string _gameName;
             std::string _playerName;

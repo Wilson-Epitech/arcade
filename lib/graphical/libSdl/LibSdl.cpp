@@ -186,6 +186,11 @@ arcade::KeyPressed arcade::libSdl::getKey() const
     return arcade::OTHER;
 }
 
+void arcade::libSdl::setKey(arcade::KeyPressed newValue)
+{
+    _key = newValue;
+}
+
 std::string arcade::libSdl::getPlayerName() const
 {
     return _playerName;

@@ -129,7 +129,7 @@ arcade::KeyPressed arcade::libNcurses::getKey() const
     if (c == KEY_BACKSPACE) {
         return arcade::KeyPressed::BACKSPACE;
     }
-    if (c == KEY_ENTER) {
+    if (c == 10) {
         return arcade::KeyPressed::ENTER;
     }
     if (c == 'q') {
@@ -138,6 +138,11 @@ arcade::KeyPressed arcade::libNcurses::getKey() const
         return arcade::CLOSE_BUTTON;
     }
     return key;
+}
+
+void arcade::libNcurses::setKey(arcade::KeyPressed newValue)
+{
+    _key = newValue;
 }
 
 void arcade::libNcurses::checkTwoChar(std::size_t j, std::string str)

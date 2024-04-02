@@ -26,7 +26,6 @@ namespace arcade {
             void incrementTime() override {};
             GameStatus updateMap(arcade::KeyPressed key) override;
             std::pair<std::size_t, std::size_t> getIndexes() const override {};
-            void keyEnter(const KeyPressed key) override {};
             void initText(const std::vector<std::string>, const std::vector<std::string>) override {};
         protected:
         private:
