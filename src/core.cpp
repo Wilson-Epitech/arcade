@@ -168,6 +168,9 @@ void Core::gameLoop(void)
             status = _gameLib->updateMap(_key);
             if (_gameLibIndex == -1 && _key == arcade::ENTER) {
                 playerName = _graphicalLib->getPlayerName();
+                if (playerName.size() < 1) {
+                    playerName = "DefaultPlayer";
+                }
                 std::pair<std::size_t, std::size_t> indexPair = _gameLib->getIndexes();
                 _gameLibIndex = indexPair.second;
                 _graphicalLibIndex = indexPair.first;
@@ -188,7 +191,6 @@ void Core::gameLoop(void)
         if (status == arcade::LOOSE) {
             status = arcade::PLAYING;
             _graphicalLib->setKey(arcade::OTHER);
-            saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
             _key = arcade::M;
             changeLibrary();
         }
