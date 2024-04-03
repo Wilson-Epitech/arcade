@@ -12,6 +12,13 @@ arcade::libNcurses::libNcurses()
     return;
 }
 
+arcade::libNcurses::~libNcurses()
+{
+    _gameName.clear();
+    _playerName.clear();
+    _textToDiplay.clear();
+}
+
 void arcade::libNcurses::init(const std::unordered_map<std::string, Color> pattern)
 {
     initscr();
@@ -28,6 +35,7 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     x = 0;
     y = 0;
     pressedChar = 0;
+    _keyPressed = arcade::OTHER;
 }
 
 void arcade::libNcurses::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
@@ -160,9 +168,11 @@ void arcade::libNcurses::otherGetKey(void)
     }
     if (c == 'q' && _gameName.compare("menu") != 0) {
         _keyPressed = arcade::BACKSPACE;
+        return;
     }
     if (c == 27 && _gameName.compare("menu") == 0) {
         _keyPressed = arcade::M;
+        return;
     }
 }
 

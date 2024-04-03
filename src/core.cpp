@@ -28,6 +28,7 @@ Core::Core(int argc, char **argv)
     _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
     _graphicalLib->init(_gameLib->getPattern());
     _DefaultGraphicalLib = _graphicalLib;
+    pass = 0;
 }
 
 Core::~Core()

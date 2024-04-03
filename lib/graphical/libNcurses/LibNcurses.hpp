@@ -22,7 +22,7 @@ namespace arcade
     class libNcurses : virtual public arcade::IDisplayModule{
         public:
             libNcurses();
-            ~libNcurses() {};
+            ~libNcurses();
             void init(const std::unordered_map<std::string, Color> pattern) override;
             void stop() override;
             void game(const std::string gameName) override;
