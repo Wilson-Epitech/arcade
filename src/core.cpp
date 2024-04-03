@@ -100,6 +100,7 @@ void Core::changeLibrary()
         pass = 0;
     }
     if (_key == arcade::M && pass == 0) {
+        saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
         _gameLibIndex = -1;
         _graphicalLib->stop();
         _graphicalLib = _DefaultGraphicalLib;

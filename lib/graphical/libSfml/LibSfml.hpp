@@ -11,6 +11,7 @@
     #include <string>
     #include <iostream>
     #include <SFML/Graphics.hpp>
+    #include <fstream>
     #include "../../includes/IDisplayModule.hpp"
 
 static const int BASE_X = 30;
@@ -47,8 +48,12 @@ namespace arcade
             arcade::KeyPressed _keyClose;
             arcade::KeyPressed _key;
             bool nextChar;
+            std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
 
+            void sortScore(std::size_t textSize);
+            int getNumber(std::string);
             void pickColor(const std::unordered_map<std::string, Color> patternMap);
+            void addScoreTabToDisplay(void);
             void incertCharToPlayerName(void);
             sf::RectangleShape madeRectangle(sf::Color color, float size);
             bool displayRoundShape(sf::RectangleShape rect, char c);

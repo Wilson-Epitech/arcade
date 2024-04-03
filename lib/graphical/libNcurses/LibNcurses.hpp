@@ -12,6 +12,7 @@
     #include <iostream>
     #include <ncurses.h>
     #include "../../includes/IDisplayModule.hpp"
+    #include <fstream>
 
 static const int BASE_X = 2;
 static const int BASE_Y = 3;
@@ -46,7 +47,11 @@ namespace arcade
             arcade::KeyPressed _keyPressed;
             int pressedChar;
             bool nextChar;
-    
+            std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
+
+            void sortScore(std::size_t textSize);
+            int getNumber(std::string);
+            void addScoreTabToDisplay(void);
             void otherGetKey(void);
             void pickColor(const std::unordered_map<std::string, Color> patternMap);
             void color_remove(void);

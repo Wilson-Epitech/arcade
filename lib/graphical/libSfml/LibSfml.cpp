@@ -112,6 +112,9 @@ arcade::KeyPressed arcade::libSfml::getKey() const
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) == true) {
         return arcade::KeyPressed::ENTER;
     }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) == true) {
+        return arcade::KeyPressed::BACKSPACE;
+    }
     return key;
 }
 
@@ -217,20 +220,97 @@ void arcade::libSfml::displayMap(std::array<std::string, 23> map, std::size_t si
     y = BASE_Y;
 }
 
+int arcade::libSfml::getNumber(std::string str)
+{
+    std::string strNbr;
+    for (std::size_t i = 0; i < str.size(); i++) {
+        if (str.at(i) <=  '9' && str.at(i) >= '0') {
+            strNbr.push_back(str.at(i));
+        } else {
+            break;
+        }
+    }
+    return atoi(strNbr.c_str());
+}
+
+void arcade::libSfml::sortScore(std::size_t textSize)
+{
+    int max = 0;
+    std::size_t index = 0;
+    int x_score = 1000;
+    int y_score = 50;
+    std::vector<std::pair<std::string, std::pair<int, int>>> tmpToDisplay;
+    for (size_t i = 0; i < textSize; i++) {
+        tmpToDisplay.push_back(_textToDiplay.at(i));
+    }
+    
+    for (size_t i = textSize; i < _textToDiplay.size(); i++) {
+        for (size_t j = textSize; j < _textToDiplay.size(); j++) {
+            if (max <= getNumber(_textToDiplay.at(j).first)) {
+                max = getNumber(_textToDiplay.at(j).first);
+                index = j;
+            }
+        }
+        tmpToDisplay.push_back(_textToDiplay.at(index));
+        tmpToDisplay.at(i).second.first = x_score;
+        tmpToDisplay.at(i).second.second = y_score;
+        _textToDiplay.at(index).first = "0 \n";
+        max = 0;
+        y_score += 50;
+    }
+    _textToDiplay.clear();
+    for (size_t i = textSize; i < tmpToDisplay.size() && i < (10 + textSize); i++) {
+        _textToDiplay.push_back(tmpToDisplay.at(i));
+    }
+}
+
+void arcade::libSfml::addScoreTabToDisplay(void)
+{
+    std::fstream my_file;
+    std::string fileName = "./lib/games/score/";
+    fileName.append(_gameName);
+    fileName.append("_score.mbw");
+    my_file.open(fileName.c_str(), std::ios::in);
+
+    std::size_t textSize = _textToDiplay.size();
+    if (my_file.is_open()) {
+        char mychar;
+        std::string line;
+        while (my_file) {
+            mychar = my_file.get();
+            line.push_back(mychar);
+            if (mychar == '\n') {
+                _textToDiplay.push_back({line, {0, 0}});
+                line.clear();
+            }
+        }
+    }
+	my_file.close();
+    sortScore(textSize);
+}
+
 void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     sf::Text txt;
+    _textToDiplay = textToDisplay;
     if (_gameName.compare("menu") == 0) {
-        textToDisplay.push_back({_playerName, {0,0}});
+        _textToDiplay.push_back({_playerName, {0,0}});
+    } else {
+        addScoreTabToDisplay();
     }
-    for (size_t i = 0; i < textToDisplay.size(); i++) {
+    for (std::size_t i = 0; i < textToDisplay.size(); i++) {
+        _textToDiplay.push_back(textToDisplay.at(i));
+    }
+
+    for (size_t i = 0; i < _textToDiplay.size(); i++) {
         txt.setFont(_font);
         txt.setCharacterSize(25);
         txt.setFillColor(sf::Color::White);
-        txt.setPosition(getPosition(textToDisplay.at(i).second.first, textToDisplay.at(i).second.second));
-        txt.setString(textToDisplay.at(i).first.c_str());
+        txt.setPosition(getPosition(_textToDiplay.at(i).second.first, _textToDiplay.at(i).second.second));
+        txt.setString(_textToDiplay.at(i).first.c_str());
         window.draw(txt);
     }
+    
     window.display();
 }
 
