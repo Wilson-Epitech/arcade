@@ -44,12 +44,14 @@ void arcade::LibSnake::init()
 
     _gameName = "Snake";
     score = 0;
+    scoreCopy = 0;
     mapSize = 1;
     direction = DROITE;
     SnakeLenght = 4;
     fillVector();
     srand(time(NULL));
     placeFood();
+    speed = 0;
 }
 
 std::array<std::string, 23> arcade::LibSnake::getMap() const
@@ -107,8 +109,6 @@ void arcade::LibSnake::placeFood(size_t y, size_t x)
         foodX = rand() % 31;
     }
     map[foodY][foodX] = '|';
-    std :: cout << "food" << std ::endl;
-    std::cout << "y " << foodY << "  " << "x " << foodX << std::endl;
 }
 
 void arcade::LibSnake::fillVector()
@@ -189,6 +189,7 @@ void arcade::LibSnake::changePlayerPos()
 {
     if (map[playerY][playerX] == '|') {
         score++;
+        scoreCopy++;
         if (direction == DROITE) {
             MyVector.insert(MyVector.begin(), std::make_pair(MyVector[0].first, (MyVector[0].second) - 1));
             placeFood(MyVector[0].first, MyVector[0].second);
@@ -297,14 +298,21 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
 {
     findPlayer();
     int move = moovePlayer(key);
+    int mooveInContinue = 0;
 
-    if (move == -1) {
+    if (scoreCopy == 10) {
+        speed++;
+        scoreCopy = 0;
+    }
+    if (move == -1)
         return arcade::LOOSE;
-    }
     if (move == 0) {
-        if (moove() == -1)
-            return arcade::LOOSE;
+        mooveInContinue = moove();
+        for (int i = 0; i != speed; i++)
+            moove();
     }
+    if (mooveInContinue == -1)
+        return arcade::LOOSE;
     return arcade::PLAYING;
 }
 

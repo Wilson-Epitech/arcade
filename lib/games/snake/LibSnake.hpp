@@ -41,6 +41,8 @@ namespace arcade {
             void placeFood(size_t y = 50, size_t x = 50);
             void fillVector();
 
+            size_t speed;
+            size_t scoreCopy;
             size_t foodY;
             size_t foodX;
             std::string _gameName;
