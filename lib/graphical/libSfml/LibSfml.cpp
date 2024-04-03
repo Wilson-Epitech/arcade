@@ -123,7 +123,7 @@ void arcade::libSfml::setKey(arcade::KeyPressed newValue)
 void arcade::libSfml::incertCharToPlayerName(void)
 {
     sf::Keyboard::Key k = event.key.code;
-    if (k <= sf::Keyboard::Z && k >= sf::Keyboard::A || k == sf::Keyboard::BackSpace) {
+    if ((k <= sf::Keyboard::Z && k >= sf::Keyboard::A) || k == sf::Keyboard::BackSpace) {
         if (sf::Keyboard::isKeyPressed(k) && nextChar == true) {
             if (k == sf::Keyboard::BackSpace && _playerName.size() > 0) {
                 _playerName.pop_back();

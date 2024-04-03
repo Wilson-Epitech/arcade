@@ -25,8 +25,11 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     wclear(win);
     keyPressed = false;
     pickColor(pattern);
+    _gameName = "";
     x = 0;
     y = 0;
+    nextChar = true;
+    pressedChar = 0;
 }
 
 void arcade::libNcurses::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
@@ -84,6 +87,18 @@ void arcade::libNcurses::stop() {
 void arcade::libNcurses::game(const std::string gameName)
 {
     _gameName = gameName;
+    otherGetKey();
+    if (_gameName.compare("menu") == 0) {
+        if ((pressedChar >= 'a' && pressedChar <= 'z') ||
+        (pressedChar >= 'A' && pressedChar <= 'Z') ||
+        pressedChar == '_' ||
+        (pressedChar >= '0' && pressedChar <= '9')) {
+            _playerName.push_back(pressedChar);
+        }
+        if (pressedChar == KEY_BACKSPACE) {
+            _playerName.pop_back();
+        }
+    }
     werase(win);
 }
 
@@ -97,54 +112,71 @@ void arcade::libNcurses::color_remove(void) {
     wattron(win,COLOR_PAIR(DEFAULT));
 }
 
-arcade::KeyPressed arcade::libNcurses::getKey() const
+void arcade::libNcurses::otherGetKey(void)
 {
-    arcade::KeyPressed key = arcade::KeyPressed::OTHER;
     int c = getch();
+    pressedChar = c;
     if (c == KEY_UP) {
-        return arcade::KeyPressed::UP;
+        _keyPressed = arcade::KeyPressed::UP;
+        return;
     }
     if (c == KEY_DOWN) {
-        return arcade::KeyPressed::DOWN;
+        _keyPressed = arcade::KeyPressed::DOWN;
+        return;
     }
     if (c == KEY_LEFT) {
-        return arcade::KeyPressed::LEFT;
+        _keyPressed = arcade::KeyPressed::LEFT;
+        return;
     }
     if (c == KEY_RIGHT) {
-        return arcade::KeyPressed::RIGHT;
+        _keyPressed = arcade::KeyPressed::RIGHT;
+        return;
     }
     if (c == 'g' || c == 'G') {
-        return arcade::KeyPressed::G;
+        _keyPressed = arcade::KeyPressed::G;
+        return;
     }
     if (c == 'n' || c == 'N') {
-        return arcade::KeyPressed::N;
+        _keyPressed = arcade::KeyPressed::N;
+        return;
     }
     if (c == 'p' || c == 'P') {
-        return arcade::KeyPressed::P;
+        _keyPressed = arcade::KeyPressed::P;
+        return;
     }
     if (c == 'r' || c == 'R') {
-        return arcade::KeyPressed::R;
+        _keyPressed = arcade::KeyPressed::R;
+        return;
     }
     if (c == 'm' || c == 'M') {
-        return arcade::KeyPressed::M;
+        _keyPressed = arcade::KeyPressed::M;
+        return;
     }
     if (c == KEY_BACKSPACE) {
-        return arcade::KeyPressed::BACKSPACE;
+        _keyPressed = arcade::KeyPressed::BACKSPACE;
+        return;
     }
     if (c == 10) {
-        return arcade::KeyPressed::ENTER;
+        _keyPressed = arcade::KeyPressed::ENTER;
+        return;
     }
-    if (c == 'q') {
-        delwin(win);
-        endwin();
-        return arcade::CLOSE_BUTTON;
+    if (c == 'q' && _gameName.compare("menu") != 0) {
+        _keyPressed = arcade::BACKSPACE;
     }
-    return key;
+    if (c == 27 && _gameName.compare("menu") == 0) {
+        _keyPressed = arcade::M;
+    }
+}
+
+arcade::KeyPressed arcade::libNcurses::getKey() const
+{
+    return _keyPressed;
 }
 
 void arcade::libNcurses::setKey(arcade::KeyPressed newValue)
 {
-    _key = newValue;
+    if (_keyPressed != arcade::BACKSPACE)
+        _keyPressed = newValue;
 }
 
 void arcade::libNcurses::checkTwoChar(std::size_t j, std::string str)
@@ -183,6 +215,9 @@ void arcade::libNcurses::displayMap(std::array<std::string, 23> map, std::size_t
 void arcade::libNcurses::displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay)
 {
     wattron(win,COLOR_PAIR(DEFAULT));
+    if (_gameName.compare("menu") == 0) {
+        textToDisplay.push_back({_playerName, {10,10}});
+    }
     for (size_t i = 0; i < textToDisplay.size(); i++) {
         mvwprintw(win, (textToDisplay.at(i).second.second * 0.04), (textToDisplay.at(i).second.first * 0.04), "%s", textToDisplay.at(i).first.c_str());
     }

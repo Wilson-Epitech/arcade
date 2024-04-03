@@ -106,6 +106,7 @@ void Core::changeLibrary()
         changeGameLib();
         _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
         _graphicalLib->init(_gameLib->getPattern());
+        _graphicalLib->setKey(arcade::OTHER);
     }
     if (_key != arcade::M && pass == 1) {
         pass = 0;
@@ -159,6 +160,10 @@ void Core::gameLoop(void)
                 _graphicalLib->stop();
                 break;
             }
+            if (_key == arcade::M && _gameLib->getGameName().compare("menu") == 0) {
+                _graphicalLib->stop();
+                break;
+            }
             status = _gameLib->updateMap(_key);
             if (_gameLibIndex == -1 && _key == arcade::ENTER) {
                 playerName = _graphicalLib->getPlayerName();
@@ -169,6 +174,7 @@ void Core::gameLoop(void)
                 changeGameLib();
             } 
             changeLibrary();
+            _graphicalLib->setKey(arcade::OTHER);
             time1 = std::chrono::steady_clock::now();
         }
         _graphicalLib->displayMap(_gameLib->getMap(), _gameLib->getMapCellSize());
@@ -180,6 +186,7 @@ void Core::gameLoop(void)
         _graphicalLib->displayText(_gameLib->getText());
         if (status == arcade::LOOSE) {
             status = arcade::PLAYING;
+            _graphicalLib->setKey(arcade::OTHER);
             saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
             _key = arcade::M;
             changeLibrary();

@@ -43,7 +43,11 @@ namespace arcade
             std::string _gameName;
             std::string _playerName;
             arcade::KeyPressed _key;
+            arcade::KeyPressed _keyPressed;
+            int pressedChar;
+            bool nextChar;
     
+            void otherGetKey(void);
             void pickColor(const std::unordered_map<std::string, Color> patternMap);
             void color_remove(void);
             void checkTwoChar(std::size_t j, std::string str);
