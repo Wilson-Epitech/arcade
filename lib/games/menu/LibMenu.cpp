@@ -36,7 +36,6 @@ arcade::LibMenu::LibMenu()
     _SelectedGameIndex = 0;
     _SelectedLibIndex = 0;
     _libTypeSelected = 0;
-    oldKeyPressed = arcade::OTHER;
 }
 
 void arcade::LibMenu::initText(std::vector<std::string> gameLibName, std::vector<std::string> graphicalName)

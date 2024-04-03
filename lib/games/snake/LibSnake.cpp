@@ -163,13 +163,6 @@ void arcade::LibSnake::getSnakeLenght()
         SnakeLenght = MyVector.size();
 }
 
-void arcade::LibSnake::updateKeyPressed(arcade::KeyPressed key)
-{
-    if (key != arcade::OTHER) {
-        keyPressed = key;
-    }
-}
-
 std::unordered_map<std::string, arcade::Color> arcade::LibSnake::getPattern() const
 {
     std::unordered_map<std::string, arcade::Color> pattern;

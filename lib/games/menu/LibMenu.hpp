@@ -9,12 +9,7 @@
 #define LIBMENU_HPP_
 
 #include "../../includes/IGameModule.hpp"
-#include "../../includes/Color.hpp"
-#include "../../includes/KeyPressed.hpp"
-#include "../../includes/GameStatus.hpp"
 #include <string>
-#include <iostream>
-#include <chrono>
 
 namespace arcade {
     class LibMenu : virtual public arcade::IGameModule {
@@ -39,7 +34,6 @@ namespace arcade {
             std::size_t _SelectedGameIndex;
             std::size_t _SelectedLibIndex;
             int _libTypeSelected;
-            arcade::KeyPressed oldKeyPressed;
 
             int changeLibIndex(int index, int change, int nbLib);
     };

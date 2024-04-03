@@ -8,8 +8,6 @@
 #ifndef SFML_HPP_
     #define SFML_HPP_
 
-    #include <string>
-    #include <iostream>
     #include <SFML/Graphics.hpp>
     #include <fstream>
     #include "../../includes/IDisplayModule.hpp"

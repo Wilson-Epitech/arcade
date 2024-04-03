@@ -8,8 +8,6 @@
 #ifndef SFML_HPP_
     #define SFML_HPP_
 
-    #include <string>
-    #include <iostream>
     #include <ncurses.h>
     #include "../../includes/IDisplayModule.hpp"
     #include <fstream>
@@ -17,7 +15,6 @@
 static const int BASE_X = 2;
 static const int BASE_Y = 3;
 
-static const std::string FONT_PATH = "lib/graphical/font/ARCADE_N.TTF";
 static const std::string WINDOW_TITLE = "Arcade Ncurses";
 
 namespace arcade
@@ -39,14 +36,11 @@ namespace arcade
             WINDOW *win;
             int x;
             int y;
-            bool keyPressed;
             std::map<std::string, arcade::Color> charMap;
             std::string _gameName;
             std::string _playerName;
-            arcade::KeyPressed _key;
             arcade::KeyPressed _keyPressed;
             int pressedChar;
-            bool nextChar;
             std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
 
             void sortScore(std::size_t textSize);

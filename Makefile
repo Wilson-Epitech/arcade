@@ -14,7 +14,10 @@ msg:
 	@echo -e "\x1b[1m\x1b[38;2;252;0;3m                                                        #                                  \x1b[0m"
 
 SRC = ./src/core.cpp	\
-	./src/dlLoader.cpp
+	./src/dlLoader.cpp	\
+	./src/errorHandling.cpp	\
+	./src/main.cpp	\
+	./src/coreLibActions.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

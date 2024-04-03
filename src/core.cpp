@@ -6,36 +6,35 @@
 */
 
 #include "core.hpp"
+#include "errorHandling.hpp"
 
-int Core::changeLibIndex(int index, int change, std::size_t nbLib)
+Core::Core(int argc, char **argv)
 {
-    if ((index + change) < nbLib && (index + change) >= 0) {
-        return (index + change);
+    _dlLoader = new DlLoader;
+    _graphicalLibIndex = getLibIndex(argv[1]);
+    if (_graphicalLibIndex == -1) {
+        throw LibError();
     }
-    if (index == (nbLib - 1) && change > 0) {
-        return 0;
-    }
-    if (index == 0 && change < 0) {
-        return (nbLib - 1);
-    }
-    return index;
+    _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
+    _graphicalLib = _graphicalLibAndHandler.first;
+    _libGraphicalLen = _dlLoader->getGraphicalPath().size();
+    _libGameLen = _dlLoader->getGamePath().size();
+
+    _key = arcade::OTHER;
+    _gameSpeed = 150;
+    _gameLibIndex = -1;
+    _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
+    _gameLib = _gameLibAndHandler.first;
+    _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
+    _graphicalLib->init(_gameLib->getPattern());
+    _DefaultGraphicalLib = _graphicalLib;
 }
 
-int Core::getLibIndex(std::string path)
+Core::~Core()
 {
-    int index = -1;
-    std::vector<std::string> allGraphicalLib = _dlLoader->getGraphicalPath();
-    for (int i = 0; i < NB_LIB_GRAPHICAL; i++) {
-        if (path.find(allGraphicalLibraryPath[i]) != std::string::npos) {
-            index = i;
-        }
-    }
-    for (std::size_t i = 0; i < allGraphicalLib.size(); i++) {
-        if (allGraphicalLib.at(i).compare(allGraphicalLibraryPath[index]) == 0) {
-            return i;
-        }
-    }
-    return -1;
+    saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
+    dlclose(_gameLibAndHandler.second);
+    dlclose(_graphicalLibAndHandler.second);
 }
 
 void Core::saveScore(std::string playerName, std::string gameName, std::size_t score)
@@ -47,101 +46,63 @@ void Core::saveScore(std::string playerName, std::string gameName, std::size_t s
     fileName.append(gameName);
     fileName.append("_score.mbw");
     std::ofstream file(fileName, std::ios::app);
-    std::string scoreLine = std::to_string(score);
-    scoreLine.append(" : ");
-    scoreLine.append(playerName);
-    scoreLine.append("\n");
-    file.write(scoreLine.c_str(), strlen(scoreLine.c_str()));
-    file.close();
+    if (file.is_open()) {
+        std::string scoreLine = std::to_string(score);
+        scoreLine.append(" : ");
+        scoreLine.append(playerName);
+        scoreLine.append("\n");
+        file.write(scoreLine.c_str(), scoreLine.size());
+        file.close();
+    } else {
+        throw SaveError();
+    }
 }
 
-void Core::changeGraphicalLib(void)
+int Core::closeEvent(void)
 {
-    _graphicalLib->stop();
-    _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
-    _graphicalLib = _graphicalLibAndHandler.first;
-    _graphicalLib->init(_gameLib->getPattern());
-    pass = 1;
-}
-
-void Core::changeGameLib(void)
-{
-    saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
-    _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
-    _gameLib = _gameLibAndHandler.first;
-    _graphicalLib->changeColor(_gameLib->getPattern());
-    pass = 1;
-}
-
-void Core::changeLibrary()
-{
-    if (_gameLibIndex == -1) {
-        return;
+    if (_key == arcade::CLOSE_BUTTON) {
+        return 1;
     }
-    if (_key == arcade::N && pass == 0) {
-        _graphicalLibIndex = changeLibIndex(_graphicalLibIndex, 1, _libGraphicalLen);
-        changeGraphicalLib();
-    }
-    if (_key != arcade::N && pass == 1) {
-        pass = 0;
-    }
-    if (_key == arcade::P && pass == 0) {
-        _graphicalLibIndex = changeLibIndex(_graphicalLibIndex, -1, _libGraphicalLen);
-        changeGraphicalLib();
-    }
-    if (_key != arcade::P && pass == 1) {
-        pass = 0;
-    }
-    if (_key == arcade::G && pass == 0) {
-        _gameLibIndex = changeLibIndex(_gameLibIndex, 1, _libGameLen);
-        changeGameLib();
-    }
-    if (_key != arcade::G && pass == 1) {
-        pass = 0;
-    }
-    if (_key == arcade::M && pass == 0) {
-        saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
-        _gameLibIndex = -1;
+    if (_key == arcade::BACKSPACE && _gameLib->getGameName().compare("menu") != 0) {
         _graphicalLib->stop();
-        _graphicalLib = _DefaultGraphicalLib;
+        return 1;
+    }
+    if (_key == arcade::M && _gameLib->getGameName().compare("menu") == 0) {
+        _graphicalLib->stop();
+        return 1;
+    }
+    return 0;
+}
+
+void Core::quitMenu(void)
+{
+    if (_gameLibIndex == -1 && _key == arcade::ENTER) {
+        playerName = _graphicalLib->getPlayerName();
+        if (playerName.size() < 1) {
+            playerName = "DefaultPlayer";
+        }
+        std::pair<std::size_t, std::size_t> indexPair = _gameLib->getIndexes();
+        _gameLibIndex = indexPair.second;
+        _graphicalLibIndex = indexPair.first;
+        changeGraphicalLib();
         changeGameLib();
-        _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
-        _graphicalLib->init(_gameLib->getPattern());
-        _graphicalLib->setKey(arcade::OTHER);
-    }
-    if (_key != arcade::M && pass == 1) {
-        pass = 0;
-    }
-    if (_key == arcade::R && pass == 0) {
-        _gameLib->resetGame();
-        pass = 1;
-    }
-    if (_key != arcade::R && pass == 1) {
-        pass = 0;
     }
 }
 
-Core::Core(int argc, char **argv)
+arcade::GameStatus Core::winAndLooseEvent(arcade::GameStatus status)
 {
-    _dlLoader = new DlLoader;
-    _graphicalLibIndex = getLibIndex(argv[1]);
-    _graphicalLibAndHandler = _dlLoader->getAIDisplayModule(_graphicalLibIndex);
-    _graphicalLib = _graphicalLibAndHandler.first;
-    _libGraphicalLen = _dlLoader->getGraphicalPath().size();
-    _libGameLen = _dlLoader->getGamePath().size();
-    if (_graphicalLibIndex == -1) {
-        std::cout << "lib : " << argv[1] << " not found." << std::endl;
-        exit(84);
+    if (status == arcade::WON_AND_RELOADED) {
+        status = arcade::PLAYING;
+        _gameLib->resetGame();
+        _gameSpeed -= 15;
     }
-
-    _key = arcade::OTHER;
-    _gameSpeed = 150;
-    _gameLibIndex = -1;
-    _gameLibAndHandler = _dlLoader->getAIGameModule(_gameLibIndex);
-    _gameLib = _gameLibAndHandler.first;
-    _gameLib->initText(_dlLoader->getGraphicalPath(), _dlLoader->getGamePath());
-    _graphicalLib->init(_gameLib->getPattern());
-    _DefaultGraphicalLib = _graphicalLib;
+    if (status == arcade::LOOSE) {
+        status = arcade::PLAYING;
+        _graphicalLib->setKey(arcade::OTHER);
+        _key = arcade::M;
+        changeLibrary();
+    }
+    return status;
 }
 
 void Core::gameLoop(void)
@@ -154,64 +115,17 @@ void Core::gameLoop(void)
         auto elapsed= std::chrono::duration_cast <std::chrono::milliseconds>(time2 - time1);
         if (elapsed.count() >= _gameSpeed) {
             _key = _graphicalLib->getKey();
-            if (_key == arcade::CLOSE_BUTTON) {
-                break;
-            }
-            if (_key == arcade::BACKSPACE && _gameLib->getGameName().compare("menu") != 0) {
-                _graphicalLib->stop();
-                break;
-            }
-            if (_key == arcade::M && _gameLib->getGameName().compare("menu") == 0) {
-                _graphicalLib->stop();
+            if (closeEvent() == 1) {
                 break;
             }
             status = _gameLib->updateMap(_key);
-            if (_gameLibIndex == -1 && _key == arcade::ENTER) {
-                playerName = _graphicalLib->getPlayerName();
-                if (playerName.size() < 1) {
-                    playerName = "DefaultPlayer";
-                }
-                std::pair<std::size_t, std::size_t> indexPair = _gameLib->getIndexes();
-                _gameLibIndex = indexPair.second;
-                _graphicalLibIndex = indexPair.first;
-                changeGraphicalLib();
-                changeGameLib();
-            } 
+            quitMenu();
             changeLibrary();
             _graphicalLib->setKey(arcade::OTHER);
             time1 = std::chrono::steady_clock::now();
         }
         _graphicalLib->displayMap(_gameLib->getMap(), _gameLib->getMapCellSize());
-        if (status == arcade::WON_AND_RELOADED) {
-            status = arcade::PLAYING;
-            _gameLib->resetGame();
-            _gameSpeed -= 15;
-        }
+        status = winAndLooseEvent(status);
         _graphicalLib->displayText(_gameLib->getText());
-        if (status == arcade::LOOSE) {
-            status = arcade::PLAYING;
-            _graphicalLib->setKey(arcade::OTHER);
-            _key = arcade::M;
-            changeLibrary();
-        }
     }
-    saveScore(playerName, _gameLib->getGameName(), _gameLib->getScore());
-}
-
-void displayUsage(void)
-{
-    std::cout << "./arcade [Lib]" << std::endl << std::endl;
-    std::cout << "[Lib] :\tpath to the graphical library used at the start of arcade" << std::endl;
-}
-
-int main(int argc, char **argv)
-{
-    if (argc != 2) {
-        displayUsage();
-        return 84;
-    }
-    Core core(argc, argv);
-
-    core.gameLoop();
-    return 0;
 }

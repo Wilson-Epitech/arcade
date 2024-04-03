@@ -8,8 +8,6 @@
 #ifndef libSdl_HPP_
     #define libSdl_HPP_
 
-    #include <string>
-    #include <iostream>
     #include "../../includes/IDisplayModule.hpp"
     #include <SDL2/SDL.h>
     #include <SDL2/SDL_ttf.h>
@@ -50,7 +48,6 @@ namespace arcade
             std::map<std::string, SDL_Texture*> charMap;
             std::string _gameName;
             std::string _playerName;
-            bool nextChar;
             std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
 
             void sortScore(std::size_t textSize);

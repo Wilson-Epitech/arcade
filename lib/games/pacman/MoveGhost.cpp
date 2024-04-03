@@ -188,15 +188,6 @@ arcade::KeyPressed arcade::LibPacman::randKey(arcade::KeyPressed key1, arcade::K
     return key1;
 }
 
-bool arcade::LibPacman::isAvailableDirect(int x, int y)
-{
-    if (isAvailableGhost(map.at(ghostY + y).at(ghostX + x)) == true ||
-    isAvailableGhost(map.at(ghostY - y).at(ghostX - x)) == true) {
-        return true;
-    }
-    return false;
-}
-
 arcade::KeyPressed arcade::LibPacman::changeGhostKey(arcade::KeyPressed key)
 {
     arcade::KeyPressed oldKey = key;

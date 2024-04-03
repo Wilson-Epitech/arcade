@@ -9,11 +9,7 @@
 #define LIBPACMAN_HPP_
 
 #include "../../includes/IGameModule.hpp"
-#include "../../includes/Color.hpp"
-#include "../../includes/KeyPressed.hpp"
-#include "../../includes/GameStatus.hpp"
 #include <string>
-#include <iostream>
 #include <chrono>
 
 namespace arcade {
@@ -49,7 +45,6 @@ namespace arcade {
             void getNexGhost();
             bool tpGhostSide(arcade::KeyPressed key, int defaultX, int defaultY);
             void changeGhostPos(arcade::KeyPressed key);
-            bool isAvailableDirect(int x, int y);
             arcade::KeyPressed randKey(arcade::KeyPressed key1, arcade::KeyPressed key2, arcade::KeyPressed key3);
             arcade::KeyPressed changeGhostKey(arcade::KeyPressed key);
             arcade::KeyPressed mooveGhost(arcade::KeyPressed key);

@@ -9,14 +9,7 @@
 #define MAIN_HPP_
 
 #include "../../includes/IGameModule.hpp"
-#include "../../includes/Color.hpp"
-#include "../../includes/KeyPressed.hpp"
-#include "../../includes/GameStatus.hpp"
-#include <iostream>
 #include <ostream>
-#include <functional>
-#include <utility>
-#include <vector>
 
 namespace arcade {
     class LibSnake : virtual public arcade::IGameModule {
@@ -38,7 +31,6 @@ namespace arcade {
         private:
             void getQueue();
             int findPlayer();
-            void updateKeyPressed(arcade::KeyPressed key);
             bool isAvailable(char c);
             bool isAvailableFood(char c);
             void getSnakeLenght();
@@ -57,7 +49,6 @@ namespace arcade {
             std::size_t playerX;
             std::size_t playerY;
             std::size_t mapSize;
-            GameStatus gameStatus;
             std::size_t SnakeLenght;
             std::array<std::string, 23> map;
             enum Direction {
@@ -65,7 +56,7 @@ namespace arcade {
                 HAUT,
                 GAUCHE,
                 BAS
-                };
+            };
             Direction direction;
             size_t score;
     };

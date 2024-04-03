@@ -23,12 +23,10 @@ void arcade::libNcurses::init(const std::unordered_map<std::string, Color> patte
     init_pair(DEFAULT, COLOR_WHITE, COLOR_BLACK);
     win = newwin(1920 , 1080, 0, 0);
     wclear(win);
-    keyPressed = false;
     pickColor(pattern);
     _gameName = "";
     x = 0;
     y = 0;
-    nextChar = true;
     pressedChar = 0;
 }
 
@@ -148,7 +146,7 @@ void arcade::libNcurses::otherGetKey(void)
         _keyPressed = arcade::KeyPressed::R;
         return;
     }
-    if (c == 'm' || c == 'M') {
+    if ((c == 'm' || c == 'M') && _gameName.compare("menu") != 0) {
         _keyPressed = arcade::KeyPressed::M;
         return;
     }

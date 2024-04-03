@@ -103,7 +103,7 @@ arcade::KeyPressed arcade::libSfml::getKey() const
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) == true) {
         return arcade::KeyPressed::R;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) == true) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) == true && _gameName.compare("menu") != 0) {
         return arcade::KeyPressed::M;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) == true) {

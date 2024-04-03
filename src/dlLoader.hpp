@@ -7,17 +7,11 @@
 
 #ifndef DLLOADER_HPP_
     #define DLLOADER_HPP_
-    #include <stdio.h>
     #include <dlfcn.h>
     #include <string>
     #include "../lib/includes/IDisplayModule.hpp"
-    #include "../lib/includes/KeyPressed.hpp"
     #include "../lib/includes/IGameModule.hpp"
-    #include "../lib/includes/Color.hpp"
-    #include <gnu/lib-names.h>
-    #include <iostream>
     #include <dirent.h>
-    #include <sys/types.h>
     #include <deque>
 
 static const int NB_LIB_GRAPHICAL = 13;
