@@ -62,7 +62,7 @@ void arcade::libSfml::pickColor(const std::unordered_map<std::string, std::pair<
             charMap.insert({tt->first, {madeRectangle(RGB(255,0,0), squareSize),tt->second.second}});
         }
         if (tt->second.first == arcade::BLUE) {
-            charMap.insert({tt->first, {madeRectangle(RGB(100,100,255), squareSize), tt->second.second}});
+            charMap.insert({tt->first, {madeRectangle(RGB(0,0,100), squareSize), tt->second.second}});
         }
         if (tt->second.first == arcade::GREEN) {
             charMap.insert({tt->first, {madeRectangle(RGB(0,255,0), squareSize), tt->second.second}});
@@ -334,7 +334,8 @@ void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<i
     sf::Text txt;
     _textToDiplay = textToDisplay;
     if (_gameName.compare("menu") == 0) {
-        _textToDiplay.push_back({_playerName, {0,0}});
+        _textToDiplay.push_back({"Player name :", {600,700}});
+        _textToDiplay.push_back({_playerName, {800,700}});
     } else {
         addScoreTabToDisplay();
     }

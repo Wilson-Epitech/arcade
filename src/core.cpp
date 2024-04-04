@@ -97,6 +97,10 @@ arcade::GameStatus Core::winAndLooseEvent(arcade::GameStatus status)
         _gameLib->resetGame();
         _gameSpeed -= 15;
     }
+    if (status == arcade::NO_ACTIVITY) {
+        status = arcade::PLAYING;
+        _gameSpeed -= 15;
+    }
     if (status == arcade::LOOSE) {
         status = arcade::PLAYING;
         _graphicalLib->setKey(arcade::OTHER);

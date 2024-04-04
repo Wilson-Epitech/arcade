@@ -70,7 +70,7 @@ void arcade::libSdl::pickColor(const std::unordered_map<std::string, std::pair<C
             charMap.insert({tt->first, madeSprite(255,0,0, tt->second.second)});
         }
         if (tt->second.first == arcade::BLUE) {
-            charMap.insert({tt->first, madeSprite(0,0,124, tt->second.second)});
+            charMap.insert({tt->first, madeSprite(0,0,100, tt->second.second)});
         }
         if (tt->second.first == arcade::GREEN) {
             charMap.insert({tt->first, madeSprite(0,255,0, tt->second.second)});
@@ -195,7 +195,8 @@ void arcade::libSdl::displayText(std::vector<std::pair<std::string, std::pair<in
     }
     _textToDiplay = textToDisplay;
     if (_gameName.compare("menu") == 0) {
-        _textToDiplay.push_back({_playerName, {0,0}});
+        _textToDiplay.push_back({"Player name :", {600,700}});
+        _textToDiplay.push_back({_playerName, {800,700}});
     } else {
         addScoreTabToDisplay();
     }

@@ -291,7 +291,7 @@ std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::L
 {
     std::unordered_map<std::string, std::pair<arcade::Color, std::string>> pattern;
     pattern.insert({" ", {arcade::DEFAULT, ""}});
-    pattern.insert({"#", {arcade::GRAY, ""}});
+    pattern.insert({"#", {arcade::BLUE, ""}});
     pattern.insert({"o", {arcade::WHITE, ""}});
     pattern.insert({"O", {arcade::CYAN, ""}});
     pattern.insert({"|", {arcade::DEFAULT, ""}});
