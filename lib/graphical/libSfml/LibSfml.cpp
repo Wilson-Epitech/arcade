@@ -172,40 +172,6 @@ void arcade::libSfml::handleEvent(const std::string gameName)
     }
 }
 
-bool arcade::libSfml::displayRoundShape(sf::RectangleShape rect, char c)
-{
-    sf::CircleShape cerc;
-    cerc.setRadius(rect.getSize().x);
-    cerc.setFillColor(rect.getFillColor());
-    cerc.setPosition(rect.getPosition());
-    if (c == 'o') {
-        cerc.setPosition(getPosition(x + (squareSize / 2.5), y + (squareSize / 2.5)));
-        window.draw(cerc);
-        return true;
-    }
-    if (c == 'O') {
-        cerc.setPosition(getPosition(x + (squareSize / 3), y + (squareSize / 3)));
-        window.draw(cerc);
-        return true;
-    }
-    if (c == 'P') {
-        cerc.setRadius(rect.getSize().x / 2);
-        window.draw(cerc);
-        return true;
-    }
-    if (c == 'F') {
-        cerc.setRadius(rect.getSize().x / 2);
-        window.draw(cerc);
-        return true;
-    }
-    if (c == 'M') {
-        cerc.setRadius(rect.getSize().x / 2);
-        window.draw(cerc);
-        return true;
-    }
-    return false;
-}
-
 void arcade::libSfml::setLastDirection(arcade::KeyPressed key)
 {
     if (key == arcade::UP) {
@@ -252,6 +218,11 @@ void arcade::libSfml::checkTwoChar(std::size_t j, std::string str)
         if (tt->first.at(0) == str.at(j)) {
             sf::RectangleShape rect = tt->second.first;
             rect.setPosition(getPosition(x, y));
+            if (str.at(j) == 'o') {
+                rect.setPosition(getPosition(x + (squareSize / 2.5), y + (squareSize / 2.5)));
+            } else if (str.at(j) == 'O') {
+                rect.setPosition(getPosition(x + (squareSize / 3), y + (squareSize / 3)));
+            }
 
             setLastDirection(getKey());
             if (tt->second.second.size() > 2) {
@@ -268,8 +239,6 @@ void arcade::libSfml::checkTwoChar(std::size_t j, std::string str)
                     tt->second.second.clear();
                 }
             } else {
-                if (displayRoundShape(rect, str.at(j)) == true)
-                    break;
                 window.draw(rect);
             }
         }

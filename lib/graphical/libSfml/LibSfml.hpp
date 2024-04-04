@@ -62,7 +62,6 @@ namespace arcade
             void addScoreTabToDisplay(void);
             void incertCharToPlayerName(void);
             sf::RectangleShape madeRectangle(sf::Color color, float size);
-            bool displayRoundShape(sf::RectangleShape rect, char c);
             void checkTwoChar(std::size_t j, std::string str);
             sf::Vector2f getPosition(float x, float y);
             sf::Color RGB(int r, int g, int b);

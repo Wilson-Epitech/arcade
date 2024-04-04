@@ -59,6 +59,7 @@ namespace arcade
             void pickColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap);
             void checkTwoChar(std::size_t j, std::string str);
             SDL_Texture* madeRectangle(int r, int g, int b);
+            SDL_Texture* madeSprite(int r, int g, int b, std::string path);
     };
 };
 
