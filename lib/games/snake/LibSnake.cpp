@@ -103,7 +103,7 @@ void arcade::LibSnake::placeFood(size_t y, size_t x)
     foodX = rand() % 31;
 
     while (isAvailableFood(map.at(foodY).at(foodX)) == false ||
-    (foodY == y && foodX == x ||
+    ((foodY == y && foodX == x) ||
     (foodY == lasty && foodX == lastx))) {
         foodY = rand() % 23;
         foodX = rand() % 31;
@@ -172,16 +172,17 @@ void arcade::LibSnake::getSnakeLenght()
         SnakeLenght = MyVector.size();
 }
 
-std::unordered_map<std::string, arcade::Color> arcade::LibSnake::getPattern() const
+std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::LibSnake::getPattern() const
 {
-    std::unordered_map<std::string, arcade::Color> pattern;
-    pattern.insert({" ", arcade::BLACK});
-    pattern.insert({"#", arcade::GRAY});
-    pattern.insert({"O", arcade::YELLOW});
-    pattern.insert({"|", arcade::RED});
-    pattern.insert({"8", arcade::BLUE});
-    pattern.insert({"=", arcade::GREEN});
-    pattern.insert({"<", arcade::GREEN});
+    std::unordered_map<std::string, std::pair<arcade::Color, std::string>> pattern;
+    pattern.insert({" ", {arcade::DEFAULT, ""}});
+    pattern.insert({"#", {arcade::GRAY, ""}});
+    pattern.insert({"o", {arcade::WHITE, ""}});
+    pattern.insert({"O", {arcade::YELLOW, ""}});
+    pattern.insert({"|", {arcade::RED, ""}});
+    pattern.insert({"8", {arcade::BLUE, ""}});
+    pattern.insert({"=", {arcade::GREEN, ""}});
+    pattern.insert({"<", {arcade::GREEN, ""}});
     return pattern;
 }
 
@@ -308,7 +309,7 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
         return arcade::LOOSE;
     if (move == 0) {
         mooveInContinue = moove();
-        for (int i = 0; i != speed; i++)
+        for (std::size_t i = 0; i != speed; i++)
             moove();
     }
     if (mooveInContinue == -1)
@@ -319,11 +320,11 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibSnake::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    textToDisplay.push_back({_gameName, {10, 10}});
+    textToDisplay.push_back({_gameName, {800, 150}});
     std::string scoreTxt;
     scoreTxt = "Score : ";
     scoreTxt.append(std::to_string(score));
-    textToDisplay.push_back({scoreTxt, {200, 10}});
+    textToDisplay.push_back({scoreTxt, {1000, 150}});
     return textToDisplay;
 }
 

@@ -12,20 +12,22 @@ arcade::libSfml::libSfml()
     return;
 }
 
-void arcade::libSfml::init(const std::unordered_map<std::string, Color> pattern)
+void arcade::libSfml::init(const std::unordered_map<std::string, std::pair<Color, std::string>> pattern)
 {
     x = BASE_X;
     y = BASE_Y;
-    squareSize = 30;
+    squareSize = 25;
     _font.loadFromFile(FONT_PATH.c_str());
     pickColor(pattern);
     _keyClose = arcade::OTHER;
     window.create(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str());
     nextChar = true;
+    backgroundTexture.loadFromFile(BACKGROUND_PATH);
+    backgroundSprite.setTexture(backgroundTexture);
     return;
 }
 
-void arcade::libSfml::changeColor(const std::unordered_map<std::string, arcade::Color> patternMap)
+void arcade::libSfml::changeColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap)
 {
     charMap.clear();
     pickColor(patternMap);
@@ -39,31 +41,31 @@ sf::RectangleShape arcade::libSfml::madeRectangle(sf::Color color, float size)
     return rect;
 }
 
-void arcade::libSfml::pickColor(const std::unordered_map<std::string, Color> patternMap)
+void arcade::libSfml::pickColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap)
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
-        if (tt->second == arcade::BLACK) {
+        if (tt->second.first == arcade::BLACK) {
             charMap.insert({tt->first, madeRectangle(RGB(0,0,0), squareSize)});
         }
-        if (tt->second == arcade::WHITE) {
+        if (tt->second.first == arcade::WHITE) {
             charMap.insert({tt->first, madeRectangle(RGB(255,255,255), squareSize / 8)});
         }
-        if (tt->second == arcade::RED) {
+        if (tt->second.first == arcade::RED) {
             charMap.insert({tt->first, madeRectangle(RGB(255,0,0), squareSize)});
         }
-        if (tt->second == arcade::BLUE) {
-            charMap.insert({tt->first, madeRectangle(RGB(0,0,124), squareSize)});
+        if (tt->second.first == arcade::BLUE) {
+            charMap.insert({tt->first, madeRectangle(RGB(100,100,255), squareSize)});
         }
-        if (tt->second == arcade::GREEN) {
+        if (tt->second.first == arcade::GREEN) {
             charMap.insert({tt->first, madeRectangle(RGB(0,255,0), squareSize)});
         }
-        if (tt->second == arcade::YELLOW) {
+        if (tt->second.first == arcade::YELLOW) {
             charMap.insert({tt->first, madeRectangle(RGB(255,240,0), squareSize)});
         }
-        if (tt->second == arcade::GRAY) {
+        if (tt->second.first == arcade::GRAY) {
             charMap.insert({tt->first, madeRectangle(RGB(50,50,50), squareSize)});
         }
-        if (tt->second == arcade::CYAN) {
+        if (tt->second.first == arcade::CYAN) {
             charMap.insert({tt->first, madeRectangle(RGB(74,86,237), squareSize / 4)});
         }
     }
@@ -145,7 +147,7 @@ void arcade::libSfml::incertCharToPlayerName(void)
     }
 }
 
-void arcade::libSfml::game(const std::string gameName)
+void arcade::libSfml::handleEvent(const std::string gameName)
 {
     _gameName = gameName;
     if (_gameName.compare("menu") == 0) {
@@ -157,6 +159,7 @@ void arcade::libSfml::game(const std::string gameName)
         _keyClose = CLOSE_BUTTON;
     }
     window.clear();
+    window.draw(backgroundSprite);
 }
 
 bool arcade::libSfml::displayRoundShape(sf::RectangleShape rect, char c)
@@ -240,8 +243,8 @@ void arcade::libSfml::sortScore(std::size_t textSize)
 {
     int max = 0;
     std::size_t index = 0;
-    int x_score = 1000;
-    int y_score = 50;
+    int x_score = 1550;
+    int y_score = 350;
     std::vector<std::pair<std::string, std::pair<int, int>>> tmpToDisplay;
     for (size_t i = 0; i < textSize; i++) {
         tmpToDisplay.push_back(_textToDiplay.at(i));
@@ -307,7 +310,7 @@ void arcade::libSfml::displayText(std::vector<std::pair<std::string, std::pair<i
 
     for (size_t i = 0; i < _textToDiplay.size(); i++) {
         txt.setFont(_font);
-        txt.setCharacterSize(25);
+        txt.setCharacterSize(15);
         txt.setFillColor(sf::Color::White);
         txt.setPosition(getPosition(_textToDiplay.at(i).second.first, _textToDiplay.at(i).second.second));
         txt.setString(_textToDiplay.at(i).first.c_str());

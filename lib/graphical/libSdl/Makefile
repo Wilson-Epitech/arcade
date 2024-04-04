@@ -22,7 +22,7 @@ CXX = g++
 
 CXXFLAGS = -Wall -Wextra -fPIC
 
-LDLIBS = -lSDL2 -lSDL2_ttf
+LDLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image
 
 LDFLAGS = -shared
 

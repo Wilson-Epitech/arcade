@@ -10,28 +10,28 @@
 arcade::LibMenu::LibMenu()
 {
     map = {
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               ",
-        "                               "
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
     };
     _SelectedGameIndex = 0;
     _SelectedLibIndex = 0;
@@ -112,18 +112,22 @@ arcade::GameStatus arcade::LibMenu::updateMap(arcade::KeyPressed key)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    int x = 100;
-    int y = 100;
+    int x = 600;
+    int y = 280;
     if (_libTypeSelected == 1) {
-        x = 1300;
+        x = 1000;
     }
-    textToDisplay.push_back({"     |", {x + 50, y}});
+    textToDisplay.push_back({"     ||", {x + 50, y}});
     y += 25;
-    textToDisplay.push_back({"     |", {x + 50, y}});
+    textToDisplay.push_back({"     ||", {x + 50, y}});
+    y += 25;
+    textToDisplay.push_back({"     ||", {x + 50, y}});
+    y += 25;
+    textToDisplay.push_back({"    \\||/", {x + 50, y}});
     y += 25;
     textToDisplay.push_back({"     \\/", {x + 50, y}});
     y += 60;
-    x = 100;
+    x = 600;
     int defaultY = y;
     for (std::size_t i = 0; i < _gameLibName.size(); i++) {
         std::string actualLib = _gameLibName.at(i);
@@ -134,7 +138,7 @@ std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibMenu::getTex
         y += 75;
     }
     y = defaultY;
-    x = 1300;
+    x = 1000;
     for (std::size_t i = 0; i < _graphicalName.size(); i++) {
         std::string actualLib = _graphicalName.at(i);
         if (_SelectedLibIndex == i) {
@@ -151,9 +155,9 @@ std::pair<std::size_t, std::size_t> arcade::LibMenu::getIndexes() const
     return {_SelectedGameIndex, _SelectedLibIndex};
 }
 
-std::unordered_map<std::string, arcade::Color> arcade::LibMenu::getPattern() const
+std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::LibMenu::getPattern() const
 {
-    std::unordered_map<std::string, arcade::Color> pattern;
-    pattern.insert({" ", arcade::BLACK});
+    std::unordered_map<std::string, std::pair<arcade::Color, std::string>> pattern;
+    pattern.insert({" ", {arcade::DEFAULT, ""}});
     return pattern;
 }

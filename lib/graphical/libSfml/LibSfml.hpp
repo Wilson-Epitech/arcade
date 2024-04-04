@@ -12,10 +12,11 @@
     #include <fstream>
     #include "../../includes/IDisplayModule.hpp"
 
-static const int BASE_X = 30;
-static const int BASE_Y = 60;
+static const int BASE_X = 550;
+static const int BASE_Y = 200;
 
-static const std::string FONT_PATH = "lib/graphical/font/ARCADE_N.TTF";
+static const std::string FONT_PATH = "assets/font/ARCADE_N.TTF";
+static const std::string BACKGROUND_PATH = "assets/sprites/background.png";
 static const std::string WINDOW_TITLE = "Arcade SFML";
 
 namespace arcade
@@ -24,14 +25,14 @@ namespace arcade
         public:
             libSfml();
             ~libSfml() {};
-            void init(const std::unordered_map<std::string, Color> pattern) override;
+            void init(const std::unordered_map<std::string, std::pair<Color, std::string>> pattern) override;
             void stop() override;
-            void game(const std::string gameName) override;
+            void handleEvent(const std::string gameName) override;
             void displayText(std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay) override;
             void displayMap(std::array<std::string, 23> map, std::size_t size) override;
             arcade::KeyPressed getKey() const override;
             void setKey(arcade::KeyPressed newValue) override;
-            void changeColor(const std::unordered_map<std::string, Color> patternMap) override;
+            void changeColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap) override;
             std::string getPlayerName() const override;
         private:
             sf::RenderWindow window;
@@ -47,10 +48,12 @@ namespace arcade
             arcade::KeyPressed _key;
             bool nextChar;
             std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
+            sf::Sprite backgroundSprite;
+            sf::Texture backgroundTexture;
 
             void sortScore(std::size_t textSize);
             int getNumber(std::string);
-            void pickColor(const std::unordered_map<std::string, Color> patternMap);
+            void pickColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap);
             void addScoreTabToDisplay(void);
             void incertCharToPlayerName(void);
             sf::RectangleShape madeRectangle(sf::Color color, float size);

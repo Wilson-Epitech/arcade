@@ -4,4 +4,4 @@ src/*.o
 lib/graphical/lib*/*.o
 lib/games/*/*.o
 src/main.cpp
-lib/games/score/*
+lib/games/score/*.mbw

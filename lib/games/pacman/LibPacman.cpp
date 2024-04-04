@@ -37,7 +37,8 @@ void arcade::LibPacman::init()
         "#o############o##o###########o#",
         "#o############o##o###########o#",
         "#ooooooooooooooooooooooooooooo#",
-        "###############################"
+        "###############################",
+        "                               "
     };
     ghostID = 0;
     mapSize = 1;
@@ -278,25 +279,25 @@ void arcade::LibPacman::addScore(char c)
 std::vector<std::pair<std::string, std::pair<int, int>>> arcade::LibPacman::getText() const
 {
     std::vector<std::pair<std::string, std::pair<int, int>>> textToDisplay;
-    textToDisplay.push_back({_gameName, {10, 10}});
+    textToDisplay.push_back({_gameName, {800, 150}});
     std::string scoreTxt;
     scoreTxt = "Score : ";
     scoreTxt.append(std::to_string(score));
-    textToDisplay.push_back({scoreTxt, {200, 10}});
+    textToDisplay.push_back({scoreTxt, {1000, 150}});
     return textToDisplay;
 }
 
-std::unordered_map<std::string, arcade::Color> arcade::LibPacman::getPattern() const
+std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::LibPacman::getPattern() const
 {
-    std::unordered_map<std::string, arcade::Color> pattern;
-    pattern.insert({" ", arcade::BLACK});
-    pattern.insert({"#", arcade::GRAY});
-    pattern.insert({"o", arcade::WHITE});
-    pattern.insert({"O", arcade::CYAN});
-    pattern.insert({"|", arcade::BLACK});
-    pattern.insert({"M", arcade::RED});
-    pattern.insert({"P", arcade::YELLOW});
-    pattern.insert({"F", arcade::BLUE});
+    std::unordered_map<std::string, std::pair<arcade::Color, std::string>> pattern;
+    pattern.insert({" ", {arcade::DEFAULT, ""}});
+    pattern.insert({"#", {arcade::GRAY, ""}});
+    pattern.insert({"o", {arcade::WHITE, ""}});
+    pattern.insert({"O", {arcade::CYAN, ""}});
+    pattern.insert({"|", {arcade::DEFAULT, ""}});
+    pattern.insert({"M", {arcade::RED, ""}});
+    pattern.insert({"P", {arcade::YELLOW, ""}});
+    pattern.insert({"F", {arcade::BLUE, ""}});
     return pattern;
 }
 
