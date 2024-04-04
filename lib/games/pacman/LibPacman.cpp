@@ -295,9 +295,9 @@ std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::L
     pattern.insert({"o", {arcade::WHITE, ""}});
     pattern.insert({"O", {arcade::CYAN, ""}});
     pattern.insert({"|", {arcade::DEFAULT, ""}});
-    pattern.insert({"M", {arcade::RED, ""}});
-    pattern.insert({"P", {arcade::YELLOW, ""}});
-    pattern.insert({"F", {arcade::BLUE, ""}});
+    pattern.insert({"M", {arcade::RED, "./assets/sprites/ghost.png"}});
+    pattern.insert({"P", {arcade::YELLOW, "./assets/sprites/pacman.png"}});
+    pattern.insert({"F", {arcade::BLUE, "./assets/sprites/ghost_nerf.png"}});
     return pattern;
 }
 

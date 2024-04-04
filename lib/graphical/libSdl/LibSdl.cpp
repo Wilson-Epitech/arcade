@@ -25,7 +25,11 @@ void arcade::libSdl::init(const std::unordered_map<std::string, std::pair<Color,
     _key = arcade::OTHER;
     _gameName = "";
     pickColor(pattern);
+    spriteLoaded = true;
     backgroundSprite = IMG_LoadTexture(render, BACKGROUND_PATH.c_str());
+    if (backgroundSprite == nullptr) {
+        spriteLoaded = false;
+    }
 }
 
 void arcade::libSdl::changeColor(const std::unordered_map<std::string, std::pair<Color, std::string>> patternMap)
@@ -100,7 +104,8 @@ void arcade::libSdl::handleEvent(const std::string gameName)
     }
     SDL_RenderClear(render);
     SDL_SetRenderDrawColor(render, 0, 0, 0, 255);
-    SDL_RenderCopy(render, backgroundSprite, NULL, NULL);
+    if (spriteLoaded == true)
+        SDL_RenderCopy(render, backgroundSprite, NULL, NULL);
 }
 
 int arcade::libSdl::getNumber(std::string str)

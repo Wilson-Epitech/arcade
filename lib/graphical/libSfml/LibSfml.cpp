@@ -17,13 +17,21 @@ void arcade::libSfml::init(const std::unordered_map<std::string, std::pair<Color
     x = BASE_X;
     y = BASE_Y;
     squareSize = 25;
-    _font.loadFromFile(FONT_PATH.c_str());
+    if (!_font.loadFromFile(FONT_PATH.c_str())) {
+        fprintf(stderr, "error: font not found\n");
+        exit(84);
+    }
     pickColor(pattern);
     _keyClose = arcade::OTHER;
     window.create(sf::VideoMode(1920, 1080), WINDOW_TITLE.c_str());
     nextChar = true;
-    backgroundTexture.loadFromFile(BACKGROUND_PATH);
-    backgroundSprite.setTexture(backgroundTexture);
+    spriteLoaded = true;
+    if (!backgroundTexture.loadFromFile(BACKGROUND_PATH)) {
+        spriteLoaded = false;
+    } else {
+        backgroundSprite.setTexture(backgroundTexture);
+    }
+    
     return;
 }
 
@@ -45,28 +53,28 @@ void arcade::libSfml::pickColor(const std::unordered_map<std::string, std::pair<
 {
     for (auto tt = patternMap.begin(); tt != patternMap.end(); tt++) {
         if (tt->second.first == arcade::BLACK) {
-            charMap.insert({tt->first, madeRectangle(RGB(0,0,0), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(0,0,0), squareSize),tt->second.second}});
         }
         if (tt->second.first == arcade::WHITE) {
-            charMap.insert({tt->first, madeRectangle(RGB(255,255,255), squareSize / 8)});
+            charMap.insert({tt->first, {madeRectangle(RGB(255,255,255), squareSize / 8),tt->second.second}});
         }
         if (tt->second.first == arcade::RED) {
-            charMap.insert({tt->first, madeRectangle(RGB(255,0,0), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(255,0,0), squareSize),tt->second.second}});
         }
         if (tt->second.first == arcade::BLUE) {
-            charMap.insert({tt->first, madeRectangle(RGB(100,100,255), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(100,100,255), squareSize), tt->second.second}});
         }
         if (tt->second.first == arcade::GREEN) {
-            charMap.insert({tt->first, madeRectangle(RGB(0,255,0), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(0,255,0), squareSize), tt->second.second}});
         }
         if (tt->second.first == arcade::YELLOW) {
-            charMap.insert({tt->first, madeRectangle(RGB(255,240,0), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(255,240,0), squareSize), tt->second.second}});
         }
         if (tt->second.first == arcade::GRAY) {
-            charMap.insert({tt->first, madeRectangle(RGB(50,50,50), squareSize)});
+            charMap.insert({tt->first, {madeRectangle(RGB(50,50,50), squareSize), tt->second.second}});
         }
         if (tt->second.first == arcade::CYAN) {
-            charMap.insert({tt->first, madeRectangle(RGB(74,86,237), squareSize / 4)});
+            charMap.insert({tt->first, {madeRectangle(RGB(74,86,237), squareSize / 4), tt->second.second}});
         }
     }
 }
@@ -159,7 +167,9 @@ void arcade::libSfml::handleEvent(const std::string gameName)
         _keyClose = CLOSE_BUTTON;
     }
     window.clear();
-    window.draw(backgroundSprite);
+    if (spriteLoaded == true) {
+        window.draw(backgroundSprite);
+    }
 }
 
 bool arcade::libSfml::displayRoundShape(sf::RectangleShape rect, char c)
@@ -196,17 +206,72 @@ bool arcade::libSfml::displayRoundShape(sf::RectangleShape rect, char c)
     return false;
 }
 
+void arcade::libSfml::setLastDirection(arcade::KeyPressed key)
+{
+    if (key == arcade::UP) {
+        _lastDirection = arcade::UP;
+    }
+    if (key == arcade::DOWN) {
+        _lastDirection = arcade::DOWN;
+    }
+    if (key == arcade::RIGHT) {
+        _lastDirection = arcade::RIGHT;
+    }
+    if (key == arcade::LEFT) {
+        _lastDirection = arcade::LEFT;
+    }
+}
+
+void arcade::libSfml::displaySpriteItem(sf::RectangleShape rect, sf::Texture tmp)
+{
+    sf::Sprite sprite;
+    sprite.setTexture(tmp);
+    sf::Vector2f pos = rect.getPosition();
+    sprite.setRotation(0);
+    if (_lastDirection == arcade::UP) {
+        sprite.setRotation(270);
+        pos.y += squareSize;
+    }
+    if (_lastDirection == arcade::DOWN) {
+        sprite.setRotation(90);
+        pos.x += squareSize;
+    }
+    if (_lastDirection == arcade::LEFT) {
+        sprite.setRotation(180);
+        pos.x += squareSize;
+        pos.y += squareSize;
+    }
+    sprite.setPosition(pos);
+    window.draw(sprite);
+}
+
 void arcade::libSfml::checkTwoChar(std::size_t j, std::string str)
 {
 
     for (auto tt = charMap.begin(); tt != charMap.end(); tt++) {
         if (tt->first.at(0) == str.at(j)) {
-            sf::RectangleShape rect = tt->second;
+            sf::RectangleShape rect = tt->second.first;
             rect.setPosition(getPosition(x, y));
-            if (displayRoundShape(rect, str.at(j)) == true) {
-                break;
+
+            setLastDirection(getKey());
+            if (tt->second.second.size() > 2) {
+                sf::Texture tmp;
+                if (tmp.loadFromFile(tt->second.second) == true) {
+                    arcade::KeyPressed defaultKey = _lastDirection;
+                    if (str.at(j) == '|' || str.at(j) == 'M' || str.at(j) == 'F') {
+                        _lastDirection = arcade::RIGHT;
+                    }
+                    displaySpriteItem(rect, tmp);
+                    _lastDirection = defaultKey;
+                    break;
+                } else {
+                    tt->second.second.clear();
+                }
+            } else {
+                if (displayRoundShape(rect, str.at(j)) == true)
+                    break;
+                window.draw(rect);
             }
-            window.draw(rect);
         }
     }
 }

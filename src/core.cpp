@@ -109,6 +109,7 @@ arcade::GameStatus Core::winAndLooseEvent(arcade::GameStatus status)
 void Core::gameLoop(void)
 {
     auto time1 = std::chrono::steady_clock::now();
+    auto second1 = std::chrono::steady_clock::now();
     arcade::GameStatus status = arcade::PLAYING;
     while (status == arcade::PLAYING) {
         _graphicalLib->handleEvent(_gameLib->getGameName());
@@ -124,6 +125,11 @@ void Core::gameLoop(void)
             changeLibrary();
             _graphicalLib->setKey(arcade::OTHER);
             time1 = std::chrono::steady_clock::now();
+        }
+        auto elapsedSecond = std::chrono::duration_cast <std::chrono::milliseconds>(time2 - second1);
+        if (elapsedSecond.count() >= 1000) {
+            _gameLib->incrementTime();
+            second1 = std::chrono::steady_clock::now();
         }
         _graphicalLib->displayMap(_gameLib->getMap(), _gameLib->getMapCellSize());
         status = winAndLooseEvent(status);

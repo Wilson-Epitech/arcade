@@ -51,6 +51,7 @@ namespace arcade
             std::string _playerName;
             std::vector<std::pair<std::string, std::pair<int, int>>> _textToDiplay;
             SDL_Texture *backgroundSprite;
+            bool spriteLoaded;
 
             void sortScore(std::size_t textSize);
             int getNumber(std::string);
