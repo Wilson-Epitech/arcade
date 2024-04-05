@@ -1,4 +1,4 @@
-<img src="/src/assets/Arcade.gif" height="400" width="900"/>
+<img src="/doc/src/assets/Arcade.gif" height="400" width="900"/>
 
 # Documentation Arcade
 
