@@ -319,6 +319,8 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
 {
     findPlayer();
     int move = moovePlayer(key);
+    if (key == arcade::SPACE)
+        return ::arcade::NO_ACTIVITY;
     int mooveInContinue = 0;
     checkTime();
     if (scoreCopy == 5) {
