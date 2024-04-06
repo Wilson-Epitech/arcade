@@ -42,6 +42,7 @@ void arcade::LibSnake::init()
         "###############################"
     };
 
+    timeFood = 15;
     _gameName = "Snake";
     score = 0;
     scoreCopy = 0;
@@ -52,6 +53,8 @@ void arcade::LibSnake::init()
     srand(time(NULL));
     placeFood();
     speed = 0;
+    timeSec = 0;
+    replaceFood = 0;
 }
 
 std::array<std::string, 23> arcade::LibSnake::getMap() const
@@ -109,6 +112,8 @@ void arcade::LibSnake::placeFood(size_t y, size_t x)
         foodX = rand() % 31;
     }
     map[foodY][foodX] = '|';
+    if (timeFood > 5)
+        timeFood -= 1;
 }
 
 void arcade::LibSnake::fillVector()
@@ -155,6 +160,7 @@ bool arcade::LibSnake::isAvailable(char c)
 
 bool arcade::LibSnake::isAvailableFood(char c)
 {
+
     if (c == '#')
         return false;
     if (c == '<')
@@ -172,13 +178,27 @@ void arcade::LibSnake::getSnakeLenght()
         SnakeLenght = MyVector.size();
 }
 
+void arcade::LibSnake::incrementTime()
+{
+    replaceFood++;
+}
+
+void arcade::LibSnake::checkTime()
+{
+    if (replaceFood == timeFood) {
+        replaceFood = 0;
+        map[foodY][foodX] = ' ';
+        placeFood();
+    }
+}
+
 std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::LibSnake::getPattern() const
 {
     std::unordered_map<std::string, std::pair<arcade::Color, std::string>> pattern;
     pattern.insert({" ", {arcade::DEFAULT, ""}});
     pattern.insert({"#", {arcade::GRAY, ""}});
     pattern.insert({"o", {arcade::WHITE, ""}});
-    pattern.insert({"O", {arcade::YELLOW, ""}});
+    pattern.insert({"O", {arcade::BLUE, "./assets/sprites/golden_apple.png"}});
     pattern.insert({"|", {arcade::RED, "./assets/sprites/apple.png"}});
     pattern.insert({"8", {arcade::BLUE, "./assets/sprites/snake_head.png"}});
     pattern.insert({"=", {arcade::GREEN, "./assets/sprites/snake_body.png"}});
@@ -300,18 +320,15 @@ arcade::GameStatus arcade::LibSnake::updateMap(arcade::KeyPressed key)
     findPlayer();
     int move = moovePlayer(key);
     int mooveInContinue = 0;
-
-    if (scoreCopy == 10) {
-        speed++;
+    checkTime();
+    if (scoreCopy == 5) {
         scoreCopy = 0;
+        return arcade::NO_ACTIVITY;
     }
     if (move == -1)
         return arcade::LOOSE;
-    if (move == 0) {
+    if (move == 0)
         mooveInContinue = moove();
-        for (std::size_t i = 0; i != speed; i++)
-            moove();
-    }
     if (mooveInContinue == -1)
         return arcade::LOOSE;
     return arcade::PLAYING;
