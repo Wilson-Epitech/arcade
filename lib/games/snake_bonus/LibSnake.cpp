@@ -222,7 +222,7 @@ std::unordered_map<std::string, std::pair<arcade::Color, std::string>> arcade::L
     pattern.insert({" ", {arcade::DEFAULT, ""}});
     pattern.insert({"#", {arcade::GRAY, ""}});
     pattern.insert({"o", {arcade::WHITE, "./assets/sprites/rotten_apple.png"}});
-    pattern.insert({"O", {arcade::BLUE, "./assets/sprites/golden_apple.png"}});
+    pattern.insert({"O", {arcade::YELLOW, "./assets/sprites/golden_apple.png"}});
     pattern.insert({"|", {arcade::RED, "./assets/sprites/apple.png"}});
     pattern.insert({"8", {arcade::BLUE, "./assets/sprites/snake_head.png"}});
     pattern.insert({"=", {arcade::GREEN, "./assets/sprites/snake_body.png"}});
