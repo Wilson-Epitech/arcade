@@ -1,5 +1,16 @@
 <img src="/doc/src/assets/Arcade.gif" height="400" width="900"/>
 
+# Credit
+
+Membre du groupe:
+- Mathis Brehm
+- Bradley Malbrouck
+- Wilson Bordichon
+
+Membre du 2eme groupe:
+- Eva Legrand
+- Yanis Harkouk
+
 # Documentation Arcade
 
 Cette documentation a pour but de comprendre le fonctionnement du projet et comment intégrer vos jeux et librairies graphiques
