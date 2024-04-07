@@ -2,12 +2,12 @@
 
 # Crédits
 
-Membre du groupe:
+Membres du groupe:
 - Mathis Brehm
 - Bradley Malbrouck
 - Wilson Bordichon
 
-Membre du 2ème groupe:
+Membres du 2ème groupe:
 - Eva Legrand
 - Yanis Harkouk
 
