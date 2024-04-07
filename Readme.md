@@ -1,13 +1,13 @@
 <img src="/doc/src/assets/Arcade.gif" height="400" width="900"/>
 
-# Credit
+# Crédits
 
 Membre du groupe:
 - Mathis Brehm
 - Bradley Malbrouck
 - Wilson Bordichon
 
-Membre du 2eme groupe:
+Membre du 2ème groupe:
 - Eva Legrand
 - Yanis Harkouk
 
@@ -18,7 +18,6 @@ Cette documentation a pour but de comprendre le fonctionnement du projet et comm
 # Table des matières
 
 - [Core](#core)
-    - [Diagramme de classe](#diagramme-de-classe)
     - [Fonctionnement du core](#fonctionnement-du-core)
     - [DlLoader](#dlloader)
 
@@ -55,10 +54,6 @@ Cette documentation a pour but de comprendre le fonctionnement du projet et comm
 - [Compiler et lancer le programme](#compiler-et-lancer-le-programme)
 
 # Core
-
-## Diagramme de classe
-
-<img src="DIAGRAMME/" width="400"/>
 
 ## Fonctionnement du core
 
