@@ -1,0 +1,18 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcsfml-dev libsfml-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libncurses-dev libboost-all-dev
+      - name: Build
+        run: make all
