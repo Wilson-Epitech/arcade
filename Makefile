@@ -4,6 +4,8 @@
 ## File description:
 ## Makefile
 ##
+.DEFAULT_GOAL := all
+
 msg:
 	@echo -e "\x1b[1m\x1b[38;2;0;0;255m ####                               ####                        #     #                 #  \x1b[0m"
 	@echo -e "\x1b[1m\x1b[38;2;42;0;213m#    #  ###    ###    ###          #    #  ###   ## #   #####         #       ###       #  \x1b[0m"
