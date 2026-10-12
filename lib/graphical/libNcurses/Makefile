@@ -32,7 +32,7 @@ BIN_NAME = arcade_ncurses.so
 
 all: $(OBJ) msg
 	$(CXX) -c $(CXXFLAGS) $(SRC)
-	$(CXX) $(LDFLAGS) -o $(BIN_NAME) $(LDLIBS) $(OBJ)
+	$(CXX) $(LDFLAGS) -o $(BIN_NAME) $(OBJ) $(LDLIBS)
 	mv $(BIN_NAME) ../../
 
 clean:
