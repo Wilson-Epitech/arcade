@@ -44,4 +44,4 @@ La documentation technique complète est dans [DOCUMENTATION.md](DOCUMENTATION.m
 
 Mathis Brehm, Wilson Bordichon, Bradley Malbrouck
 
-**Ma partition :** J'ai écrit la **documentation technique** du projet (fonctionnement du cœur, interfaces, ajout d'un jeu ou d'une bibliothèque), le **système de sauvegarde des scores** et la structure des jeux.
+**Ma partition :** J'ai écrit la **documentation technique** du projet (fonctionnement du cœur, interfaces, ajout d'un jeu ou d'une bibliothèque), co-écrit la **sauvegarde des scores**, et posé la structure des dossiers des jeux.
