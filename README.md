@@ -33,8 +33,7 @@ Une plateforme de jeux en C++ où **tout est un plugin**. Les jeux (Snake, Pac-M
 
 ```bash
 make
-./arcade ./lib/arcade_sfml.so      # ou arcade_sdl2.so / arcade_ncurses.so
-# menu : flèches pour choisir, taper son pseudo, Entrée pour jouer
+./arcade ./lib/arcade_sfml.so
 ```
 
 La documentation technique complète est dans [DOCUMENTATION.md](DOCUMENTATION.md).
